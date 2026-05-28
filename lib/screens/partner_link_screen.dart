@@ -1,0 +1,197 @@
+import 'package:flutter/material.dart';
+
+import '../../l10n/app_localizations.dart';
+
+import '../services/partner_link_service.dart';
+
+class PartnerLinkScreen
+    extends StatefulWidget {
+  const PartnerLinkScreen({
+    super.key,
+  });
+
+  @override
+  State<PartnerLinkScreen>
+      createState() =>
+          _PartnerLinkScreenState();
+}
+
+class _PartnerLinkScreenState
+    extends State<
+        PartnerLinkScreen> {
+  String? myCode;
+
+  final controller =
+      TextEditingController();
+
+  bool linked = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _load();
+  }
+
+  Future<void> _load() async {
+    final code =
+        await PartnerLinkService
+            .getOrCreateMyCode();
+
+    final isLinked =
+        await PartnerLinkService
+            .isLinked();
+
+    if (!mounted) return;
+
+    setState(() {
+      myCode = code;
+      linked = isLinked;
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
+    final l10n =
+        AppLocalizations.of(context)!;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          l10n.partnerLink,
+        ),
+      ),
+
+      body: Padding(
+        padding:
+            const EdgeInsets.all(
+          16,
+        ),
+
+        child:
+            linked
+                ? Column(
+                    children: [
+                      Text(
+                        l10n
+                            .linkedSuccess,
+
+                        style:
+                            const TextStyle(
+                          fontSize:
+                              18,
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      ElevatedButton(
+                        onPressed:
+                            () async {
+                          await PartnerLinkService
+                              .unlink();
+
+                          await _load();
+                        },
+
+                        child: Text(
+                          l10n.unlink,
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment
+                            .start,
+
+                    children: [
+                      Text(
+                        l10n.yourCode,
+
+                        style:
+                            const TextStyle(
+                          fontWeight:
+                              FontWeight
+                                  .bold,
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 6,
+                      ),
+
+                      SelectableText(
+                        myCode ??
+                            '...',
+
+                        style:
+                            const TextStyle(
+                          fontSize:
+                              24,
+
+                          letterSpacing:
+                              2,
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 24,
+                      ),
+
+                      Text(
+                        l10n
+                            .enterPartnerCode,
+                      ),
+
+                      const SizedBox(
+                        height: 6,
+                      ),
+
+                      TextField(
+                        controller:
+                            controller,
+
+                        textCapitalization:
+                            TextCapitalization
+                                .characters,
+                      ),
+
+                      const SizedBox(
+                        height: 12,
+                      ),
+
+                      ElevatedButton(
+                        onPressed:
+                            () async {
+                          await PartnerLinkService
+                              .savePartnerCode(
+                            controller
+                                .text
+                                .trim(),
+                          );
+
+                          await _load();
+                        },
+
+                        child: Text(
+                          l10n.link,
+                        ),
+                      ),
+                    ],
+                  ),
+      ),
+    );
+  }
+}

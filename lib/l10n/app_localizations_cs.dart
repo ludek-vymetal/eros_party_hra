@@ -1,0 +1,364 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Czech (`cs`).
+class AppLocalizationsCs extends AppLocalizations {
+  AppLocalizationsCs([String locale = 'cs']) : super(locale);
+
+  @override
+  String get appTitle => 'EROS';
+
+  @override
+  String get newPartyGame => '🎉 Nová party hra';
+
+  @override
+  String get continuePartyGame => '▶️ Pokračovat v party hře';
+
+  @override
+  String get taskManager => '🛠 Správa úkolů';
+
+  @override
+  String get partnerMode => '❤️ Partnerský režim';
+
+  @override
+  String get language => 'Jazyk';
+
+  @override
+  String get czech => '🇨🇿 Čeština';
+
+  @override
+  String get english => '🇺🇸 English';
+
+  @override
+  String get newPartyGamePlayers => 'Nová party hra – hráči';
+
+  @override
+  String get playerName => 'Jméno hráče';
+
+  @override
+  String get male => 'Muž';
+
+  @override
+  String get female => 'Žena';
+
+  @override
+  String get addPlayer => 'Přidat hráče';
+
+  @override
+  String get continueText => 'Pokračovat';
+
+  @override
+  String get enterPlayerName => 'Zadej jméno hráče';
+
+  @override
+  String get playerNotParticipating => 'se hry neúčastní';
+
+  @override
+  String get partyConsentTitle => 'Souhlas se hrou';
+
+  @override
+  String get partyConsentText =>
+      'tato party hra je intimní, dobrovolná a může obsahovat erotické prvky, svlékání a fyzickou blízkost.\n\nMůžeš kdykoliv říct NE.\nSouhlasíš s účastí?';
+
+  @override
+  String get agree => 'Souhlasím';
+
+  @override
+  String get disagree => 'Nesouhlasím';
+
+  @override
+  String get partyGame => 'Party hra';
+
+  @override
+  String get currentTurn => 'Na tahu';
+
+  @override
+  String get naked => 'nahý/nahá';
+
+  @override
+  String get youRemove => 'Sundáváš:';
+
+  @override
+  String get complete => 'Splním';
+
+  @override
+  String get refuse => 'Nesplním';
+
+  @override
+  String get saveAndExit => 'Uložit a skončit';
+
+  @override
+  String get fullyNakedPlayers => '🔥 Úplně nazí hráči';
+
+  @override
+  String get rescueApproved => 'Záchrana schválena!';
+
+  @override
+  String get rescueDenied => 'Záchrana zamítnuta!';
+
+  @override
+  String get rescueDeniedText =>
+      'Nezoufej! Za 5 kol bude nové hlasování. Zkus ostatní v dalším kole přesvědčit!';
+
+  @override
+  String get rescueSelectFirst => 'Záchrana: Vyber 1. kus';
+
+  @override
+  String get chooseClothing => 'Vyber si oblečení';
+
+  @override
+  String get selectClothing => 'Klikni na kus, který si chceš obléknout:';
+
+  @override
+  String get boxers => 'Trenky';
+
+  @override
+  String get bra => 'Podprsenka';
+
+  @override
+  String get pants => 'Kalhoty';
+
+  @override
+  String get shoes => 'Boty';
+
+  @override
+  String get tshirt => 'Tričko';
+
+  @override
+  String get hoodie => 'Mikina';
+
+  @override
+  String get socks => 'Ponožky';
+
+  @override
+  String get panties => 'Kalhotky';
+
+  @override
+  String get sweater => 'Svetr';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get gameDifficulty => 'Obtížnost hry';
+
+  @override
+  String get difficultyEasy => '1 – Jemně';
+
+  @override
+  String get difficultyMedium => '2 – Odvážně';
+
+  @override
+  String get difficultyHard => '3 – Bez zábran';
+
+  @override
+  String get startGame => 'Začít hru';
+
+  @override
+  String get partyConsentScreenText =>
+      'Tato party hra je intimní, dobrovolná a může obsahovat erotické prvky, svlékání a fyzickou blízkost.\n\nKaždý hráč má právo kdykoliv říct NE.\nRespekt je důležitější než hra samotná.\n\nPokračuj pouze pokud všichni účastníci souhlasí.';
+
+  @override
+  String get taskManagerTitle => '🛠️ Správa úkolů';
+
+  @override
+  String get noTasksYet => 'Zatím tu nejsou žádné úkoly';
+
+  @override
+  String get addTask => '➕ Přidat úkol';
+
+  @override
+  String get exportQr => '📤 Export do QR';
+
+  @override
+  String get lastClothing => '🔥 POSLEDNÍ KUS 🔥';
+
+  @override
+  String get nothingToHide => 'už nic neskrývá';
+
+  @override
+  String get rescueTitle => '🛟 ZÁCHRANA';
+
+  @override
+  String get givePhoneToPlayer => 'Dej telefon tomuto hráči:';
+
+  @override
+  String get rescueQuestion => 'Chceš zachránit nahého hráče?';
+
+  @override
+  String get yes => 'ANO';
+
+  @override
+  String get no => 'NE';
+
+  @override
+  String get rescuedPlayer => 'Zachraňovaný hráč:';
+
+  @override
+  String get votingPlayer => 'Hlasuje hráč:';
+
+  @override
+  String get partnerModeTitle => '❤️ PARTNERSKÝ REŽIM ❤️';
+
+  @override
+  String get writeScenario => '✍️ Napsat nový scénář';
+
+  @override
+  String get readScenario => '📖 Přečíst scénář';
+
+  @override
+  String get scenarioHistory => '🕰️ Historie scénářů';
+
+  @override
+  String get connected => '🔐 Propojeno';
+
+  @override
+  String get notConnected => '🔐 Nepřipojeno';
+
+  @override
+  String get editScenario => '✏️ Upravit scénář';
+
+  @override
+  String get newScenario => '✍️ Nový scénář';
+
+  @override
+  String get author => 'Autor';
+
+  @override
+  String get forWho => 'Pro koho';
+
+  @override
+  String get scenarioTitle => 'Název scénáře';
+
+  @override
+  String get boundaries => 'Hranice';
+
+  @override
+  String get scenarioGoal => '🎯 Cíl scénáře';
+
+  @override
+  String get scenarioEmotions => 'Jaké emoce má scénář vyvolat?';
+
+  @override
+  String get scenarioText => 'Text scénáře';
+
+  @override
+  String get saveChanges => '💾 Uložit změny';
+
+  @override
+  String get generateCode => '🔐 Vygenerovat kód';
+
+  @override
+  String get copyCode => '📋 Kopírovat kód';
+
+  @override
+  String get fillRequiredFields => 'Vyplň všechna povinná pole';
+
+  @override
+  String get emotionTenderness => 'Něha';
+
+  @override
+  String get emotionTrust => 'Důvěra';
+
+  @override
+  String get emotionExcitement => 'Vzrušení';
+
+  @override
+  String get emotionPlayfulness => 'Hravost';
+
+  @override
+  String get emotionDominance => 'Dominance';
+
+  @override
+  String get emotionSubmission => 'Podřízení';
+
+  @override
+  String get emotionRomance => 'Romantika';
+
+  @override
+  String get emotionCuriosity => 'Zvědavost';
+
+  @override
+  String get openScenario => 'Otevřít scénář';
+
+  @override
+  String get pasteScenarioCode => 'Vlož kód scénáře';
+
+  @override
+  String get pasteFromClipboard => '📋 Vložit ze schránky';
+
+  @override
+  String get invalidCode => 'Kód je neplatný nebo poškozený';
+
+  @override
+  String get howDoYouFeel => 'Jak se cítíš?';
+
+  @override
+  String get howDoYouDecide => 'Jak se rozhoduješ?';
+
+  @override
+  String get message => 'Vzkaz:';
+
+  @override
+  String get attachProof => 'Přiložit důkaz';
+
+  @override
+  String get sendReaction => '💌 Odeslat reakci';
+
+  @override
+  String get emotionExcited => '❤️ Nadšení';
+
+  @override
+  String get emotionCalm => '😊 Pohoda';
+
+  @override
+  String get emotionTurnedOn => '🔥 Vzrušení';
+
+  @override
+  String get emotionNervous => '😳 Nervozita';
+
+  @override
+  String get emotionUnsure => '🤔 Nejistota';
+
+  @override
+  String get emotionThinking => '💭 Přemýšlení';
+
+  @override
+  String get stateWillDo => 'splním';
+
+  @override
+  String get stateMaybeLater => 'možná později';
+
+  @override
+  String get stateWillNotDo => 'nesplním';
+
+  @override
+  String get scenarioHistoryTitle => '📚 Historie scénářů';
+
+  @override
+  String get noScenariosYet => 'Zatím žádné scénáře';
+
+  @override
+  String get reactions => 'reakcí';
+
+  @override
+  String get partnerLink => 'Propojení s partnerem';
+
+  @override
+  String get linkedSuccess => '✅ Jste propojeni';
+
+  @override
+  String get unlink => 'Odpojit';
+
+  @override
+  String get yourCode => 'Tvůj kód:';
+
+  @override
+  String get enterPartnerCode => 'Zadej kód partnera:';
+
+  @override
+  String get link => 'Propojit';
+}

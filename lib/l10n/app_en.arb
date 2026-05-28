@@ -1,0 +1,285 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "EROS",
+
+  "newPartyGame": "🎉 New Party Game",
+  "continuePartyGame": "▶️ Continue Party Game",
+  "taskManager": "🛠 Task Manager",
+  "partnerMode": "❤️ Partner Mode",
+
+  "language": "Language",
+
+  "czech": "🇨🇿 Czech",
+  "english": "🇺🇸 English",
+
+  "newPartyGamePlayers": "New Party Game – Players",
+
+  "playerName": "Player Name",
+
+  "male": "Male",
+  "female": "Female",
+
+  "addPlayer": "Add Player",
+
+  "continueText": "Continue",
+
+  "enterPlayerName": "Enter player name",
+
+  "playerNotParticipating": "is not participating",
+
+  "partyConsentTitle": "Game Consent",
+
+  "partyConsentText": "this party game is intimate, voluntary and may contain erotic elements, undressing and physical closeness.\n\nYou can say NO at any time.\nDo you agree to participate?",
+
+  "agree": "Agree",
+  "disagree": "Disagree",
+  
+  "@@locale": "en",
+
+  "appTitle": "EROS",
+
+  "newPartyGame": "🎉 New Party Game",
+  "continuePartyGame": "▶️ Continue Party Game",
+  "taskManager": "🛠 Task Manager",
+  "partnerMode": "❤️ Partner Mode",
+
+  "language": "Language",
+
+  "czech": "🇨🇿 Czech",
+  "english": "🇺🇸 English",
+
+  "newPartyGamePlayers": "New Party Game – Players",
+
+  "playerName": "Player Name",
+
+  "male": "Male",
+  "female": "Female",
+
+  "addPlayer": "Add Player",
+
+  "continueText": "Continue",
+
+  "enterPlayerName": "Enter player name",
+
+  "playerNotParticipating": "is not participating",
+
+  "partyConsentTitle": "Game Consent",
+
+  "partyConsentText": "this party game is intimate, voluntary and may contain erotic elements, undressing and physical closeness.\n\nYou can say NO at any time.\nDo you agree to participate?",
+
+  "agree": "Agree",
+  "disagree": "Disagree",
+
+  "partyGame": "Party Game",
+  "currentTurn": "Current Turn",
+  "naked": "naked",
+
+  "youRemove": "You remove:",
+
+  "complete": "Complete",
+  "refuse": "Refuse",
+
+  "saveAndExit": "Save and Exit",
+
+  "fullyNakedPlayers": "🔥 Completely Naked Players",
+
+  "rescueApproved": "Rescue approved!",
+  "rescueDenied": "Rescue denied!",
+
+  "rescueDeniedText": "Don't worry! There will be another vote in 5 rounds. Try to convince others next round!",
+
+  "rescueSelectFirst": "Rescue: Select 1st clothing",
+
+  "chooseClothing": "Choose clothing",
+
+  "selectClothing": "Click clothing you want to wear:",
+
+  "boxers": "Boxers",
+  "bra": "Bra",
+  "pants": "Pants",
+  "shoes": "Shoes",
+  "tshirt": "T-Shirt",
+  "hoodie": "Hoodie",
+  "socks": "Socks",
+  "panties": "Panties",
+  "sweater": "Sweater",
+
+  "ok": "OK",
+  
+  "gameDifficulty": "Game Difficulty",
+
+  "difficultyEasy": "1 – Gentle",
+  "difficultyMedium": "2 – Bold",
+  "difficultyHard": "3 – No Limits",
+
+  "startGame": "Start Game",
+  
+  "partyConsentScreenText": "This party game is intimate, voluntary and may contain erotic elements, undressing and physical closeness.\n\nEvery player has the right to say NO at any time.\nRespect is more important than the game itself.\n\nContinue only if all participants agree.",
+
+  "taskManagerTitle": "🛠️ Task Manager",
+
+  "noTasksYet": "There are no tasks yet",
+
+  "addTask": "➕ Add Task",
+
+  "exportQr": "📤 Export to QR",
+  
+  "lastClothing": "🔥 LAST CLOTHING 🔥",
+
+  "nothingToHide": "has nothing left to hide",
+  
+  "rescueTitle": "🛟 RESCUE",
+
+  "givePhoneToPlayer": "Give the phone to this player:",
+
+  "rescueQuestion": "Do you want to rescue the naked player?",
+
+  "yes": "YES",
+  "no": "NO",
+  
+  "rescuedPlayer": "Rescued player:",
+
+  "votingPlayer": "Voting player:",
+  
+  "partnerModeTitle": "❤️ PARTNER MODE ❤️",
+
+  "writeScenario": "✍️ Write New Scenario",
+
+  "readScenario": "📖 Read Scenario",
+
+  "scenarioHistory": "🕰️ Scenario History",
+
+  "connected": "🔐 Connected",
+
+  "notConnected": "🔐 Not Connected",
+  
+  "editScenario": "✏️ Edit Scenario",
+  "newScenario": "✍️ New Scenario",
+
+  "author": "Author",
+  "forWho": "For Who",
+
+  "scenarioTitle": "Scenario Title",
+
+  "boundaries": "Boundaries",
+
+  "scenarioGoal": "🎯 Scenario Goal",
+
+  "scenarioEmotions": "What emotions should the scenario evoke?",
+
+  "scenarioText": "Scenario Text",
+
+  "saveChanges": "💾 Save Changes",
+
+  "generateCode": "🔐 Generate Code",
+
+  "copyCode": "📋 Copy Code",
+
+  "fillRequiredFields": "Fill in all required fields",
+  
+  "emotionTenderness": "Tenderness",
+  "emotionTrust": "Trust",
+  "emotionExcitement": "Excitement",
+  "emotionPlayfulness": "Playfulness",
+  "emotionDominance": "Dominance",
+  "emotionSubmission": "Submission",
+  "emotionRomance": "Romance",
+  "emotionCuriosity": "Curiosity",
+  
+  "emotionTenderness": "Tenderness",
+
+  "emotionTrust": "Trust",
+
+  "emotionExcitement": "Excitement",
+
+  "emotionPlayfulness": "Playfulness",
+
+  "emotionDominance": "Dominance",
+
+  "emotionSubmission": "Submission",
+
+  "emotionRomance": "Romance",
+
+  "emotionCuriosity": "Curiosity",
+  
+  "openScenario": "Open Scenario",
+
+  "pasteScenarioCode": "Paste Scenario Code",
+
+  "pasteFromClipboard": "📋 Paste From Clipboard",
+
+  "invalidCode": "Code is invalid or corrupted",
+
+  "howDoYouFeel": "How do you feel?",
+
+  "howDoYouDecide": "What is your decision?",
+
+  "message": "Message:",
+
+  "attachProof": "Attach Proof",
+
+  "sendReaction": "💌 Send Reaction",
+
+  "emotionExcited": "❤️ Excited",
+
+  "emotionCalm": "😊 Calm",
+
+  "emotionTurnedOn": "🔥 Turned On",
+
+  "emotionNervous": "😳 Nervous",
+
+  "emotionUnsure": "🤔 Unsure",
+
+  "emotionThinking": "💭 Thinking",
+
+  "stateWillDo": "I will do it",
+
+  "stateMaybeLater": "maybe later",
+
+  "stateWillNotDo": "I will not do it",
+  
+  "scenarioHistoryTitle": "📚 Scenario History",
+
+  "noScenariosYet": "No scenarios yet",
+
+  "reactions": "reactions",
+  
+  "partnerLink": "Partner Connection",
+
+  "linkedSuccess": "✅ You are connected",
+
+  "unlink": "Disconnect",
+
+  "yourCode": "Your code:",
+
+  "enterPartnerCode": "Enter partner code:",
+
+  "link": "Connect",
+  
+  "partnerLink": "Partner Connection",
+
+  "linkedSuccess": "✅ You are connected",
+
+  "unlink": "Disconnect",
+
+  "yourCode": "Your code:",
+
+  "enterPartnerCode": "Enter partner code:",
+
+  "link": "Connect"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
