@@ -70,6 +70,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disagree => 'Disagree';
 
   @override
+  String get latestTasks => 'Latest';
+
+  @override
+  String get topTasks => 'Top Rated';
+
+  @override
   String get partyGame => 'Party Game';
 
   @override
@@ -361,4 +367,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get link => 'Connect';
+
+  @override
+  String get shareToCommunity => 'Share to community';
+
+  @override
+  String get taskShared => 'Task shared with community';
+
+  @override
+  String get taskShareFailed => 'Failed to share task';
+
+  @override
+  String get communityTasks => 'Community Tasks';
+
+  @override
+  String get noCommunityTasks => 'No community tasks have been shared yet';
+
+  @override
+  String get communityLoadError => 'Failed to load community tasks';
+
+  @override
+  String get likes => 'Likes';
+
+  @override
+  String get importTask => 'Import task';
+
+  @override
+  String get taskImported => 'Task imported';
+
+  @override
+  String get reportTask => 'Report';
+
+  @override
+  String get taskReported => 'Task reported';
+
+  @override
+  String get reportTaskQuestion => 'Do you want to report this task?';
+
+  @override
+  String get taskAlreadyImported => 'This task is already imported';
 }

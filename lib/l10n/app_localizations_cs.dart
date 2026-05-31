@@ -70,6 +70,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get disagree => 'Nesouhlasím';
 
   @override
+  String get latestTasks => 'Nejnovější';
+
+  @override
+  String get topTasks => 'Nejlepší';
+
+  @override
   String get partyGame => 'Party hra';
 
   @override
@@ -361,4 +367,43 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get link => 'Propojit';
+
+  @override
+  String get shareToCommunity => 'Sdílet do komunity';
+
+  @override
+  String get taskShared => 'Úkol byl sdílen do komunity';
+
+  @override
+  String get taskShareFailed => 'Sdílení úkolu se nezdařilo';
+
+  @override
+  String get communityTasks => 'Komunitní úkoly';
+
+  @override
+  String get noCommunityTasks => 'Zatím nebyly sdíleny žádné úkoly';
+
+  @override
+  String get communityLoadError => 'Chyba při načítání komunitních úkolů';
+
+  @override
+  String get likes => 'To se mi líbí';
+
+  @override
+  String get importTask => 'Importovat úkol';
+
+  @override
+  String get taskImported => 'Úkol byl importován';
+
+  @override
+  String get reportTask => 'Nahlásit';
+
+  @override
+  String get taskReported => 'Úkol byl nahlášen';
+
+  @override
+  String get reportTaskQuestion => 'Opravdu chcete nahlásit tento úkol?';
+
+  @override
+  String get taskAlreadyImported => 'Tento úkol už máte importovaný';
 }

@@ -10,17 +10,18 @@ import '../services/task_bank_storage.dart';
 import '../models/task_qr_package.dart';
 import 'task_qr_export_screen.dart';
 import 'task_editor_screen.dart';
+import '../services/community_task_service.dart';
 
-class TaskManagerScreen
-    extends StatefulWidget {
+import 'community_tasks_screen.dart';
+
+class TaskManagerScreen extends StatefulWidget {
   const TaskManagerScreen({
     super.key,
   });
 
   @override
-  State<TaskManagerScreen>
-      createState() =>
-          _TaskManagerScreenState();
+  State<TaskManagerScreen> createState() =>
+      _TaskManagerScreenState();
 }
 
 class _TaskManagerScreenState
@@ -49,9 +50,7 @@ class _TaskManagerScreenState
   }
 
   List<String> get _tasks =>
-      _bank
-          ?.tasks[_gender]
-              ?[_difficulty] ??
+      _bank?.tasks[_gender]?[_difficulty] ??
       [];
 
   Future<void> _save() async {
@@ -81,34 +80,44 @@ class _TaskManagerScreenState
         title: Text(
           l10n.taskManagerTitle,
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.public,
+            ),
+            tooltip: l10n.communityTasks,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      const CommunityTasksScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
 
       body: Column(
         children: [
-          const SizedBox(
-            height: 16,
-          ),
 
           // 🎚️ FILTRY
           Row(
             mainAxisAlignment:
-                MainAxisAlignment
-                    .center,
+                MainAxisAlignment.center,
             children: [
               DropdownButton<Gender>(
                 value: _gender,
                 items: [
                   DropdownMenuItem(
-                    value:
-                        Gender.male,
+                    value: Gender.male,
                     child: Text(
                       l10n.male,
                     ),
                   ),
                   DropdownMenuItem(
-                    value:
-                        Gender
-                            .female,
+                    value: Gender.female,
                     child: Text(
                       l10n.female,
                     ),
@@ -120,11 +129,9 @@ class _TaskManagerScreenState
                   });
                 },
               ),
-
               const SizedBox(
                 width: 20,
               ),
-
               DropdownButton<int>(
                 value: _difficulty,
                 items: const [
@@ -157,10 +164,8 @@ class _TaskManagerScreenState
             child: _tasks.isEmpty
                 ? Center(
                     child: Text(
-                      l10n
-                          .noTasksYet,
-                      style:
-                          const TextStyle(
+                      l10n.noTasksYet,
+                      style: const TextStyle(
                         fontSize: 16,
                       ),
                     ),
@@ -169,31 +174,90 @@ class _TaskManagerScreenState
                     itemCount:
                         _tasks.length,
                     itemBuilder:
-                        (_, i) =>
-                            ListTile(
+                        (_, i) => ListTile(
                       title: Text(
                         _tasks[i],
                       ),
 
-                      // 🗑️ DELETE
-                      trailing:
+                      trailing: Row(
+                        mainAxisSize:
+                            MainAxisSize.min,
+                        children: [
                           IconButton(
-                        icon: const Icon(
-                          Icons.delete,
-                        ),
-                        onPressed:
-                            () async {
-                          _bank!
-                              .removeTask(
-                            _gender,
-                            _difficulty,
-                            i,
-                          );
+                            icon: const Icon(
+                              Icons.public,
+                            ),
+                            tooltip: l10n
+                                .shareToCommunity,
+                            onPressed: () async {
+                              final messenger =
+                                  ScaffoldMessenger.of(
+                                context,
+                              );
 
-                          await _save();
+                              try {
+                                await CommunityTaskService
+                                    .uploadTask(
+                                  text: _tasks[i],
+                                  gender:
+                                      _gender.name,
+                                  difficulty:
+                                      _difficulty,
+                                  anonymous:
+                                      false,
+                                );
 
-                          setState(() {});
-                        },
+                                if (!mounted) {
+                                  return;
+                                }
+
+                                messenger
+                                    .showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text(
+                                      l10n
+                                          .taskShared,
+                                    ),
+                                  ),
+                                );
+                              } catch (_) {
+                                if (!mounted) {
+                                  return;
+                                }
+
+                                messenger
+                                    .showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text(
+                                      l10n
+                                          .taskShareFailed,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+
+                          IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                            ),
+                            onPressed: () async {
+                              _bank!
+                                  .removeTask(
+                                _gender,
+                                _difficulty,
+                                i,
+                              );
+
+                              await _save();
+
+                              setState(() {});
+                            },
+                          ),
+                        ],
                       ),
 
                       // ✏️ EDIT
@@ -206,24 +270,20 @@ class _TaskManagerScreenState
                             builder: (_) =>
                                 TaskEditorScreen(
                               initialText:
-                                  _tasks[
-                                      i],
+                                  _tasks[i],
                             ),
                           ),
                         );
 
-                        if (edited !=
-                                null &&
+                        if (edited != null &&
                             edited
                                 .trim()
                                 .isNotEmpty) {
-                          _bank!
-                              .updateTask(
+                          _bank!.updateTask(
                             _gender,
                             _difficulty,
                             i,
-                            edited
-                                .trim(),
+                            edited.trim(),
                           );
 
                           await _save();
@@ -300,11 +360,10 @@ class _TaskManagerScreenState
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder:
-                                      (_) =>
-                                          TaskQrExportScreen(
-                                    data:
-                                        package.toJsonString(),
+                                  builder: (_) =>
+                                      TaskQrExportScreen(
+                                    data: package
+                                        .toJsonString(),
                                   ),
                                 ),
                               );

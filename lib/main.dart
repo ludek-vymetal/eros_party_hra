@@ -1,5 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'firebase_options.dart';
 
 import 'screens/partner_menu.dart';
 
@@ -19,7 +24,23 @@ import 'core/age_gate/age_gate_screen.dart';
 // 🌍 L10N
 import 'l10n/app_localizations.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 🔥 Firebase init
+  await Firebase.initializeApp(
+    options:
+        DefaultFirebaseOptions
+            .currentPlatform,
+  );
+
+  // 🔥 Anonymous auth
+  if (FirebaseAuth.instance.currentUser ==
+      null) {
+    await FirebaseAuth.instance
+        .signInAnonymously();
+  }
+
   runApp(const MyApp());
 }
 
@@ -47,14 +68,20 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _ageGateController =
-      AgeGateController(AgeGateStorage());
+      AgeGateController(
+    AgeGateStorage(),
+  );
 
   bool _checked = false;
   bool _showAgeGate = true;
 
-  Locale _locale = const Locale('cs');
+  Locale _locale = const Locale(
+    'cs',
+  );
 
-  void changeLocale(Locale locale) {
+  void changeLocale(
+    Locale locale,
+  ) {
     setState(() {
       _locale = locale;
     });
@@ -63,6 +90,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
     _checkAgeGate();
   }
 
@@ -80,7 +108,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     if (!_checked) {
       return const MaterialApp(
         home: Scaffold(
@@ -93,7 +123,8 @@ class _MyAppState extends State<MyApp> {
     }
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner:
+          false,
 
       locale: _locale,
 
@@ -118,6 +149,7 @@ class _MyAppState extends State<MyApp> {
           ? AgeGateScreen(
               controller:
                   _ageGateController,
+
               onConfirmed: () {
                 setState(() {
                   _showAgeGate = false;
@@ -152,10 +184,12 @@ class _MainMenuScreenState
   @override
   void initState() {
     super.initState();
+
     _checkSavedGame();
   }
 
-  Future<void> _checkSavedGame() async {
+  Future<void>
+      _checkSavedGame() async {
     final exists =
         await PartyGamePersistence
             .hasSavedGame();
@@ -207,7 +241,9 @@ class _MainMenuScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final l10n =
         AppLocalizations.of(context)!;
 
@@ -221,67 +257,83 @@ class _MainMenuScreenState
     }
 
     return Scaffold(
-    appBar: AppBar(
-      title: const Text('EROS'),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(
-            right: 12,
-          ),
-          child: Center(
-            child:
-                DropdownButtonHideUnderline(
+      appBar: AppBar(
+        title: const Text('EROS'),
+
+        actions: [
+          Padding(
+            padding:
+                const EdgeInsets.only(
+              right: 12,
+            ),
+
+            child: Center(
               child:
-                  DropdownButton<Locale>(
-                dropdownColor:
-                    Colors.black87,
-                value:
-                    Localizations.localeOf(
-                  context,
-                ),
-                items: [
-                  DropdownMenuItem(
-                    value:
-                        const Locale(
-                      'cs',
+                  DropdownButtonHideUnderline(
+                child:
+                    DropdownButton<
+                      Locale
+                    >(
+                      dropdownColor:
+                          Colors
+                              .black87,
+
+                      value:
+                          Localizations.localeOf(
+                        context,
+                      ),
+
+                      items: [
+                        DropdownMenuItem(
+                          value:
+                              const Locale(
+                            'cs',
+                          ),
+
+                          child: Text(
+                            l10n.czech,
+                          ),
+                        ),
+
+                        DropdownMenuItem(
+                          value:
+                              const Locale(
+                            'en',
+                          ),
+
+                          child: Text(
+                            l10n.english,
+                          ),
+                        ),
+                      ],
+
+                      onChanged: (
+                        locale,
+                      ) {
+                        if (locale !=
+                            null) {
+                          MyApp.setLocale(
+                            context,
+                            locale,
+                          );
+                        }
+                      },
                     ),
-                    child: Text(
-                      l10n.czech,
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value:
-                        const Locale(
-                      'en',
-                    ),
-                    child: Text(
-                      l10n.english,
-                    ),
-                  ),
-                ],
-                onChanged: (locale) {
-                  if (locale != null) {
-                    MyApp.setLocale(
-                      context,
-                      locale,
-                    );
-                  }
-                },
               ),
             ),
           ),
-        ),
-      ],
-    ),
+        ],
+      ),
 
- 
       body: Center(
         child: Column(
           mainAxisAlignment:
               MainAxisAlignment.center,
+
           children: [
             const Text(
               'EROS',
+
               style: TextStyle(
                 fontSize: 42,
                 fontWeight:
@@ -290,53 +342,20 @@ class _MainMenuScreenState
               ),
             ),
 
-            const SizedBox(height: 30),
-
-            DropdownButton<Locale>(
-              value:
-                  Localizations.localeOf(
-                context,
-              ),
-              items: [
-                DropdownMenuItem(
-                  value:
-                      const Locale(
-                    'cs',
-                  ),
-                  child: Text(
-                    l10n.czech,
-                  ),
-                ),
-                DropdownMenuItem(
-                  value:
-                      const Locale(
-                    'en',
-                  ),
-                  child: Text(
-                    l10n.english,
-                  ),
-                ),
-              ],
-              onChanged: (locale) {
-                if (locale != null) {
-                  MyApp.setLocale(
-                    context,
-                    locale,
-                  );
-                }
-              },
+            const SizedBox(
+              height: 50,
             ),
-
-            const SizedBox(height: 50),
 
             if (_hasSavedPartyGame)
               ...[
                 ElevatedButton(
                   onPressed:
                       _continuePartyGame,
+
                   child: Text(
                     l10n
                         .continuePartyGame,
+
                     style:
                         const TextStyle(
                       fontSize: 18,
@@ -373,15 +392,20 @@ class _MainMenuScreenState
 
                 _checkSavedGame();
               },
+
               child: Text(
                 l10n.newPartyGame,
-                style: const TextStyle(
+
+                style:
+                    const TextStyle(
                   fontSize: 18,
                 ),
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(
+              height: 20,
+            ),
 
             ElevatedButton(
               onPressed: () async {
@@ -394,15 +418,20 @@ class _MainMenuScreenState
                   ),
                 );
               },
+
               child: Text(
                 l10n.taskManager,
-                style: const TextStyle(
+
+                style:
+                    const TextStyle(
                   fontSize: 18,
                 ),
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(
+              height: 30,
+            ),
 
             ElevatedButton(
               onPressed: () async {
@@ -415,9 +444,12 @@ class _MainMenuScreenState
                   ),
                 );
               },
+
               child: Text(
                 l10n.partnerMode,
-                style: const TextStyle(
+
+                style:
+                    const TextStyle(
                   fontSize: 18,
                 ),
               ),

@@ -50,7 +50,8 @@
   "english": "🇺🇸 English",
 
   "newPartyGamePlayers": "New Party Game – Players",
-
+  "latestTasks": "Latest",
+  "topTasks": "Top Rated",
   "playerName": "Player Name",
 
   "male": "Male",
@@ -267,8 +268,25 @@
 
   "enterPartnerCode": "Enter partner code:",
 
-  "link": "Connect"
+  "link": "Connect",
+  
+  "shareToCommunity": "Share to community",
+  "taskShared": "Task shared with community",
+  "taskShareFailed": "Failed to share task",
+  "communityTasks": "Community Tasks",
+  "noCommunityTasks": "No community tasks have been shared yet",
+  "communityLoadError": "Failed to load community tasks",
+  "likes": "Likes",
+  "importTask": "Import task",
+  "taskImported": "Task imported",
+  "importTask": "Import task",
+  "taskImported": "Task imported",
+  "reportTask": "Report",
+  "taskReported": "Task reported",
+  "reportTaskQuestion": "Do you want to report this task?",
+  "taskAlreadyImported": "This task is already imported"
 }
+
 
 
 

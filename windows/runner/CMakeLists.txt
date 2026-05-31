@@ -16,6 +16,11 @@ add_executable(${BINARY_NAME} WIN32
   "runner.exe.manifest"
 )
 
+# 🔥 FIX FIREBASE / LINKER
+set_target_properties(${BINARY_NAME} PROPERTIES
+  LINK_FLAGS "/INCREMENTAL:NO"
+)
+
 # Apply the standard set of build settings. This can be removed for applications
 # that need different build settings.
 apply_standard_settings(${BINARY_NAME})

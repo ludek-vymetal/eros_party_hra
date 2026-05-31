@@ -218,6 +218,18 @@ abstract class AppLocalizations {
   /// **'Disagree'**
   String get disagree;
 
+  /// No description provided for @latestTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest'**
+  String get latestTasks;
+
+  /// No description provided for @topTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Rated'**
+  String get topTasks;
+
   /// No description provided for @partyGame.
   ///
   /// In en, this message translates to:
@@ -799,6 +811,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Connect'**
   String get link;
+
+  /// No description provided for @shareToCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Share to community'**
+  String get shareToCommunity;
+
+  /// No description provided for @taskShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Task shared with community'**
+  String get taskShared;
+
+  /// No description provided for @taskShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to share task'**
+  String get taskShareFailed;
+
+  /// No description provided for @communityTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Community Tasks'**
+  String get communityTasks;
+
+  /// No description provided for @noCommunityTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No community tasks have been shared yet'**
+  String get noCommunityTasks;
+
+  /// No description provided for @communityLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load community tasks'**
+  String get communityLoadError;
+
+  /// No description provided for @likes.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes'**
+  String get likes;
+
+  /// No description provided for @importTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Import task'**
+  String get importTask;
+
+  /// No description provided for @taskImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Task imported'**
+  String get taskImported;
+
+  /// No description provided for @reportTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get reportTask;
+
+  /// No description provided for @taskReported.
+  ///
+  /// In en, this message translates to:
+  /// **'Task reported'**
+  String get taskReported;
+
+  /// No description provided for @reportTaskQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to report this task?'**
+  String get reportTaskQuestion;
+
+  /// No description provided for @taskAlreadyImported.
+  ///
+  /// In en, this message translates to:
+  /// **'This task is already imported'**
+  String get taskAlreadyImported;
 }
 
 class _AppLocalizationsDelegate

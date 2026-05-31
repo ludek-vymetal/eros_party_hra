@@ -34,8 +34,9 @@
 
   "agree": "Souhlasím",
   "disagree": "Nesouhlasím",
+  "latestTasks": "Nejnovější",
+  "topTasks": "Nejlepší",
   
-  "@@locale": "cs",
 
   "appTitle": "EROS",
 
@@ -245,7 +246,7 @@
 
   "reactions": "reakcí",
   
-  "partnerLink": "Propojení s partnerem",
+  
 
   "linkedSuccess": "✅ Jste propojeni",
 
@@ -267,7 +268,24 @@
 
   "enterPartnerCode": "Zadej kód partnera:",
 
-  "link": "Propojit"
+  "link": "Propojit",
+  
+  "shareToCommunity": "Sdílet do komunity",
+  "taskShared": "Úkol byl sdílen do komunity",
+  "taskShareFailed": "Sdílení úkolu se nezdařilo",
+  "communityTasks": "Komunitní úkoly",
+  "noCommunityTasks": "Zatím nebyly sdíleny žádné úkoly",
+  "communityLoadError": "Chyba při načítání komunitních úkolů",
+  "likes": "To se mi líbí",
+  
+  
+  "importTask": "Importovat úkol",
+  "taskImported": "Úkol byl importován",
+  "reportTask": "Nahlásit",
+  "taskReported": "Úkol byl nahlášen",
+  "reportTaskQuestion": "Opravdu chcete nahlásit tento úkol?",
+  "taskAlreadyImported": "Tento úkol už máte importovaný"
+
 }
 
 

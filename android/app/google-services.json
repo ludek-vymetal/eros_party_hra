@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "956940813038",
+    "project_id": "eros-party-game",
+    "storage_bucket": "eros-party-game.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956940813038:android:4bd128926a99b9203ee9ff",
+        "android_client_info": {
+          "package_name": "com.example.eros_party_hra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8jTDbCebmz2AqmKpdVb7m4WPllrGVKqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
