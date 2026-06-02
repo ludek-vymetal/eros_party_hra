@@ -21,6 +21,9 @@
 * [x] app_cs.arb
 * [x] app_en.arb
 * [x] flutter gen-l10n
+* [x] Lokalizace Community Tasks
+* [x] Lokalizace Community Scenarios
+* [ ] Kompletní kontrola všech starších obrazovek
 
 ---
 
@@ -36,6 +39,7 @@
 * [x] Rescue systém
 * [x] Rescue hlasování
 * [x] Lokální task banka
+* [x] QR export tasků
 * [x] QR import tasků
 
 ---
@@ -46,9 +50,14 @@
 * [x] Partner propojení
 * [x] Partner kódy
 * [x] Historie scénářů
+* [x] Detail scénáře
+* [x] Úprava scénáře
+* [x] Mazání scénáře
 * [x] Reakce na scénáře
 * [x] Emoce
 * [x] Lokální ukládání scénářů
+* [x] Generování kódu po editaci scénáře
+* [x] Kopírování kódu do schránky
 
 ---
 
@@ -70,8 +79,11 @@
 ## Firestore
 
 * [x] Firestore databáze vytvořena
-* [x] Test mode zapnut
 * [x] Europe region
+* [x] Firestore Rules nastaveny
+* [x] Firestore Rules pro Community Tasks
+* [x] Firestore Rules pro Community Scenarios
+* [x] Firestore Rules pro Reporty
 
 ---
 
@@ -79,6 +91,7 @@
 
 * [x] Firebase Authentication
 * [x] Anonymous login
+* [x] Ověřený funkční login
 
 ---
 
@@ -104,106 +117,151 @@ Všichni uživatelé vidí:
 
 ---
 
-## Sdílení obsahu
-
-Při vytvoření:
-
-* [ ] Sdílet s komunitou?
-* [ ] Ano / Ne
-
-Pokud:
-
-* Ano → community
-* Ne → private
-
----
-
-## Anonymní sdílení
-
-* [ ] Sdílet anonymně
-
----
-
-# 🔥 DALŠÍ KROKY
-
-## Firebase integrace
- splneno
-- [x] Firebase packages
-- [x] Firebase.initializeApp()
-- [x] Anonymous sign-in
-- [x] Firebase Authentication
-
-## Cloud tasky
+# ✅ COMMUNITY TASKS
 
 * [x] community_tasks kolekce
 * [x] upload tasků
 * [x] download tasků
 * [x] sync tasků
+* [x] latest tasky
+* [x] top tasky
+* [x] like systém
+* [x] report tasků
+* [x] import do TaskBank
+* [x] ochrana proti duplicitnímu importu
+* [x] l10n
+* [x] flutter analyze bez chyb
+
+### Chybí
+
+* [ ] Automatické skrytí nahlášených tasků
+* [ ] Moderace tasků
 
 ---
 
-## Cloud scénáře
+# ✅ COMMUNITY SCÉNÁŘE
 
-* [ ] community_scenarios
-* [ ] private_scenarios
-* [ ] upload scénářů
-* [ ] veřejné sdílení
+## Backend
 
----
+* [x] CommunityScenario model
+* [x] CommunityScenarioService
+* [x] community_scenarios kolekce
+* [x] upload scénářů
+* [x] download scénářů
+* [x] latest scénáře
+* [x] top scénáře
+* [x] anonymní sdílení
+* [x] Firestore Rules
 
-## Moderace
+## UI
 
-* [ ] Report content
-* [ ] Like systém
-* [ ] Hodnocení
+* [x] CommunityScenariosScreen
+* [x] načítání z Firestore
+* [x] přepínání Latest / Top
+* [x] otevření detailu scénáře
+
+## Sdílení
+
+* [x] Sdílet s komunitou
+* [x] Sdílet anonymně
+* [x] Upload při vytvoření scénáře
+
+### Chybí
+
+* [ ] Detail scénáře (kompletní obsah)
+* [ ] Import scénáře
+* [ ] Like scénáře (UI)
+* [ ] Report scénáře (UI)
+* [ ] Ochrana proti duplicitnímu importu scénáře
 * [ ] Oblíbené scénáře
 
 ---
 
-## Partner sync
+# 🔥 PARTNER SYNC
+
+### Chybí
 
 * [ ] Cloud partner propojení
 * [ ] Sync mezi zařízeními
+* [ ] Windows ↔ Android sync
 * [ ] Windows ↔ iPhone sync
+* [ ] Cloud reakce
+* [ ] Cloud historie scénářů
 
 ---
 
-## UI/UX
+# 🎨 UI / UX
+
+### Chybí
 
 * [ ] Animace
 * [ ] Lepší přechody
 * [ ] Modernější design
 * [ ] Dark erotic theme polish
+* [ ] Vlastní ikonografie
 
 ---
 
-## iOS release
+# 🍎 iOS RELEASE
+
+### Chybí
 
 * [ ] Apple Developer účet
 * [ ] TestFlight
 * [ ] App Store build
-* [ ] Privacy policy
-* [ ] Age rating 18+
+* [ ] Privacy Policy
+* [ ] Age Rating 18+
+* [ ] App Store metadata
 
 ---
 
-## Budoucí možnosti
+# 🤖 BUDOUCNOST
+
+### AI
 
 * [ ] AI generování scénářů
+* [ ] AI doporučení scénářů
 * [ ] AI doporučení tasků
-* [ ] Community feed
+
+### Community
+
+* [ ] Community Feed
 * [ ] Trending scénáře
+* [ ] Trending tasky
+* [ ] Hodnocení scénářů
+* [ ] Oblíbené scénáře
+
+### Multiplayer
+
 * [ ] Multiplayer režim
-* [ ] Online party rooms
-## Firebase integrace
+* [ ] Online Party Rooms
+* [ ] Cloud Party Session
 
-- [x] Přidat Firebase packages
-- [x] Firebase.initializeApp()
-- [x] Anonymous sign-in ve Flutteru
+---
 
-## Cloud tasky
+# 🎯 NEJBLIŽŠÍ KROKY
 
-- [x] community_tasks kolekce
-- [x] upload tasků
-- [x] download tasků
-- [x] sync tasků
+1. Community Scenario Detail
+2. Import scénáře
+3. Like scénáře
+4. Report scénáře
+5. Duplicitní ochrana scénářů
+6. Kompletní l10n kontrola
+7. Cloud Partner Sync
+
+✅ flutter analyze čisté
+✅ Community Tasks hotové
+✅ Community Scenarios hotové
+✅ CloudPartnerService vytvořen
+✅ Firebase Authentication funkční
+✅ Firestore funkční
+
+✅ Cloud partner propojení
+✅ Vyhledání partnera podle kódu
+✅ Uložení partner UID
+✅ partner_scenarios Firestore Rules
+
+✅ Cloud partner scénáře - odesílání
+🚧 Cloud partner scénáře - příjem
+🚧 Cloud inbox
+🚧 Live synchronizace

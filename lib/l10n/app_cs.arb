@@ -36,7 +36,22 @@
   "disagree": "Nesouhlasím",
   "latestTasks": "Nejnovější",
   "topTasks": "Nejlepší",
-  
+  "shareToCommunity": "Sdílet s komunitou",
+"shareAnonymously": "Sdílet anonymně",
+
+"communityScenarios": "Komunitní scénáře",
+"latestScenarios": "Nejnovější scénáře",
+"topScenarios": "Nejlépe hodnocené scénáře",
+
+"scenarioImported": "Scénář byl importován",
+"scenarioAlreadyImported": "Scénář již byl importován",
+
+"reportScenario": "Nahlásit scénář",
+"reportScenarioQuestion": "Opravdu chcete nahlásit tento scénář?",
+"scenarioReported": "Scénář byl nahlášen",
+
+"noCommunityScenarios": "Zatím nejsou žádné komunitní scénáře",
+"communityScenarioLoadError": "Nepodařilo se načíst komunitní scénáře",
 
   "appTitle": "EROS",
 
@@ -49,7 +64,33 @@
 
   "czech": "🇨🇿 Čeština",
   "english": "🇺🇸 English",
+  "communityScenarios": "Komunitní scénáře",
+"latestScenarios": "Nejnovější scénáře",
+"topScenarios": "Nejlépe hodnocené scénáře",
+"cloudInbox": "Doručené scénáře",
+"noCloudScenarios": "Zatím nemáte žádné scénáře od partnera",
 
+
+"communityScenarioAuthor": "Autor",
+"communityScenarioFor": "Pro",
+"importScenario": "Importovat scénář",
+"scenarioImported": "Scénář byl importován",
+"scenarioAlreadyImported": "Scénář již byl importován",
+"communityScenarioGoal": "Cíl",
+"communityScenarioBoundaries": "Hranice",
+"communityScenarioEmotions": "Emoce",
+"communityScenarioImport": "Importovat",
+"communityScenarioImported": "Scénář importován",
+"communityScenarioAlreadyImported": "Scénář již byl importován",
+"communityScenarioLike": "To se mi líbí",
+"communityScenarioReport": "Nahlásit",
+"communityScenarioReportQuestion": "Opravdu chcete nahlásit tento scénář?",
+"reportScenario": "Nahlásit scénář",
+"reportScenarioQuestion": "Opravdu chcete nahlásit tento scénář?",
+"scenarioReported": "Scénář byl nahlášen",
+
+"noCommunityScenarios": "Zatím nejsou žádné komunitní scénáře",
+"communityScenarioLoadError": "Nepodařilo se načíst komunitní scénáře",
   "newPartyGamePlayers": "Nová party hra – hráči",
 
   "playerName": "Jméno hráče",

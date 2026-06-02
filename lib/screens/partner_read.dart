@@ -77,7 +77,7 @@ class _PartnerReadScreenState
 
   Future<void> _decode() async {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     setState(() {
       error = null;
@@ -194,7 +194,7 @@ class _PartnerReadScreenState
     BuildContext context,
   ) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     _emoce = [
       l10n.emotionExcited,

@@ -4,6 +4,10 @@ import '../../l10n/app_localizations.dart';
 
 import '../services/partner_link_service.dart';
 
+import '../services/cloud_partner_service.dart';
+
+
+
 class PartnerLinkScreen
     extends StatefulWidget {
   const PartnerLinkScreen({
@@ -38,6 +42,9 @@ class _PartnerLinkScreenState
         await PartnerLinkService
             .getOrCreateMyCode();
 
+    await CloudPartnerService
+        .registerMyCode(code);
+
     final isLinked =
         await PartnerLinkService
             .isLinked();
@@ -62,7 +69,7 @@ class _PartnerLinkScreenState
     BuildContext context,
   ) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -173,13 +180,28 @@ class _PartnerLinkScreenState
                       ),
 
                       ElevatedButton(
-                        onPressed:
-                            () async {
+                        onPressed: () async {
+                          final code =
+                              controller.text.trim();
+
+                          final partnerUid =
+                              await CloudPartnerService
+                                  .findPartnerUid(
+                            code,
+                          );
+
+                          if (partnerUid == null) {
+                            return;
+                          }
+
                           await PartnerLinkService
                               .savePartnerCode(
-                            controller
-                                .text
-                                .trim(),
+                            code,
+                          );
+
+                          await PartnerLinkService
+                              .savePartnerUid(
+                            partnerUid,
                           );
 
                           await _load();

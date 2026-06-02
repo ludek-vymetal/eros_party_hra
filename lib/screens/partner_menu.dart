@@ -7,6 +7,10 @@ import 'partner_read.dart';
 import 'partner_link_screen.dart';
 import 'scenario_record_list_screen.dart';
 
+import 'cloud_partner_inbox_screen.dart';
+
+import 'community_scenarios_screen.dart';
+
 import '../services/partner_link_service.dart';
 
 class PartnerMenuScreen
@@ -53,7 +57,7 @@ class _PartnerMenuScreenState
   @override
   Widget build(BuildContext context) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor:
@@ -128,6 +132,28 @@ class _PartnerMenuScreenState
                   MaterialPageRoute(
                     builder: (_) =>
                         const PartnerReadScreen(),
+                  ),
+                ),
+              ),
+
+              _btn(
+                l10n.cloudInbox,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const CloudPartnerInboxScreen(),
+                  ),
+                ),
+              ),
+
+              _btn(
+                l10n.communityScenarios,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const CommunityScenariosScreen(),
                   ),
                 ),
               ),

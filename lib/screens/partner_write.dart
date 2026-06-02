@@ -8,6 +8,10 @@ import '../models/scenario_record.dart';
 
 import '../services/crypto_service.dart';
 import '../services/scenario_record_storage.dart';
+import '../services/community_scenario_service.dart';
+
+import '../services/partner_link_service.dart';
+import '../services/cloud_partner_scenario_service.dart';
 
 class PartnerWriteScreen extends StatefulWidget {
   final ScenarioRecord? existingRecord;
@@ -53,6 +57,9 @@ class _PartnerWriteScreenState
       widget.existingRecord !=
       null;
 
+  bool shareToCommunity = false;
+  bool anonymousShare = true;    
+
   @override
   void initState() {
     super.initState();
@@ -75,7 +82,7 @@ class _PartnerWriteScreenState
 
   Future<void> _save() async {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     if (_autorCtrl.text.isEmpty ||
         _proCtrl.text.isEmpty ||
@@ -154,9 +161,13 @@ class _PartnerWriteScreenState
       await ScenarioRecordStorage
           .update(updated);
 
-      if (!mounted) return;
-
-      Navigator.pop(context);
+      setState(() {
+        generatedCode =
+            CryptoService.encodeScenar(
+              scenar,
+            );
+      });
+    
     } else {
       final record =
           ScenarioRecord(
@@ -168,12 +179,50 @@ class _PartnerWriteScreenState
       await ScenarioRecordStorage
           .add(record);
 
+      debugPrint(
+        'shareToCommunity = $shareToCommunity',
+      );
+
+      if (shareToCommunity) {
+        await CommunityScenarioService
+            .uploadScenario(
+          scenar: scenar,
+          anonymous: anonymousShare,
+        );
+      }
+
+      final partnerUid =
+        await PartnerLinkService
+            .getPartnerUid();
+
+    debugPrint(
+      'PARTNER UID: $partnerUid',
+    );
+
+    if (partnerUid != null) {
+      debugPrint(
+        'SENDING TO FIREBASE',
+      );
+
+      await CloudPartnerScenarioService
+          .sendScenario(
+        receiverUid: partnerUid,
+        nazev: scenar.nazev,
+        text: scenar.text,
+      );
+
+      debugPrint(
+        'SENT',
+      );
+    }
+      
+      // Zde opraveno uzavření metody
       setState(() {
         generatedCode =
-            CryptoService
-                .encodeScenar(
-                  scenar,
-                );
+            CryptoService.encodeScenar(
+              scenar,
+            );
+      
       });
     }
   }
@@ -183,7 +232,7 @@ class _PartnerWriteScreenState
     BuildContext context,
   ) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     emoce = [
       l10n.emotionTenderness,
@@ -314,6 +363,31 @@ class _PartnerWriteScreenState
                   height: 20,
                 ),
 
+                SwitchListTile(
+                  title: Text(
+                    l10n.shareToCommunity,
+                  ),
+                  value: shareToCommunity,
+                  onChanged: (v) {
+                    setState(() {
+                      shareToCommunity = v;
+                    });
+                  },
+                ),
+
+                if (shareToCommunity)
+                  SwitchListTile(
+                    title: Text(
+                      l10n.shareAnonymously,
+                    ),
+                    value: anonymousShare,
+                    onChanged: (v) {
+                      setState(() {
+                        anonymousShare = v;
+                      });
+                    },
+                  ),
+
                 ElevatedButton(
                   onPressed: _save,
 
@@ -326,9 +400,7 @@ class _PartnerWriteScreenState
                   ),
                 ),
 
-                if (!isEdit &&
-                    generatedCode !=
-                        null) ...[
+                if (generatedCode != null) ...[
                   const SizedBox(
                     height: 12,
                   ),
@@ -342,15 +414,12 @@ class _PartnerWriteScreenState
                   ),
 
                   ElevatedButton(
-                    onPressed:
-                        () =>
-                            Clipboard.setData(
-                              ClipboardData(
-                                text:
-                                    generatedCode!,
-                              ),
-                            ),
-
+                    onPressed: () =>
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: generatedCode!,
+                          ),
+                        ),
                     child: Text(
                       l10n.copyCode,
                     ),

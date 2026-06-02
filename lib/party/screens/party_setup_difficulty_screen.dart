@@ -102,7 +102,7 @@ class _PartySetupDifficultyScreenState
   @override
   Widget build(BuildContext context) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(

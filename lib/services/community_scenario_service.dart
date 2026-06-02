@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../models/community_task.dart';
+import '../models/community_scenario.dart';
+import '../models/scenar.dart';
 
-class CommunityTaskService {
+class CommunityScenarioService {
   static final _firestore =
       FirebaseFirestore.instance;
 
@@ -11,42 +12,49 @@ class CommunityTaskService {
       FirebaseAuth.instance;
 
   static CollectionReference<Map<String, dynamic>>
-      get _tasks =>
+      get _scenarios =>
           _firestore.collection(
-            'community_tasks',
+            'community_scenarios',
           );
 
-  static Future<void> uploadTask({
-    required String text,
-    required String gender,
-    required int difficulty,
+  static Future<void> uploadScenario({
+    required Scenar scenar,
     required bool anonymous,
   }) async {
+    
+
     final user = _auth.currentUser;
 
+    
+    
     if (user == null) {
+      
       return;
     }
 
-    final task = CommunityTask(
+    final scenario = CommunityScenario(
       id: '',
-      text: text,
-      gender: gender,
-      difficulty: difficulty,
+      nazev: scenar.nazev,
+      autor: scenar.autor,
+      pro: scenar.pro,
+      cil: scenar.cil,
+      text: scenar.text,
+      hranice: scenar.hranice,
+      emoce: scenar.emoce,
       authorUid: user.uid,
       anonymous: anonymous,
       likes: 0,
       createdAt: DateTime.now(),
     );
 
-    await _tasks.add(
-      task.toMap(),
+    await _scenarios.add(
+      scenario.toMap(),
     );
-  }
+    }
 
-  static Stream<List<CommunityTask>>
-      latestTasks() {
-    return _tasks
+  static Stream<List<CommunityScenario>>
+      latestScenarios() {
+    return _scenarios
         .orderBy(
           'createdAt',
           descending: true,
@@ -55,16 +63,16 @@ class CommunityTaskService {
         .map(
           (snapshot) => snapshot.docs
               .map(
-                CommunityTask
+                CommunityScenario
                     .fromFirestore,
               )
               .toList(),
         );
   }
 
-  static Stream<List<CommunityTask>>
-      topTasks() {
-    return _tasks
+  static Stream<List<CommunityScenario>>
+      topScenarios() {
+    return _scenarios
         .orderBy(
           'likes',
           descending: true,
@@ -73,36 +81,40 @@ class CommunityTaskService {
         .map(
           (snapshot) => snapshot.docs
               .map(
-                CommunityTask
+                CommunityScenario
                     .fromFirestore,
               )
               .toList(),
         );
   }
 
-  static Future<void> likeTask(
-    String taskId,
+  static Future<void> likeScenario(
+    String scenarioId,
   ) async {
-    await _tasks.doc(taskId).update(
-      {
-        'likes':
-            FieldValue.increment(1),
-      },
-    );
+    await _scenarios
+        .doc(scenarioId)
+        .update({
+      'likes':
+          FieldValue.increment(1),
+    });
   }
-  
-  static Future<void> reportTask(
-    String taskId,
+
+  static Future<void> reportScenario(
+    String scenarioId,
   ) async {
     final user =
         _auth.currentUser;
 
-    if (user == null) return;
+    if (user == null) {
+      return;
+    }
 
     await _firestore
-        .collection('reported_tasks')
+        .collection(
+          'reported_scenarios',
+        )
         .add({
-      'taskId': taskId,
+      'scenarioId': scenarioId,
       'reporterUid': user.uid,
       'createdAt':
           FieldValue.serverTimestamp(),

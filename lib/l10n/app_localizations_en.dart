@@ -70,6 +70,86 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disagree => 'Disagree';
 
   @override
+  String get shareToCommunity => 'Share to community';
+
+  @override
+  String get shareAnonymously => 'Share anonymously';
+
+  @override
+  String get communityScenarios => 'Community Scenarios';
+
+  @override
+  String get latestScenarios => 'Latest Scenarios';
+
+  @override
+  String get topScenarios => 'Top Rated Scenarios';
+
+  @override
+  String get scenarioImported => 'Scenario imported';
+
+  @override
+  String get scenarioAlreadyImported => 'Scenario already imported';
+
+  @override
+  String get reportScenario => 'Report Scenario';
+
+  @override
+  String get reportScenarioQuestion =>
+      'Do you really want to report this scenario?';
+
+  @override
+  String get scenarioReported => 'Scenario reported';
+
+  @override
+  String get importScenario => 'Import Scenario';
+
+  @override
+  String get cloudInbox => 'Inbox';
+
+  @override
+  String get noCloudScenarios => 'No scenarios from your partner yet';
+
+  @override
+  String get communityScenarioAuthor => 'Author';
+
+  @override
+  String get communityScenarioFor => 'For';
+
+  @override
+  String get communityScenarioGoal => 'Goal';
+
+  @override
+  String get communityScenarioBoundaries => 'Boundaries';
+
+  @override
+  String get communityScenarioEmotions => 'Emotions';
+
+  @override
+  String get communityScenarioImport => 'Import';
+
+  @override
+  String get communityScenarioImported => 'Scenario imported';
+
+  @override
+  String get communityScenarioAlreadyImported => 'Scenario already imported';
+
+  @override
+  String get communityScenarioLike => 'Like';
+
+  @override
+  String get communityScenarioReport => 'Report';
+
+  @override
+  String get communityScenarioReportQuestion =>
+      'Do you really want to report this scenario?';
+
+  @override
+  String get noCommunityScenarios => 'No community scenarios yet';
+
+  @override
+  String get communityScenarioLoadError => 'Failed to load community scenarios';
+
+  @override
   String get latestTasks => 'Latest';
 
   @override
@@ -367,9 +447,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get link => 'Connect';
-
-  @override
-  String get shareToCommunity => 'Share to community';
 
   @override
   String get taskShared => 'Task shared with community';

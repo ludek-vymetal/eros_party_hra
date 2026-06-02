@@ -159,7 +159,7 @@ class _PartyGameScreenState
 
   void _finishRescueProcess() {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     final success =
         _rescueController
@@ -227,7 +227,7 @@ class _PartyGameScreenState
     bool isDouble = false,
   }) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     int remaining =
         isDouble ? 2 : 1;
@@ -324,7 +324,7 @@ class _PartyGameScreenState
   @override
   Widget build(BuildContext context) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     final player =
         widget.engine.state.currentPlayer;

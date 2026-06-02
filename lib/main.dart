@@ -245,7 +245,7 @@ class _MainMenuScreenState
     BuildContext context,
   ) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     if (_loading) {
       return const Scaffold(

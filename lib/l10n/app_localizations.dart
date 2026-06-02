@@ -67,8 +67,8 @@ abstract class AppLocalizations {
 
   final String localeName;
 
-  static AppLocalizations? of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
@@ -217,6 +217,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disagree'**
   String get disagree;
+
+  /// No description provided for @shareToCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Share to community'**
+  String get shareToCommunity;
+
+  /// No description provided for @shareAnonymously.
+  ///
+  /// In en, this message translates to:
+  /// **'Share anonymously'**
+  String get shareAnonymously;
+
+  /// No description provided for @communityScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'Community Scenarios'**
+  String get communityScenarios;
+
+  /// No description provided for @latestScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest Scenarios'**
+  String get latestScenarios;
+
+  /// No description provided for @topScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Rated Scenarios'**
+  String get topScenarios;
+
+  /// No description provided for @scenarioImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario imported'**
+  String get scenarioImported;
+
+  /// No description provided for @scenarioAlreadyImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario already imported'**
+  String get scenarioAlreadyImported;
+
+  /// No description provided for @reportScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Scenario'**
+  String get reportScenario;
+
+  /// No description provided for @reportScenarioQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to report this scenario?'**
+  String get reportScenarioQuestion;
+
+  /// No description provided for @scenarioReported.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario reported'**
+  String get scenarioReported;
+
+  /// No description provided for @importScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Scenario'**
+  String get importScenario;
+
+  /// No description provided for @cloudInbox.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbox'**
+  String get cloudInbox;
+
+  /// No description provided for @noCloudScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'No scenarios from your partner yet'**
+  String get noCloudScenarios;
+
+  /// No description provided for @communityScenarioAuthor.
+  ///
+  /// In en, this message translates to:
+  /// **'Author'**
+  String get communityScenarioAuthor;
+
+  /// No description provided for @communityScenarioFor.
+  ///
+  /// In en, this message translates to:
+  /// **'For'**
+  String get communityScenarioFor;
+
+  /// No description provided for @communityScenarioGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get communityScenarioGoal;
+
+  /// No description provided for @communityScenarioBoundaries.
+  ///
+  /// In en, this message translates to:
+  /// **'Boundaries'**
+  String get communityScenarioBoundaries;
+
+  /// No description provided for @communityScenarioEmotions.
+  ///
+  /// In en, this message translates to:
+  /// **'Emotions'**
+  String get communityScenarioEmotions;
+
+  /// No description provided for @communityScenarioImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get communityScenarioImport;
+
+  /// No description provided for @communityScenarioImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario imported'**
+  String get communityScenarioImported;
+
+  /// No description provided for @communityScenarioAlreadyImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario already imported'**
+  String get communityScenarioAlreadyImported;
+
+  /// No description provided for @communityScenarioLike.
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get communityScenarioLike;
+
+  /// No description provided for @communityScenarioReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get communityScenarioReport;
+
+  /// No description provided for @communityScenarioReportQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to report this scenario?'**
+  String get communityScenarioReportQuestion;
+
+  /// No description provided for @noCommunityScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'No community scenarios yet'**
+  String get noCommunityScenarios;
+
+  /// No description provided for @communityScenarioLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load community scenarios'**
+  String get communityScenarioLoadError;
 
   /// No description provided for @latestTasks.
   ///
@@ -811,12 +967,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Connect'**
   String get link;
-
-  /// No description provided for @shareToCommunity.
-  ///
-  /// In en, this message translates to:
-  /// **'Share to community'**
-  String get shareToCommunity;
 
   /// No description provided for @taskShared.
   ///

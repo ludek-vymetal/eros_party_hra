@@ -63,7 +63,7 @@ class _RescueVoteOverlayState
   @override
   Widget build(BuildContext context) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     if (_currentVoter >=
         widget.voterNames.length) {

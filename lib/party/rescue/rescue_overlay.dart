@@ -23,7 +23,7 @@ class RescueOverlay
   @override
   Widget build(BuildContext context) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     return Container(
       color: Colors.black

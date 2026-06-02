@@ -70,6 +70,86 @@ class AppLocalizationsCs extends AppLocalizations {
   String get disagree => 'Nesouhlasím';
 
   @override
+  String get shareToCommunity => 'Sdílet do komunity';
+
+  @override
+  String get shareAnonymously => 'Sdílet anonymně';
+
+  @override
+  String get communityScenarios => 'Komunitní scénáře';
+
+  @override
+  String get latestScenarios => 'Nejnovější scénáře';
+
+  @override
+  String get topScenarios => 'Nejlépe hodnocené scénáře';
+
+  @override
+  String get scenarioImported => 'Scénář byl importován';
+
+  @override
+  String get scenarioAlreadyImported => 'Scénář již byl importován';
+
+  @override
+  String get reportScenario => 'Nahlásit scénář';
+
+  @override
+  String get reportScenarioQuestion => 'Opravdu chcete nahlásit tento scénář?';
+
+  @override
+  String get scenarioReported => 'Scénář byl nahlášen';
+
+  @override
+  String get importScenario => 'Importovat scénář';
+
+  @override
+  String get cloudInbox => 'Doručené scénáře';
+
+  @override
+  String get noCloudScenarios => 'Zatím nemáte žádné scénáře od partnera';
+
+  @override
+  String get communityScenarioAuthor => 'Autor';
+
+  @override
+  String get communityScenarioFor => 'Pro';
+
+  @override
+  String get communityScenarioGoal => 'Cíl';
+
+  @override
+  String get communityScenarioBoundaries => 'Hranice';
+
+  @override
+  String get communityScenarioEmotions => 'Emoce';
+
+  @override
+  String get communityScenarioImport => 'Importovat';
+
+  @override
+  String get communityScenarioImported => 'Scénář importován';
+
+  @override
+  String get communityScenarioAlreadyImported => 'Scénář již byl importován';
+
+  @override
+  String get communityScenarioLike => 'To se mi líbí';
+
+  @override
+  String get communityScenarioReport => 'Nahlásit';
+
+  @override
+  String get communityScenarioReportQuestion =>
+      'Opravdu chcete nahlásit tento scénář?';
+
+  @override
+  String get noCommunityScenarios => 'Zatím nejsou žádné komunitní scénáře';
+
+  @override
+  String get communityScenarioLoadError =>
+      'Nepodařilo se načíst komunitní scénáře';
+
+  @override
   String get latestTasks => 'Nejnovější';
 
   @override
@@ -367,9 +447,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get link => 'Propojit';
-
-  @override
-  String get shareToCommunity => 'Sdílet do komunity';
 
   @override
   String get taskShared => 'Úkol byl sdílen do komunity';

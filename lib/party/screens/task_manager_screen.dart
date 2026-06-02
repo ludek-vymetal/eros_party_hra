@@ -64,7 +64,7 @@ class _TaskManagerScreenState
   @override
   Widget build(BuildContext context) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     if (_bank == null) {
       return const Scaffold(

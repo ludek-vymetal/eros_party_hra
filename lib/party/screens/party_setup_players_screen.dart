@@ -33,7 +33,7 @@ class _PartySetupPlayersScreenState
     String name,
   ) async {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     return await showDialog<bool>(
           context: context,
@@ -73,7 +73,7 @@ class _PartySetupPlayersScreenState
 
   Future<void> _addPlayer() async {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     final name =
         _nameController.text.trim();
@@ -160,7 +160,7 @@ class _PartySetupPlayersScreenState
   @override
   Widget build(BuildContext context) {
     final l10n =
-        AppLocalizations.of(context)!;
+        AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
