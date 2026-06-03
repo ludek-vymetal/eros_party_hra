@@ -1,28 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../l10n/app_localizations.dart';
 
 import '../services/partner_link_service.dart';
-
 import '../services/cloud_partner_service.dart';
 
-
-
-class PartnerLinkScreen
-    extends StatefulWidget {
+class PartnerLinkScreen extends StatefulWidget {
   const PartnerLinkScreen({
     super.key,
   });
 
   @override
-  State<PartnerLinkScreen>
-      createState() =>
-          _PartnerLinkScreenState();
+  State<PartnerLinkScreen> createState() =>
+      _PartnerLinkScreenState();
 }
 
 class _PartnerLinkScreenState
-    extends State<
-        PartnerLinkScreen> {
+    extends State<PartnerLinkScreen> {
   String? myCode;
 
   final controller =
@@ -80,139 +75,186 @@ class _PartnerLinkScreenState
 
       body: Padding(
         padding:
-            const EdgeInsets.all(
-          16,
-        ),
+            const EdgeInsets.all(16),
 
-        child:
-            linked
-                ? Column(
-                    children: [
-                      Text(
-                        l10n
-                            .linkedSuccess,
-
-                        style:
-                            const TextStyle(
-                          fontSize:
-                              18,
-                        ),
-                      ),
-
-                      const SizedBox(
-                        height: 20,
-                      ),
-
-                      ElevatedButton(
-                        onPressed:
-                            () async {
-                          await PartnerLinkService
-                              .unlink();
-
-                          await _load();
-                        },
-
-                        child: Text(
-                          l10n.unlink,
-                        ),
-                      ),
-                    ],
-                  )
-                : Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment
-                            .start,
-
-                    children: [
-                      Text(
-                        l10n.yourCode,
-
-                        style:
-                            const TextStyle(
-                          fontWeight:
-                              FontWeight
-                                  .bold,
-                        ),
-                      ),
-
-                      const SizedBox(
-                        height: 6,
-                      ),
-
-                      SelectableText(
-                        myCode ??
-                            '...',
-
-                        style:
-                            const TextStyle(
-                          fontSize:
-                              24,
-
-                          letterSpacing:
-                              2,
-                        ),
-                      ),
-
-                      const SizedBox(
-                        height: 24,
-                      ),
-
-                      Text(
-                        l10n
-                            .enterPartnerCode,
-                      ),
-
-                      const SizedBox(
-                        height: 6,
-                      ),
-
-                      TextField(
-                        controller:
-                            controller,
-
-                        textCapitalization:
-                            TextCapitalization
-                                .characters,
-                      ),
-
-                      const SizedBox(
-                        height: 12,
-                      ),
-
-                      ElevatedButton(
-                        onPressed: () async {
-                          final code =
-                              controller.text.trim();
-
-                          final partnerUid =
-                              await CloudPartnerService
-                                  .findPartnerUid(
-                            code,
-                          );
-
-                          if (partnerUid == null) {
-                            return;
-                          }
-
-                          await PartnerLinkService
-                              .savePartnerCode(
-                            code,
-                          );
-
-                          await PartnerLinkService
-                              .savePartnerUid(
-                            partnerUid,
-                          );
-
-                          await _load();
-                        },
-
-                        child: Text(
-                          l10n.link,
-                        ),
-                      ),
-                    ],
+        child: linked
+            ? Column(
+                children: [
+                  Text(
+                    l10n.linkedSuccess,
+                    style:
+                        const TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  ElevatedButton(
+                    onPressed:
+                        () async {
+                      await PartnerLinkService
+                          .unlink();
+
+                      await _load();
+                    },
+                    child: Text(
+                      l10n.unlink,
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  ElevatedButton(
+                    onPressed:
+                        () async {
+                      await FirebaseAuth
+                          .instance
+                          .signOut();
+
+                      await PartnerLinkService
+                          .resetMyCode();
+
+                      await FirebaseAuth
+                          .instance
+                          .signInAnonymously();
+
+                      await _load();
+                    },
+                    child:
+                        const Text(
+                      'NOVÝ TEST ÚČET',
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment
+                        .start,
+                children: [
+                  Text(
+                    l10n.yourCode,
+                    style:
+                        const TextStyle(
+                      fontWeight:
+                          FontWeight
+                              .bold,
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 6,
+                  ),
+
+                  SelectableText(
+                    myCode ?? '...',
+                    style:
+                        const TextStyle(
+                      fontSize: 24,
+                      letterSpacing:
+                          2,
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 24,
+                  ),
+
+                  Text(
+                    l10n
+                        .enterPartnerCode,
+                  ),
+
+                  const SizedBox(
+                    height: 6,
+                  ),
+
+                  TextField(
+                    controller:
+                        controller,
+                    textCapitalization:
+                        TextCapitalization
+                            .characters,
+                  ),
+
+                  const SizedBox(
+                    height: 12,
+                  ),
+
+                  ElevatedButton(
+                    onPressed:
+                        () async {
+                      final code =
+                          controller
+                              .text
+                              .trim()
+                              .toUpperCase();
+
+                      if (code
+                          .isEmpty) {
+                        return;
+                      }
+
+                      final partnerUid =
+                          await CloudPartnerService
+                              .findPartnerUid(
+                        code,
+                      );
+
+                      if (partnerUid ==
+                          null) {
+                        return;
+                      }
+
+                      await PartnerLinkService
+                          .savePartnerCode(
+                        code,
+                      );
+
+                      await PartnerLinkService
+                          .savePartnerUid(
+                        partnerUid,
+                      );
+
+                      await _load();
+                    },
+                    child: Text(
+                      l10n.link,
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  ElevatedButton(
+                    onPressed:
+                        () async {
+                      await FirebaseAuth
+                          .instance
+                          .signOut();
+
+                      await PartnerLinkService
+                          .resetMyCode();
+
+                      await FirebaseAuth
+                          .instance
+                          .signInAnonymously();
+
+                      await _load();
+                    },
+                    child:
+                        const Text(
+                      'NOVÝ TEST ÚČET',
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }

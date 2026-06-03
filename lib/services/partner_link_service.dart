@@ -8,15 +8,18 @@ class PartnerLinkService {
 
   /// vygeneruje nebo vrátí existující kód
   static Future<String> getOrCreateMyCode() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
-    final existing = prefs.getString(_keyMyCode);
+    final existing =
+        prefs.getString(_keyMyCode);
 
     if (existing != null) {
       return existing;
     }
 
-    final newCode = _generateCode();
+    final newCode =
+        _generateCode();
 
     await prefs.setString(
       _keyMyCode,
@@ -84,6 +87,16 @@ class PartnerLinkService {
 
     await prefs.remove(
       _keyPartnerUid,
+    );
+  }
+
+  /// smaže vlastní kód
+  static Future<void> resetMyCode() async {
+    final prefs =
+        await SharedPreferences.getInstance();
+
+    await prefs.remove(
+      _keyMyCode,
     );
   }
 

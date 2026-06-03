@@ -52,10 +52,7 @@ class CloudPartnerScenarioService {
           'receiverUid',
           isEqualTo: myUid,
         )
-        .orderBy(
-          'createdAt',
-          descending: true,
-        )
+        
         .snapshots()
         .map(
           (snapshot) => snapshot.docs

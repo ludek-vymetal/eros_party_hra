@@ -27,14 +27,12 @@ import 'l10n/app_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 🔥 Firebase init
   await Firebase.initializeApp(
     options:
         DefaultFirebaseOptions
             .currentPlatform,
   );
 
-  // 🔥 Anonymous auth
   if (FirebaseAuth.instance.currentUser ==
       null) {
     await FirebaseAuth.instance
@@ -43,7 +41,6 @@ Future<void> main() async {
 
   runApp(const MyApp());
 }
-
 /// =======================
 /// ROOT APP
 /// =======================
