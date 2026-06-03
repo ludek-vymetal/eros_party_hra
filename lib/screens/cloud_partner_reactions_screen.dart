@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../services/cloud_partner_scenario_service.dart';
 
-import 'cloud_partner_scenario_detail_screen.dart';
+import '../services/cloud_partner_reaction_service.dart';
+import 'cloud_partner_reaction_detail_screen.dart';
 
-class CloudPartnerInboxScreen extends StatelessWidget {
-  const CloudPartnerInboxScreen({
+class CloudPartnerReactionsScreen
+    extends StatelessWidget {
+  const CloudPartnerReactionsScreen({
     super.key,
   });
 
@@ -15,8 +16,6 @@ class CloudPartnerInboxScreen extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) {
-    
-
     final l10n =
         AppLocalizations.of(context);
 
@@ -26,23 +25,19 @@ class CloudPartnerInboxScreen extends StatelessWidget {
           l10n.cloudInbox,
         ),
       ),
-
       body: StreamBuilder(
         stream:
-            CloudPartnerScenarioService
-                .incomingScenarios(
+            CloudPartnerReactionService
+                .incomingReactions(
           FirebaseAuth
               .instance
               .currentUser!
               .uid,
         ),
-
         builder: (
           context,
           snapshot,
         ) {
-          
-
           if (!snapshot.hasData) {
             return const Center(
               child:
@@ -50,12 +45,10 @@ class CloudPartnerInboxScreen extends StatelessWidget {
             );
           }
 
-          final scenarios =
+          final reactions =
               snapshot.data!;
 
-          
-
-          if (scenarios.isEmpty) {
+          if (reactions.isEmpty) {
             return Center(
               child: Text(
                 l10n.noCloudScenarios,
@@ -64,49 +57,50 @@ class CloudPartnerInboxScreen extends StatelessWidget {
           }
 
           return ListView.builder(
-            itemCount: scenarios.length,
-
-            itemBuilder: (
-              context,
-              index,
-            ) {
-              final scenario =
-                  scenarios[index];
+            itemCount:
+                reactions.length,
+            itemBuilder:
+                (
+                  context,
+                  index,
+                ) {
+              final reaction =
+                  reactions[index];
 
               return Card(
-                margin: const EdgeInsets.all(
+                margin:
+                    const EdgeInsets.all(
                   8,
                 ),
-
                 child: ListTile(
+                  title: Text(
+                    reaction.message,
+                    maxLines: 1,
+                    overflow:
+                        TextOverflow
+                            .ellipsis,
+                  ),
+                  subtitle: Text(
+                    reaction.datumFormatted,
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) =>
-                            CloudPartnerScenarioDetailScreen(
-                          scenario: scenario,
+                            CloudPartnerReactionDetailScreen(
+                          reaction:
+                              reaction,
                         ),
                       ),
                     );
                   },
-
-                  title: Text(
-                    scenario.nazev,
-                  ),
-
-                  subtitle: Text(
-                    scenario.text,
-                    maxLines: 2,
-                    overflow:
-                        TextOverflow.ellipsis,
-                  ),
                 ),
               );
             },
           );
-          },
-        ),
-      );
-    }
-  }        
+        },
+      ),
+    );
+  }
+}

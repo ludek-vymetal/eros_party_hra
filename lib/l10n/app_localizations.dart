@@ -278,6 +278,36 @@ abstract class AppLocalizations {
   /// **'Scenario reported'**
   String get scenarioReported;
 
+  /// No description provided for @sendReactionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Reaction'**
+  String get sendReactionTitle;
+
+  /// No description provided for @reactionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a reaction'**
+  String get reactionMessage;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @reactionSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Reaction sent'**
+  String get reactionSent;
+
   /// No description provided for @importScenario.
   ///
   /// In en, this message translates to:
@@ -295,6 +325,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No scenarios from your partner yet'**
   String get noCloudScenarios;
+
+  /// No description provided for @scenarioDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario Detail'**
+  String get scenarioDetail;
+
+  /// No description provided for @sentAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get sentAt;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @reactToScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'💬 React'**
+  String get reactToScenario;
 
   /// No description provided for @communityScenarioAuthor.
   ///

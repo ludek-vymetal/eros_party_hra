@@ -100,6 +100,21 @@ class AppLocalizationsCs extends AppLocalizations {
   String get scenarioReported => 'Scénář byl nahlášen';
 
   @override
+  String get sendReactionTitle => 'Odeslat reakci';
+
+  @override
+  String get reactionMessage => 'Napiš reakci';
+
+  @override
+  String get send => 'Odeslat';
+
+  @override
+  String get cancel => 'Zrušit';
+
+  @override
+  String get reactionSent => 'Reakce byla odeslána';
+
+  @override
   String get importScenario => 'Importovat scénář';
 
   @override
@@ -107,6 +122,18 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get noCloudScenarios => 'Zatím nemáte žádné scénáře od partnera';
+
+  @override
+  String get scenarioDetail => 'Detail scénáře';
+
+  @override
+  String get sentAt => 'Odesláno';
+
+  @override
+  String get close => 'Zavřít';
+
+  @override
+  String get reactToScenario => '💬 Reagovat';
 
   @override
   String get communityScenarioAuthor => 'Autor';

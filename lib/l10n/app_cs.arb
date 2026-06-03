@@ -12,7 +12,9 @@
 
   "czech": "🇨🇿 Čeština",
   "english": "🇺🇸 English",
-
+  "scenarioDetail": "Detail scénáře",
+  "sentAt": "Odesláno",
+  "close": "Zavřít",
   "newPartyGamePlayers": "Nová party hra – hráči",
 
   "playerName": "Jméno hráče",
@@ -42,10 +44,14 @@
 "communityScenarios": "Komunitní scénáře",
 "latestScenarios": "Nejnovější scénáře",
 "topScenarios": "Nejlépe hodnocené scénáře",
-
+"reactToScenario": "💬 Reagovat",
 "scenarioImported": "Scénář byl importován",
 "scenarioAlreadyImported": "Scénář již byl importován",
-
+"sendReactionTitle": "Odeslat reakci",
+"reactionMessage": "Napiš reakci",
+"send": "Odeslat",
+"cancel": "Zrušit",
+"reactionSent": "Reakce byla odeslána",
 "reportScenario": "Nahlásit scénář",
 "reportScenarioQuestion": "Opravdu chcete nahlásit tento scénář?",
 "scenarioReported": "Scénář byl nahlášen",

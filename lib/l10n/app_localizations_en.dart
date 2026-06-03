@@ -101,6 +101,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scenarioReported => 'Scenario reported';
 
   @override
+  String get sendReactionTitle => 'Send Reaction';
+
+  @override
+  String get reactionMessage => 'Write a reaction';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get reactionSent => 'Reaction sent';
+
+  @override
   String get importScenario => 'Import Scenario';
 
   @override
@@ -108,6 +123,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noCloudScenarios => 'No scenarios from your partner yet';
+
+  @override
+  String get scenarioDetail => 'Scenario Detail';
+
+  @override
+  String get sentAt => 'Sent';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get reactToScenario => '💬 React';
 
   @override
   String get communityScenarioAuthor => 'Author';

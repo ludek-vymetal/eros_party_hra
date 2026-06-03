@@ -64,14 +64,20 @@
 "communityScenarios": "Community Scenarios",
 "latestScenarios": "Latest Scenarios",
 "topScenarios": "Top Rated Scenarios",
-
+"sendReactionTitle": "Send Reaction",
+"reactionMessage": "Write a reaction",
+"send": "Send",
+"cancel": "Cancel",
+"reactionSent": "Reaction sent",
 "importScenario": "Import Scenario",
 "scenarioImported": "Scenario imported",
 "scenarioAlreadyImported": "Scenario already imported",
 "cloudInbox": "Inbox",
 "noCloudScenarios": "No scenarios from your partner yet",
-
-
+"scenarioDetail": "Scenario Detail",
+"sentAt": "Sent",
+"close": "Close",
+"reactToScenario": "💬 React",
 "communityScenarioAuthor": "Author",
 "communityScenarioFor": "For",
 "reportScenario": "Report Scenario",
