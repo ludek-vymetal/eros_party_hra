@@ -22,7 +22,7 @@ class CloudPartnerReactionsScreen
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          l10n.cloudInbox,
+          l10n.incomingReactions,
         ),
       ),
       body: StreamBuilder(
@@ -51,7 +51,7 @@ class CloudPartnerReactionsScreen
           if (reactions.isEmpty) {
             return Center(
               child: Text(
-                l10n.noCloudScenarios,
+                l10n.noIncomingReactions,
               ),
             );
           }

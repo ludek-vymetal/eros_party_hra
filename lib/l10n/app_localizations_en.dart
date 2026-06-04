@@ -183,6 +183,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topTasks => 'Top Rated';
 
   @override
+  String get noIncomingReactions => 'You don\'t have any reactions yet';
+
+  @override
+  String get incomingReactions => 'Received reactions';
+
+  @override
   String get partyGame => 'Party Game';
 
   @override

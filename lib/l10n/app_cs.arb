@@ -40,7 +40,7 @@
   "topTasks": "Nejlepší",
   "shareToCommunity": "Sdílet s komunitou",
 "shareAnonymously": "Sdílet anonymně",
-
+"incomingReactions": "Doručené reakce",
 "communityScenarios": "Komunitní scénáře",
 "latestScenarios": "Nejnovější scénáře",
 "topScenarios": "Nejlépe hodnocené scénáře",
@@ -55,7 +55,7 @@
 "reportScenario": "Nahlásit scénář",
 "reportScenarioQuestion": "Opravdu chcete nahlásit tento scénář?",
 "scenarioReported": "Scénář byl nahlášen",
-
+"noIncomingReactions": "Zatím nemáš žádné reakce",
 "noCommunityScenarios": "Zatím nejsou žádné komunitní scénáře",
 "communityScenarioLoadError": "Nepodařilo se načíst komunitní scénáře",
 

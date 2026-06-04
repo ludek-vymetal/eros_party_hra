@@ -183,6 +183,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get topTasks => 'Nejlepší';
 
   @override
+  String get noIncomingReactions => 'Zatím nemáš žádné reakce';
+
+  @override
+  String get incomingReactions => 'Doručené reakce';
+
+  @override
   String get partyGame => 'Party hra';
 
   @override

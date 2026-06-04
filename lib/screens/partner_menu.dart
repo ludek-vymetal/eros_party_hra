@@ -13,6 +13,8 @@ import 'community_scenarios_screen.dart';
 
 import '../services/partner_link_service.dart';
 
+import 'cloud_partner_reactions_screen.dart';
+
 class PartnerMenuScreen
     extends StatefulWidget {
   const PartnerMenuScreen({
@@ -147,6 +149,17 @@ class _PartnerMenuScreenState
                 ),
               ),
 
+              _btn(
+                '📥 Doručené reakce',
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const CloudPartnerReactionsScreen(),
+                  ),
+                ),
+              ),  
+              
               _btn(
                 l10n.communityScenarios,
                 () => Navigator.push(

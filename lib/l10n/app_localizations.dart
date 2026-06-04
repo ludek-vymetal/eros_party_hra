@@ -440,6 +440,18 @@ abstract class AppLocalizations {
   /// **'Top Rated'**
   String get topTasks;
 
+  /// No description provided for @noIncomingReactions.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any reactions yet'**
+  String get noIncomingReactions;
+
+  /// No description provided for @incomingReactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Received reactions'**
+  String get incomingReactions;
+
   /// No description provided for @partyGame.
   ///
   /// In en, this message translates to:

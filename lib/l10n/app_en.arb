@@ -100,10 +100,10 @@
   "latestTasks": "Latest",
   "topTasks": "Top Rated",
   "playerName": "Player Name",
-
+  "noIncomingReactions": "You don't have any reactions yet",
   "male": "Male",
   "female": "Female",
-
+  "incomingReactions": "Received reactions",
   "addPlayer": "Add Player",
 
   "continueText": "Continue",
