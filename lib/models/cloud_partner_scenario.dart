@@ -8,6 +8,12 @@ class CloudPartnerScenario {
   final String nazev;
   final String text;
 
+  // 📥 received
+  // ⏳ postponed
+  // ✅ completed
+  // ❌ rejected
+  final String status;
+
   final DateTime createdAt;
 
   CloudPartnerScenario({
@@ -16,6 +22,7 @@ class CloudPartnerScenario {
     required this.receiverUid,
     required this.nazev,
     required this.text,
+    required this.status,
     required this.createdAt,
   });
 
@@ -30,6 +37,12 @@ class CloudPartnerScenario {
       receiverUid: data['receiverUid'] ?? '',
       nazev: data['nazev'] ?? '',
       text: data['text'] ?? '',
+
+      // staré scénáře budou automaticky doručené
+      status:
+          data['status'] ??
+          'received',
+
       createdAt:
           (data['createdAt'] as Timestamp?)
                   ?.toDate() ??
@@ -43,6 +56,10 @@ class CloudPartnerScenario {
       'receiverUid': receiverUid,
       'nazev': nazev,
       'text': text,
+
+      // nový scénář
+      'status': 'received',
+
       'createdAt':
           FieldValue.serverTimestamp(),
     };

@@ -1111,6 +1111,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'❌ Not completed'**
   String get notCompleted;
+
+  /// No description provided for @inboxReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'📥 Received'**
+  String get inboxReceived;
+
+  /// No description provided for @inboxPostponed.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Postponed'**
+  String get inboxPostponed;
+
+  /// No description provided for @inboxCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Completed'**
+  String get inboxCompleted;
+
+  /// No description provided for @inboxRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ Rejected'**
+  String get inboxRejected;
 }
 
 class _AppLocalizationsDelegate

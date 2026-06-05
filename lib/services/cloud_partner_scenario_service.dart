@@ -35,12 +35,24 @@ class CloudPartnerScenarioService {
       receiverUid: receiverUid,
       nazev: nazev,
       text: text,
+      status: 'received',
       createdAt: DateTime.now(),
     );
 
     await _scenarios.add(
       scenario.toMap(),
     );
+  }
+
+  static Future<void> updateScenarioStatus(
+    String scenarioId,
+    String status,
+  ) async {
+    await _scenarios
+        .doc(scenarioId)
+        .update({
+      'status': status,
+    });
   }
 
   static Stream<List<CloudPartnerScenario>>
@@ -52,7 +64,6 @@ class CloudPartnerScenarioService {
           'receiverUid',
           isEqualTo: myUid,
         )
-        
         .snapshots()
         .map(
           (snapshot) => snapshot.docs

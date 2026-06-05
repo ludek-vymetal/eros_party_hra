@@ -7,6 +7,8 @@ import '../models/cloud_partner_scenario.dart';
 import '../services/cloud_partner_reaction_service.dart';
 import '../services/partner_link_service.dart';
 
+import '../services/cloud_partner_scenario_service.dart';
+
 
 
 class CloudPartnerScenarioDetailScreen
@@ -79,7 +81,9 @@ class CloudPartnerScenarioDetailScreen
                 onPressed: () async {
                   final controller =
                       TextEditingController();
-                      bool completed = true;
+                      String selectedStatus =
+                          'completed';
+                      
 
                   final result =
                       await showDialog<Map<String, dynamic>>(
@@ -98,19 +102,36 @@ class CloudPartnerScenarioDetailScreen
                               mainAxisSize:
                                   MainAxisSize.min,
                               children: [
-                                CheckboxListTile(
-                                  value: completed,
-                                  title: const Text(
-                                    'Splnil jsem úkol',
+                                DropdownButtonFormField<String>(
+                                  initialValue: 'completed',
+                                  decoration:
+                                      const InputDecoration(
+                                    labelText: 'Rozhodnutí',
                                   ),
-                                  onChanged: (
-                                    value,
-                                  ) {
-                                    setState(() {
-                                      completed =
-                                          value ??
-                                              false;
-                                    });
+                                  items: const [
+                                    DropdownMenuItem(
+                                      value: 'completed',
+                                      child: Text(
+                                        '✅ Splním',
+                                      ),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'postponed',
+                                      child: Text(
+                                        '⏳ Odložím',
+                                      ),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'rejected',
+                                      child: Text(
+                                        '❌ Odmítnu',
+                                      ),
+                                    ),
+                                  ],
+                                  onChanged: (value) {
+                                    selectedStatus =
+                                        value ??
+                                        'completed';
                                   },
                                 ),
 
@@ -144,8 +165,8 @@ class CloudPartnerScenarioDetailScreen
                                     {
                                       'message':
                                           controller.text,
-                                      'completed':
-                                          completed,
+                                      'status':
+                                          selectedStatus,
                                     },
                                   );
                                 },
@@ -168,9 +189,9 @@ class CloudPartnerScenarioDetailScreen
                       result['message']
                           as String;
 
-                  final completedValue =
-                      result['completed']
-                          as bool;
+                  final status =
+                      result['status']
+                          as String;
 
                   if (message.trim().isEmpty) {
                     return;
@@ -183,13 +204,20 @@ class CloudPartnerScenarioDetailScreen
                   if (partnerUid == null) {
                     return;
                   }
+                  await CloudPartnerScenarioService
+                      .updateScenarioStatus(
+                    scenario.id,
+                    status,
+                  );
 
                   await CloudPartnerReactionService
                       .sendReaction(
                     receiverUid: partnerUid,
                     scenarioId: scenario.id,
                     message: message.trim(),
-                    completed: completedValue,
+                    completed:
+                      status ==
+                          'completed',
                   );
 
                   if (!context.mounted) {

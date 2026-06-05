@@ -519,4 +519,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notCompleted => '❌ Not completed';
+
+  @override
+  String get inboxReceived => '📥 Received';
+
+  @override
+  String get inboxPostponed => '⏳ Postponed';
+
+  @override
+  String get inboxCompleted => '✅ Completed';
+
+  @override
+  String get inboxRejected => '❌ Rejected';
 }

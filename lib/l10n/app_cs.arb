@@ -168,5 +168,9 @@
   "reportTaskQuestion": "Opravdu chcete nahlásit tento úkol?",
   "taskAlreadyImported": "Tento úkol už máte importovaný",
   "completed": "✅ Splněno",
-  "notCompleted": "❌ Nesplněno"
+  "notCompleted": "❌ Nesplněno",
+  "inboxReceived": "📥 Doručené",
+  "inboxPostponed": "⏳ Odložené",
+  "inboxCompleted": "✅ Splněné",
+  "inboxRejected": "❌ Odmítnuté"
 }

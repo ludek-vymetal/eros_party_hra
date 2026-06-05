@@ -519,4 +519,16 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get notCompleted => '❌ Nesplněno';
+
+  @override
+  String get inboxReceived => '📥 Doručené';
+
+  @override
+  String get inboxPostponed => '⏳ Odložené';
+
+  @override
+  String get inboxCompleted => '✅ Splněné';
+
+  @override
+  String get inboxRejected => '❌ Odmítnuté';
 }

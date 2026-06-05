@@ -168,7 +168,11 @@
   "reportTaskQuestion": "Do you want to report this task?",
   "taskAlreadyImported": "This task is already imported",
   "completed": "✅ Completed",
-  "notCompleted": "❌ Not completed"
+  "notCompleted": "❌ Not completed",
+  "inboxReceived": "📥 Received",
+  "inboxPostponed": "⏳ Postponed",
+  "inboxCompleted": "✅ Completed",
+  "inboxRejected": "❌ Rejected"
 }
 
 
