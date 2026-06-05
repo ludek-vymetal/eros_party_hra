@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../models/cloud_partner_reaction.dart';
+import '../services/cloud_partner_reaction_service.dart';
+
+
 
 class CloudPartnerReactionDetailScreen
     extends StatelessWidget {
@@ -20,31 +23,274 @@ class CloudPartnerReactionDetailScreen
         ),
       ),
       body: Padding(
-        padding:
-            const EdgeInsets.all(
+        padding: const EdgeInsets.all(
           16,
         ),
         child: Column(
           crossAxisAlignment:
               CrossAxisAlignment.start,
           children: [
-            Text(
-              reaction.message,
-              style:
-                  const TextStyle(
-                fontSize: 20,
+            Container(
+              padding: const EdgeInsets.all(
+                12,
+              ),
+              decoration: BoxDecoration(
+                color:
+                    reaction.completed
+                        ? Colors.green
+                            .withValues(
+                            alpha: 0.15,
+                          )
+                        : Colors.red
+                            .withValues(
+                            alpha: 0.15,
+                          ),
+                borderRadius:
+                    BorderRadius.circular(
+                  12,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    reaction.completed
+                        ? Icons.check_circle
+                        : Icons.cancel,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    reaction.completed
+                        ? 'Splněno'
+                        : 'Nesplněno',
+                    style:
+                        const TextStyle(
+                      fontSize: 18,
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(
+              height: 24,
+            ),
+
+            const Text(
+              'Zpráva:',
+              style: TextStyle(
                 fontWeight:
                     FontWeight.bold,
               ),
             ),
 
             const SizedBox(
-              height: 16,
+              height: 8,
+            ),
+
+            Text(
+              reaction.message,
+              style: const TextStyle(
+                fontSize: 18,
+              ),
+            ),
+
+            const SizedBox(
+              height: 24,
+            ),
+
+            const Text(
+              'Datum:',
+              style: TextStyle(
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(
+              height: 8,
             ),
 
             Text(
               reaction.datumFormatted,
             ),
+
+            const SizedBox(
+              height: 24,
+            ),
+
+            if (reaction.proofAccepted)
+              const Row(
+                children: [
+                  Icon(
+                    Icons.verified,
+                    color: Colors.green,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    '✅ Důkaz přijat',
+                  ),
+                ],
+              )
+            else if (reaction.proofSent)
+              const Row(
+                children: [
+                  Icon(
+                    Icons.photo_camera,
+                    color: Colors.orange,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    '📷 Důkaz odeslán přes WhatsApp',
+                  ),
+                ],
+              )
+            else
+              const Row(
+                children: [
+                  Icon(
+                    Icons.hourglass_top,
+                    color: Colors.orange,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    '⏳ Čeká na odeslání důkazu',
+                  ),
+                ],
+              ),
+
+            const SizedBox(
+              height: 24,
+            ),
+
+           if (reaction.completed &&
+              !reaction.proofSent)
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(
+                  Icons.photo_camera,
+                ),
+                label: const Text(
+                  '📷 Odeslal jsem důkaz přes WhatsApp',
+                ),
+                onPressed: () async {
+                  final confirm =
+                      await showDialog<bool>(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text(
+                          'Potvrzení',
+                        ),
+                        content: const Text(
+                          'Opravdu jsi odeslal důkaz partnerovi přes WhatsApp?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(
+                                context,
+                                false,
+                              );
+                            },
+                            child: const Text(
+                              'Ne',
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(
+                                context,
+                                true,
+                              );
+                            },
+                            child: const Text(
+                              'Ano',
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  if (confirm != true) {
+                    return;
+                  }
+
+                  await CloudPartnerReactionService
+                      .markProofSent(
+                    reaction.id,
+                  );
+
+                  if (!context.mounted) {
+                    return;
+                  }
+
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        '📷 Důkaz označen jako odeslaný',
+                      ),
+                    ),
+                  );
+
+                  Navigator.pop(
+                    context,
+                  );
+                },
+              ),
+            ),
+
+          const SizedBox(
+            height: 12,
+          ),
+
+            if (reaction.proofSent &&
+                !reaction.proofAccepted)
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await CloudPartnerReactionService
+                        .acceptProof(
+                      reaction.id,
+                    );
+
+                    if (!context.mounted) {
+                      return;
+                    }
+
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Důkaz byl přijat',
+                        ),
+                      ),
+                    );
+
+                    Navigator.pop(
+                      context,
+                    );
+                  },
+                  child: const Text(
+                    'Důkaz přijat',
+                  ),
+                ),
+              ),
           ],
         ),
       ),

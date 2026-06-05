@@ -70,13 +70,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disagree => 'Disagree';
 
   @override
-  String get shareToCommunity => 'Share to community';
+  String get shareToCommunity => 'Share with community';
 
   @override
   String get shareAnonymously => 'Share anonymously';
 
   @override
-  String get communityScenarios => 'Community Scenarios';
+  String get communityScenarios => '🌍 Community Scenarios';
 
   @override
   String get latestScenarios => 'Latest Scenarios';
@@ -119,13 +119,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importScenario => 'Import Scenario';
 
   @override
-  String get cloudInbox => 'Inbox';
+  String get cloudInbox => '📥 Inbox';
 
   @override
   String get noCloudScenarios => 'No scenarios from your partner yet';
 
   @override
   String get scenarioDetail => 'Scenario Detail';
+
+  @override
+  String get incomingReactions => '💬 Received Reactions';
 
   @override
   String get sentAt => 'Sent';
@@ -184,9 +187,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noIncomingReactions => 'You don\'t have any reactions yet';
-
-  @override
-  String get incomingReactions => 'Received reactions';
 
   @override
   String get partyGame => 'Party Game';
@@ -455,9 +455,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stateWillNotDo => 'I will not do it';
 
   @override
-  String get scenarioHistoryTitle => '📚 Scenario History';
-
-  @override
   String get noScenariosYet => 'No scenarios yet';
 
   @override
@@ -516,4 +513,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get taskAlreadyImported => 'This task is already imported';
+
+  @override
+  String get completed => '✅ Completed';
+
+  @override
+  String get notCompleted => '❌ Not completed';
 }

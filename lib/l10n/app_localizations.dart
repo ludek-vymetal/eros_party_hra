@@ -221,7 +221,7 @@ abstract class AppLocalizations {
   /// No description provided for @shareToCommunity.
   ///
   /// In en, this message translates to:
-  /// **'Share to community'**
+  /// **'Share with community'**
   String get shareToCommunity;
 
   /// No description provided for @shareAnonymously.
@@ -233,7 +233,7 @@ abstract class AppLocalizations {
   /// No description provided for @communityScenarios.
   ///
   /// In en, this message translates to:
-  /// **'Community Scenarios'**
+  /// **'🌍 Community Scenarios'**
   String get communityScenarios;
 
   /// No description provided for @latestScenarios.
@@ -317,7 +317,7 @@ abstract class AppLocalizations {
   /// No description provided for @cloudInbox.
   ///
   /// In en, this message translates to:
-  /// **'Inbox'**
+  /// **'📥 Inbox'**
   String get cloudInbox;
 
   /// No description provided for @noCloudScenarios.
@@ -331,6 +331,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scenario Detail'**
   String get scenarioDetail;
+
+  /// No description provided for @incomingReactions.
+  ///
+  /// In en, this message translates to:
+  /// **'💬 Received Reactions'**
+  String get incomingReactions;
 
   /// No description provided for @sentAt.
   ///
@@ -445,12 +451,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You don\'t have any reactions yet'**
   String get noIncomingReactions;
-
-  /// No description provided for @incomingReactions.
-  ///
-  /// In en, this message translates to:
-  /// **'Received reactions'**
-  String get incomingReactions;
 
   /// No description provided for @partyGame.
   ///
@@ -980,12 +980,6 @@ abstract class AppLocalizations {
   /// **'I will not do it'**
   String get stateWillNotDo;
 
-  /// No description provided for @scenarioHistoryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'📚 Scenario History'**
-  String get scenarioHistoryTitle;
-
   /// No description provided for @noScenariosYet.
   ///
   /// In en, this message translates to:
@@ -1105,6 +1099,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This task is already imported'**
   String get taskAlreadyImported;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Completed'**
+  String get completed;
+
+  /// No description provided for @notCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ Not completed'**
+  String get notCompleted;
 }
 
 class _AppLocalizationsDelegate

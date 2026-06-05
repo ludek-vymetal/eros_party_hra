@@ -77,53 +77,100 @@ class CloudPartnerScenarioDetailScreen
                 onPressed: () async {
                   final controller =
                       TextEditingController();
+                      bool completed = true;
 
                   final result =
-                      await showDialog<String>(
+                      await showDialog<Map<String, dynamic>>(
                     context: context,
                     builder: (_) {
-                      return AlertDialog(
-                        title: Text(
-                          l10n.sendReactionTitle,
-                        ),
-                        content: TextField(
-                          controller: controller,
-                          decoration:
-                              InputDecoration(
-                            hintText:
-                                l10n.reactionMessage,
-                          ),
-                          maxLines: 3,
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(
-                                context,
-                              );
-                            },
-                            child: Text(
-                              l10n.cancel,
+                      return StatefulBuilder(
+                        builder: (
+                          context,
+                          setState,
+                        ) {
+                          return AlertDialog(
+                            title: Text(
+                              l10n.sendReactionTitle,
                             ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(
-                                context,
-                                controller.text,
-                              );
-                            },
-                            child: Text(
-                              l10n.send,
+                            content: Column(
+                              mainAxisSize:
+                                  MainAxisSize.min,
+                              children: [
+                                CheckboxListTile(
+                                  value: completed,
+                                  title: const Text(
+                                    'Splnil jsem úkol',
+                                  ),
+                                  onChanged: (
+                                    value,
+                                  ) {
+                                    setState(() {
+                                      completed =
+                                          value ??
+                                              false;
+                                    });
+                                  },
+                                ),
+
+                                TextField(
+                                  controller:
+                                      controller,
+                                  decoration:
+                                      InputDecoration(
+                                    hintText:
+                                        l10n.reactionMessage,
+                                  ),
+                                  maxLines: 3,
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(
+                                    context,
+                                  );
+                                },
+                                child: Text(
+                                  l10n.cancel,
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(
+                                    context,
+                                    {
+                                      'message':
+                                          controller.text,
+                                      'completed':
+                                          completed,
+                                    },
+                                  );
+                                },
+                                child: Text(
+                                  l10n.send,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
                   );
 
-                  if (result == null ||
-                      result.trim().isEmpty) {
+                  if (result == null) {
+                    return;
+                  }
+
+                  final message =
+                      result['message']
+                          as String;
+
+                  final completedValue =
+                      result['completed']
+                          as bool;
+
+                  if (message.trim().isEmpty) {
                     return;
                   }
 
@@ -139,7 +186,8 @@ class CloudPartnerScenarioDetailScreen
                       .sendReaction(
                     receiverUid: partnerUid,
                     scenarioId: scenario.id,
-                    message: result.trim(),
+                    message: message.trim(),
+                    completed: completedValue,
                   );
 
                   if (!context.mounted) {

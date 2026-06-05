@@ -46,7 +46,13 @@ class CloudPartnerReactionsScreen
           }
 
           final reactions =
-              snapshot.data!;
+              List.of(snapshot.data!);
+
+          reactions.sort(
+            (a, b) => b.createdAt.compareTo(
+              a.createdAt,
+            ),
+          );
 
           if (reactions.isEmpty) {
             return Center(
@@ -73,15 +79,36 @@ class CloudPartnerReactionsScreen
                   8,
                 ),
                 child: ListTile(
-                  title: Text(
-                    reaction.message,
-                    maxLines: 1,
-                    overflow:
-                        TextOverflow
-                            .ellipsis,
+                  leading: Icon(
+                    reaction.completed
+                        ? Icons.check_circle
+                        : Icons.cancel,
+                    color:
+                        reaction.completed
+                            ? Colors.green
+                            : Colors.red,
                   ),
-                  subtitle: Text(
-                    reaction.datumFormatted,
+                  title: Text(
+                    reaction.completed
+                        ? l10n.completed
+                        : l10n.notCompleted,
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment
+                            .start,
+                    children: [
+                      Text(
+                        reaction.message,
+                        maxLines: 1,
+                        overflow:
+                            TextOverflow
+                                .ellipsis,
+                      ),
+                      Text(
+                        reaction.datumFormatted,
+                      ),
+                    ],
                   ),
                   onTap: () {
                     Navigator.push(

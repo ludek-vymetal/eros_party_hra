@@ -70,13 +70,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get disagree => 'Nesouhlasím';
 
   @override
-  String get shareToCommunity => 'Sdílet do komunity';
+  String get shareToCommunity => 'Sdílet s komunitou';
 
   @override
   String get shareAnonymously => 'Sdílet anonymně';
 
   @override
-  String get communityScenarios => 'Komunitní scénáře';
+  String get communityScenarios => '🌍 Komunitní scénáře';
 
   @override
   String get latestScenarios => 'Nejnovější scénáře';
@@ -118,13 +118,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get importScenario => 'Importovat scénář';
 
   @override
-  String get cloudInbox => 'Doručené scénáře';
+  String get cloudInbox => '📥 Doručené scénáře';
 
   @override
   String get noCloudScenarios => 'Zatím nemáte žádné scénáře od partnera';
 
   @override
   String get scenarioDetail => 'Detail scénáře';
+
+  @override
+  String get incomingReactions => '💬 Doručené reakce';
 
   @override
   String get sentAt => 'Odesláno';
@@ -184,9 +187,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get noIncomingReactions => 'Zatím nemáš žádné reakce';
-
-  @override
-  String get incomingReactions => 'Doručené reakce';
 
   @override
   String get partyGame => 'Party hra';
@@ -455,9 +455,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get stateWillNotDo => 'nesplním';
 
   @override
-  String get scenarioHistoryTitle => '📚 Historie scénářů';
-
-  @override
   String get noScenariosYet => 'Zatím žádné scénáře';
 
   @override
@@ -516,4 +513,10 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get taskAlreadyImported => 'Tento úkol už máte importovaný';
+
+  @override
+  String get completed => '✅ Splněno';
+
+  @override
+  String get notCompleted => '❌ Nesplněno';
 }

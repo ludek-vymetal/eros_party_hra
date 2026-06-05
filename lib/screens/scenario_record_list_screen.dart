@@ -71,7 +71,7 @@ class _ScenarioRecordListScreenState
       appBar: AppBar(
         title: Text(
           l10n
-              .scenarioHistoryTitle,
+              .scenarioHistory,
         ),
 
         backgroundColor:

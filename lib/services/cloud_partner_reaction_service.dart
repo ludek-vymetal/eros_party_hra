@@ -20,6 +20,7 @@ class CloudPartnerReactionService {
     required String receiverUid,
     required String scenarioId,
     required String message,
+    required bool completed,
   }) async {
     final user = _auth.currentUser;
 
@@ -34,12 +35,35 @@ class CloudPartnerReactionService {
       receiverUid: receiverUid,
       scenarioId: scenarioId,
       message: message,
+      completed: completed,
+      proofSent: false,
+      proofAccepted: false,
       createdAt: DateTime.now(),
     );
 
     await _reactions.add(
       reaction.toMap(),
     );
+  }
+
+  static Future<void> markProofSent(
+    String reactionId,
+  ) async {
+    await _reactions
+        .doc(reactionId)
+        .update({
+      'proofSent': true,
+    });
+  }
+
+  static Future<void> acceptProof(
+    String reactionId,
+  ) async {
+    await _reactions
+        .doc(reactionId)
+        .update({
+      'proofAccepted': true,
+    });
   }
 
   static Stream<List<CloudPartnerReaction>>

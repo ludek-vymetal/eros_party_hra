@@ -19,6 +19,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.2.2
   image_picker: ^1.0.7
+  url_launcher: ^6.3.1
 
   # 📦 QR & skener
   qr_flutter: ^4.1.0
@@ -28,6 +29,7 @@ dependencies:
   firebase_core: ^4.6.0
   firebase_auth: ^6.3.0
   cloud_firestore: ^6.2.0
+  firebase_storage: ^13.0.2
 
 dev_dependencies:
   flutter_test:

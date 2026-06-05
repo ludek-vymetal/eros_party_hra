@@ -1,148 +1,78 @@
 {
   "@@locale": "en",
-
   "appTitle": "EROS",
-
   "newPartyGame": "🎉 New Party Game",
   "continuePartyGame": "▶️ Continue Party Game",
   "taskManager": "🛠 Task Manager",
   "partnerMode": "❤️ Partner Mode",
-
   "language": "Language",
-
   "czech": "🇨🇿 Czech",
   "english": "🇺🇸 English",
-
   "newPartyGamePlayers": "New Party Game – Players",
-
   "playerName": "Player Name",
-
   "male": "Male",
   "female": "Female",
-
   "addPlayer": "Add Player",
-
   "continueText": "Continue",
-
   "enterPlayerName": "Enter player name",
-
   "playerNotParticipating": "is not participating",
-
   "partyConsentTitle": "Game Consent",
-
   "partyConsentText": "this party game is intimate, voluntary and may contain erotic elements, undressing and physical closeness.\n\nYou can say NO at any time.\nDo you agree to participate?",
-
   "agree": "Agree",
   "disagree": "Disagree",
-  
-  "@@locale": "en",
-
-  "appTitle": "EROS",
-
-  "newPartyGame": "🎉 New Party Game",
-  "continuePartyGame": "▶️ Continue Party Game",
-  "taskManager": "🛠 Task Manager",
-  "partnerMode": "❤️ Partner Mode",
-
-  "language": "Language",
-
-  "czech": "🇨🇿 Czech",
-  "english": "🇺🇸 English",
   "shareToCommunity": "Share with community",
-"shareAnonymously": "Share anonymously",
-
-"communityScenarios": "Community Scenarios",
-"latestScenarios": "Latest Scenarios",
-"topScenarios": "Top Rated Scenarios",
-
-"scenarioImported": "Scenario imported",
-"scenarioAlreadyImported": "Scenario already imported",
-
-"reportScenario": "Report Scenario",
-"reportScenarioQuestion": "Do you really want to report this scenario?",
-"scenarioReported": "Scenario reported",
-"communityScenarios": "Community Scenarios",
-"latestScenarios": "Latest Scenarios",
-"topScenarios": "Top Rated Scenarios",
-"sendReactionTitle": "Send Reaction",
-"reactionMessage": "Write a reaction",
-"send": "Send",
-"cancel": "Cancel",
-"reactionSent": "Reaction sent",
-"importScenario": "Import Scenario",
-"scenarioImported": "Scenario imported",
-"scenarioAlreadyImported": "Scenario already imported",
-"cloudInbox": "Inbox",
-"noCloudScenarios": "No scenarios from your partner yet",
-"scenarioDetail": "Scenario Detail",
-"sentAt": "Sent",
-"close": "Close",
-"reactToScenario": "💬 React",
-"communityScenarioAuthor": "Author",
-"communityScenarioFor": "For",
-"reportScenario": "Report Scenario",
-"reportScenarioQuestion": "Do you really want to report this scenario?",
-"scenarioReported": "Scenario reported",
-"communityScenarioGoal": "Goal",
-"communityScenarioBoundaries": "Boundaries",
-"communityScenarioEmotions": "Emotions",
-"communityScenarioImport": "Import",
-"communityScenarioImported": "Scenario imported",
-"communityScenarioAlreadyImported": "Scenario already imported",
-"communityScenarioLike": "Like",
-"communityScenarioReport": "Report",
-"communityScenarioReportQuestion": "Do you really want to report this scenario?",
-"noCommunityScenarios": "No community scenarios yet",
-"communityScenarioLoadError": "Failed to load community scenarios",
-"noCommunityScenarios": "No community scenarios yet",
-"communityScenarioLoadError": "Failed to load community scenarios",
-  "newPartyGamePlayers": "New Party Game – Players",
+  "shareAnonymously": "Share anonymously",
+  "communityScenarios": "🌍 Community Scenarios",
+  "latestScenarios": "Latest Scenarios",
+  "topScenarios": "Top Rated Scenarios",
+  "scenarioImported": "Scenario imported",
+  "scenarioAlreadyImported": "Scenario already imported",
+  "reportScenario": "Report Scenario",
+  "reportScenarioQuestion": "Do you really want to report this scenario?",
+  "scenarioReported": "Scenario reported",
+  "sendReactionTitle": "Send Reaction",
+  "reactionMessage": "Write a reaction",
+  "send": "Send",
+  "cancel": "Cancel",
+  "reactionSent": "Reaction sent",
+  "importScenario": "Import Scenario",
+  "cloudInbox": "📥 Inbox",
+  "noCloudScenarios": "No scenarios from your partner yet",
+  "scenarioDetail": "Scenario Detail",
+  "incomingReactions": "💬 Received Reactions",
+  "sentAt": "Sent",
+  "close": "Close",
+  "reactToScenario": "💬 React",
+  "communityScenarioAuthor": "Author",
+  "communityScenarioFor": "For",
+  "communityScenarioGoal": "Goal",
+  "communityScenarioBoundaries": "Boundaries",
+  "communityScenarioEmotions": "Emotions",
+  "communityScenarioImport": "Import",
+  "communityScenarioImported": "Scenario imported",
+  "communityScenarioAlreadyImported": "Scenario already imported",
+  "communityScenarioLike": "Like",
+  "communityScenarioReport": "Report",
+  "communityScenarioReportQuestion": "Do you really want to report this scenario?",
+  "noCommunityScenarios": "No community scenarios yet",
+  "communityScenarioLoadError": "Failed to load community scenarios",
   "latestTasks": "Latest",
   "topTasks": "Top Rated",
-  "playerName": "Player Name",
   "noIncomingReactions": "You don't have any reactions yet",
-  "male": "Male",
-  "female": "Female",
-  "incomingReactions": "Received reactions",
-  "addPlayer": "Add Player",
-
-  "continueText": "Continue",
-
-  "enterPlayerName": "Enter player name",
-
-  "playerNotParticipating": "is not participating",
-
-  "partyConsentTitle": "Game Consent",
-
-  "partyConsentText": "this party game is intimate, voluntary and may contain erotic elements, undressing and physical closeness.\n\nYou can say NO at any time.\nDo you agree to participate?",
-
-  "agree": "Agree",
-  "disagree": "Disagree",
-
   "partyGame": "Party Game",
   "currentTurn": "Current Turn",
   "naked": "naked",
-
   "youRemove": "You remove:",
-
   "complete": "Complete",
   "refuse": "Refuse",
-
   "saveAndExit": "Save and Exit",
-
   "fullyNakedPlayers": "🔥 Completely Naked Players",
-
   "rescueApproved": "Rescue approved!",
   "rescueDenied": "Rescue denied!",
-
   "rescueDeniedText": "Don't worry! There will be another vote in 5 rounds. Try to convince others next round!",
-
   "rescueSelectFirst": "Rescue: Select 1st clothing",
-
   "chooseClothing": "Choose clothing",
-
   "selectClothing": "Click clothing you want to wear:",
-
   "boxers": "Boxers",
   "bra": "Bra",
   "pants": "Pants",
@@ -152,80 +82,45 @@
   "socks": "Socks",
   "panties": "Panties",
   "sweater": "Sweater",
-
   "ok": "OK",
-  
   "gameDifficulty": "Game Difficulty",
-
   "difficultyEasy": "1 – Gentle",
   "difficultyMedium": "2 – Bold",
   "difficultyHard": "3 – No Limits",
-
   "startGame": "Start Game",
-  
   "partyConsentScreenText": "This party game is intimate, voluntary and may contain erotic elements, undressing and physical closeness.\n\nEvery player has the right to say NO at any time.\nRespect is more important than the game itself.\n\nContinue only if all participants agree.",
-
   "taskManagerTitle": "🛠️ Task Manager",
-
   "noTasksYet": "There are no tasks yet",
-
   "addTask": "➕ Add Task",
-
   "exportQr": "📤 Export to QR",
-  
   "lastClothing": "🔥 LAST CLOTHING 🔥",
-
   "nothingToHide": "has nothing left to hide",
-  
   "rescueTitle": "🛟 RESCUE",
-
   "givePhoneToPlayer": "Give the phone to this player:",
-
   "rescueQuestion": "Do you want to rescue the naked player?",
-
   "yes": "YES",
   "no": "NO",
-  
   "rescuedPlayer": "Rescued player:",
-
   "votingPlayer": "Voting player:",
-  
   "partnerModeTitle": "❤️ PARTNER MODE ❤️",
-
   "writeScenario": "✍️ Write New Scenario",
-
   "readScenario": "📖 Read Scenario",
-
   "scenarioHistory": "🕰️ Scenario History",
-
   "connected": "🔐 Connected",
-
   "notConnected": "🔐 Not Connected",
-  
   "editScenario": "✏️ Edit Scenario",
   "newScenario": "✍️ New Scenario",
-
   "author": "Author",
   "forWho": "For Who",
-
   "scenarioTitle": "Scenario Title",
-
   "boundaries": "Boundaries",
-
   "scenarioGoal": "🎯 Scenario Goal",
-
   "scenarioEmotions": "What emotions should the scenario evoke?",
-
   "scenarioText": "Scenario Text",
-
   "saveChanges": "💾 Save Changes",
-
   "generateCode": "🔐 Generate Code",
-
   "copyCode": "📋 Copy Code",
-
   "fillRequiredFields": "Fill in all required fields",
-  
   "emotionTenderness": "Tenderness",
   "emotionTrust": "Trust",
   "emotionExcitement": "Excitement",
@@ -234,90 +129,32 @@
   "emotionSubmission": "Submission",
   "emotionRomance": "Romance",
   "emotionCuriosity": "Curiosity",
-  
-  "emotionTenderness": "Tenderness",
-
-  "emotionTrust": "Trust",
-
-  "emotionExcitement": "Excitement",
-
-  "emotionPlayfulness": "Playfulness",
-
-  "emotionDominance": "Dominance",
-
-  "emotionSubmission": "Submission",
-
-  "emotionRomance": "Romance",
-
-  "emotionCuriosity": "Curiosity",
-  
   "openScenario": "Open Scenario",
-
   "pasteScenarioCode": "Paste Scenario Code",
-
   "pasteFromClipboard": "📋 Paste From Clipboard",
-
   "invalidCode": "Code is invalid or corrupted",
-
   "howDoYouFeel": "How do you feel?",
-
   "howDoYouDecide": "What is your decision?",
-
   "message": "Message:",
-
   "attachProof": "Attach Proof",
-
   "sendReaction": "💌 Send Reaction",
-
   "emotionExcited": "❤️ Excited",
-
   "emotionCalm": "😊 Calm",
-
   "emotionTurnedOn": "🔥 Turned On",
-
   "emotionNervous": "😳 Nervous",
-
   "emotionUnsure": "🤔 Unsure",
-
   "emotionThinking": "💭 Thinking",
-
   "stateWillDo": "I will do it",
-
   "stateMaybeLater": "maybe later",
-
   "stateWillNotDo": "I will not do it",
-  
-  "scenarioHistoryTitle": "📚 Scenario History",
-
   "noScenariosYet": "No scenarios yet",
-
   "reactions": "reactions",
-  
   "partnerLink": "Partner Connection",
-
   "linkedSuccess": "✅ You are connected",
-
   "unlink": "Disconnect",
-
   "yourCode": "Your code:",
-
   "enterPartnerCode": "Enter partner code:",
-
   "link": "Connect",
-  
-  "partnerLink": "Partner Connection",
-
-  "linkedSuccess": "✅ You are connected",
-
-  "unlink": "Disconnect",
-
-  "yourCode": "Your code:",
-
-  "enterPartnerCode": "Enter partner code:",
-
-  "link": "Connect",
-  
-  "shareToCommunity": "Share to community",
   "taskShared": "Task shared with community",
   "taskShareFailed": "Failed to share task",
   "communityTasks": "Community Tasks",
@@ -326,23 +163,13 @@
   "likes": "Likes",
   "importTask": "Import task",
   "taskImported": "Task imported",
-  "importTask": "Import task",
-  "taskImported": "Task imported",
   "reportTask": "Report",
   "taskReported": "Task reported",
   "reportTaskQuestion": "Do you want to report this task?",
-  "taskAlreadyImported": "This task is already imported"
+  "taskAlreadyImported": "This task is already imported",
+  "completed": "✅ Completed",
+  "notCompleted": "❌ Not completed"
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

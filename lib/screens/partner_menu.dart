@@ -150,7 +150,7 @@ class _PartnerMenuScreenState
               ),
 
               _btn(
-                '📥 Doručené reakce',
+                l10n.incomingReactions,
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -159,7 +159,7 @@ class _PartnerMenuScreenState
                   ),
                 ),
               ),  
-              
+
               _btn(
                 l10n.communityScenarios,
                 () => Navigator.push(

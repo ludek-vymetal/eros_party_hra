@@ -10,6 +10,15 @@ class CloudPartnerReaction {
 
   final String message;
 
+  // ✅ splněno / nesplněno
+  final bool completed;
+
+  // 📷 důkaz odeslán přes WhatsApp
+  final bool proofSent;
+
+  // ✅ partner uznal důkaz
+  final bool proofAccepted;
+
   final DateTime createdAt;
 
   CloudPartnerReaction({
@@ -18,6 +27,9 @@ class CloudPartnerReaction {
     required this.receiverUid,
     required this.scenarioId,
     required this.message,
+    required this.completed,
+    required this.proofSent,
+    required this.proofAccepted,
     required this.createdAt,
   });
 
@@ -32,6 +44,10 @@ class CloudPartnerReaction {
       receiverUid: data['receiverUid'] ?? '',
       scenarioId: data['scenarioId'] ?? '',
       message: data['message'] ?? '',
+      completed: data['completed'] ?? false,
+      proofSent: data['proofSent'] ?? false,
+      proofAccepted:
+          data['proofAccepted'] ?? false,
       createdAt:
           (data['createdAt'] as Timestamp?)
                   ?.toDate() ??
@@ -45,6 +61,9 @@ class CloudPartnerReaction {
       'receiverUid': receiverUid,
       'scenarioId': scenarioId,
       'message': message,
+      'completed': completed,
+      'proofSent': proofSent,
+      'proofAccepted': proofAccepted,
       'createdAt':
           FieldValue.serverTimestamp(),
     };

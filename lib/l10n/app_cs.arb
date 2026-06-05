@@ -1,148 +1,78 @@
 {
   "@@locale": "cs",
-
   "appTitle": "EROS",
-
   "newPartyGame": "🎉 Nová party hra",
   "continuePartyGame": "▶️ Pokračovat v party hře",
   "taskManager": "🛠 Správa úkolů",
   "partnerMode": "❤️ Partnerský režim",
-
   "language": "Jazyk",
-
   "czech": "🇨🇿 Čeština",
   "english": "🇺🇸 English",
   "scenarioDetail": "Detail scénáře",
   "sentAt": "Odesláno",
   "close": "Zavřít",
   "newPartyGamePlayers": "Nová party hra – hráči",
-
   "playerName": "Jméno hráče",
-
   "male": "Muž",
   "female": "Žena",
-
   "addPlayer": "Přidat hráče",
-
   "continueText": "Pokračovat",
-
   "enterPlayerName": "Zadej jméno hráče",
-
   "playerNotParticipating": "se hry neúčastní",
-
   "partyConsentTitle": "Souhlas se hrou",
-
   "partyConsentText": "tato party hra je intimní, dobrovolná a může obsahovat erotické prvky, svlékání a fyzickou blízkost.\n\nMůžeš kdykoliv říct NE.\nSouhlasíš s účastí?",
-
   "agree": "Souhlasím",
   "disagree": "Nesouhlasím",
   "latestTasks": "Nejnovější",
   "topTasks": "Nejlepší",
   "shareToCommunity": "Sdílet s komunitou",
-"shareAnonymously": "Sdílet anonymně",
-"incomingReactions": "Doručené reakce",
-"communityScenarios": "Komunitní scénáře",
-"latestScenarios": "Nejnovější scénáře",
-"topScenarios": "Nejlépe hodnocené scénáře",
-"reactToScenario": "💬 Reagovat",
-"scenarioImported": "Scénář byl importován",
-"scenarioAlreadyImported": "Scénář již byl importován",
-"sendReactionTitle": "Odeslat reakci",
-"reactionMessage": "Napiš reakci",
-"send": "Odeslat",
-"cancel": "Zrušit",
-"reactionSent": "Reakce byla odeslána",
-"reportScenario": "Nahlásit scénář",
-"reportScenarioQuestion": "Opravdu chcete nahlásit tento scénář?",
-"scenarioReported": "Scénář byl nahlášen",
-"noIncomingReactions": "Zatím nemáš žádné reakce",
-"noCommunityScenarios": "Zatím nejsou žádné komunitní scénáře",
-"communityScenarioLoadError": "Nepodařilo se načíst komunitní scénáře",
-
-  "appTitle": "EROS",
-
-  "newPartyGame": "🎉 Nová party hra",
-  "continuePartyGame": "▶️ Pokračovat v party hře",
-  "taskManager": "🛠 Správa úkolů",
-  "partnerMode": "❤️ Partnerský režim",
-
-  "language": "Jazyk",
-
-  "czech": "🇨🇿 Čeština",
-  "english": "🇺🇸 English",
-  "communityScenarios": "Komunitní scénáře",
-"latestScenarios": "Nejnovější scénáře",
-"topScenarios": "Nejlépe hodnocené scénáře",
-"cloudInbox": "Doručené scénáře",
-"noCloudScenarios": "Zatím nemáte žádné scénáře od partnera",
-
-
-"communityScenarioAuthor": "Autor",
-"communityScenarioFor": "Pro",
-"importScenario": "Importovat scénář",
-"scenarioImported": "Scénář byl importován",
-"scenarioAlreadyImported": "Scénář již byl importován",
-"communityScenarioGoal": "Cíl",
-"communityScenarioBoundaries": "Hranice",
-"communityScenarioEmotions": "Emoce",
-"communityScenarioImport": "Importovat",
-"communityScenarioImported": "Scénář importován",
-"communityScenarioAlreadyImported": "Scénář již byl importován",
-"communityScenarioLike": "To se mi líbí",
-"communityScenarioReport": "Nahlásit",
-"communityScenarioReportQuestion": "Opravdu chcete nahlásit tento scénář?",
-"reportScenario": "Nahlásit scénář",
-"reportScenarioQuestion": "Opravdu chcete nahlásit tento scénář?",
-"scenarioReported": "Scénář byl nahlášen",
-
-"noCommunityScenarios": "Zatím nejsou žádné komunitní scénáře",
-"communityScenarioLoadError": "Nepodařilo se načíst komunitní scénáře",
-  "newPartyGamePlayers": "Nová party hra – hráči",
-
-  "playerName": "Jméno hráče",
-
-  "male": "Muž",
-  "female": "Žena",
-
-  "addPlayer": "Přidat hráče",
-
-  "continueText": "Pokračovat",
-
-  "enterPlayerName": "Zadej jméno hráče",
-
-  "playerNotParticipating": "se hry neúčastní",
-
-  "partyConsentTitle": "Souhlas se hrou",
-
-  "partyConsentText": "tato party hra je intimní, dobrovolná a může obsahovat erotické prvky, svlékání a fyzickou blízkost.\n\nMůžeš kdykoliv říct NE.\nSouhlasíš s účastí?",
-
-  "agree": "Souhlasím",
-  "disagree": "Nesouhlasím",
-
+  "shareAnonymously": "Sdílet anonymně",
+  "cloudInbox": "📥 Doručené scénáře",
+  "communityScenarios": "🌍 Komunitní scénáře",
+  "latestScenarios": "Nejnovější scénáře",
+  "topScenarios": "Nejlépe hodnocené scénáře",
+  "reactToScenario": "💬 Reagovat",
+  "scenarioImported": "Scénář byl importován",
+  "scenarioAlreadyImported": "Scénář již byl importován",
+  "sendReactionTitle": "Odeslat reakci",
+  "reactionMessage": "Napiš reakci",
+  "send": "Odeslat",
+  "cancel": "Zrušit",
+  "reactionSent": "Reakce byla odeslána",
+  "reportScenario": "Nahlásit scénář",
+  "reportScenarioQuestion": "Opravdu chcete nahlásit tento scénář?",
+  "scenarioReported": "Scénář byl nahlášen",
+  "noIncomingReactions": "Zatím nemáš žádné reakce",
+  "noCommunityScenarios": "Zatím nejsou žádné komunitní scénáře",
+  "communityScenarioLoadError": "Nepodařilo se načíst komunitní scénáře",
+  "incomingReactions": "💬 Doručené reakce",
+  "noCloudScenarios": "Zatím nemáte žádné scénáře od partnera",
+  "communityScenarioAuthor": "Autor",
+  "communityScenarioFor": "Pro",
+  "importScenario": "Importovat scénář",
+  "communityScenarioGoal": "Cíl",
+  "communityScenarioBoundaries": "Hranice",
+  "communityScenarioEmotions": "Emoce",
+  "communityScenarioImport": "Importovat",
+  "communityScenarioImported": "Scénář importován",
+  "communityScenarioAlreadyImported": "Scénář již byl importován",
+  "communityScenarioLike": "To se mi líbí",
+  "communityScenarioReport": "Nahlásit",
+  "communityScenarioReportQuestion": "Opravdu chcete nahlásit tento scénář?",
   "partyGame": "Party hra",
   "currentTurn": "Na tahu",
   "naked": "nahý/nahá",
-
   "youRemove": "Sundáváš:",
-
   "complete": "Splním",
   "refuse": "Nesplním",
-
   "saveAndExit": "Uložit a skončit",
-
   "fullyNakedPlayers": "🔥 Úplně nazí hráči",
-
   "rescueApproved": "Záchrana schválena!",
   "rescueDenied": "Záchrana zamítnuta!",
-
   "rescueDeniedText": "Nezoufej! Za 5 kol bude nové hlasování. Zkus ostatní v dalším kole přesvědčit!",
-
   "rescueSelectFirst": "Záchrana: Vyber 1. kus",
-
   "chooseClothing": "Vyber si oblečení",
-
   "selectClothing": "Klikni na kus, který si chceš obléknout:",
-
   "boxers": "Trenky",
   "bra": "Podprsenka",
   "pants": "Kalhoty",
@@ -152,80 +82,45 @@
   "socks": "Ponožky",
   "panties": "Kalhotky",
   "sweater": "Svetr",
-
   "ok": "OK",
-  
   "gameDifficulty": "Obtížnost hry",
-
   "difficultyEasy": "1 – Jemně",
   "difficultyMedium": "2 – Odvážně",
   "difficultyHard": "3 – Bez zábran",
-
   "startGame": "Začít hru",
-  
   "partyConsentScreenText": "Tato party hra je intimní, dobrovolná a může obsahovat erotické prvky, svlékání a fyzickou blízkost.\n\nKaždý hráč má právo kdykoliv říct NE.\nRespekt je důležitější než hra samotná.\n\nPokračuj pouze pokud všichni účastníci souhlasí.",
-  
   "taskManagerTitle": "🛠️ Správa úkolů",
-
   "noTasksYet": "Zatím tu nejsou žádné úkoly",
-
   "addTask": "➕ Přidat úkol",
-
   "exportQr": "📤 Export do QR",
-  
   "lastClothing": "🔥 POSLEDNÍ KUS 🔥",
-
   "nothingToHide": "už nic neskrývá",
-  
   "rescueTitle": "🛟 ZÁCHRANA",
-
   "givePhoneToPlayer": "Dej telefon tomuto hráči:",
-
   "rescueQuestion": "Chceš zachránit nahého hráče?",
-
   "yes": "ANO",
   "no": "NE",
- 
   "rescuedPlayer": "Zachraňovaný hráč:",
-
   "votingPlayer": "Hlasuje hráč:",
-  
   "partnerModeTitle": "❤️ PARTNERSKÝ REŽIM ❤️",
-
   "writeScenario": "✍️ Napsat nový scénář",
-
   "readScenario": "📖 Přečíst scénář",
-
   "scenarioHistory": "🕰️ Historie scénářů",
-
   "connected": "🔐 Propojeno",
-
   "notConnected": "🔐 Nepřipojeno",
-  
   "editScenario": "✏️ Upravit scénář",
   "newScenario": "✍️ Nový scénář",
-
   "author": "Autor",
   "forWho": "Pro koho",
-
   "scenarioTitle": "Název scénáře",
-
   "boundaries": "Hranice",
-
   "scenarioGoal": "🎯 Cíl scénáře",
-
   "scenarioEmotions": "Jaké emoce má scénář vyvolat?",
-
   "scenarioText": "Text scénáře",
-
   "saveChanges": "💾 Uložit změny",
-
   "generateCode": "🔐 Vygenerovat kód",
-
   "copyCode": "📋 Kopírovat kód",
-
   "fillRequiredFields": "Vyplň všechna povinná pole",
-  
   "emotionTenderness": "Něha",
   "emotionTrust": "Důvěra",
   "emotionExcitement": "Vzrušení",
@@ -234,117 +129,44 @@
   "emotionSubmission": "Podřízení",
   "emotionRomance": "Romantika",
   "emotionCuriosity": "Zvědavost",
-  
-  "emotionTenderness": "Něha",
-
-  "emotionTrust": "Důvěra",
-
-  "emotionExcitement": "Vzrušení",
-
-  "emotionPlayfulness": "Hravost",
-
-  "emotionDominance": "Dominance",
-
-  "emotionSubmission": "Podřízení",
-
-  "emotionRomance": "Romantika",
-
-  "emotionCuriosity": "Zvědavost",
-  
   "openScenario": "Otevřít scénář",
-
   "pasteScenarioCode": "Vlož kód scénáře",
-
   "pasteFromClipboard": "📋 Vložit ze schránky",
-
   "invalidCode": "Kód je neplatný nebo poškozený",
-
   "howDoYouFeel": "Jak se cítíš?",
-
   "howDoYouDecide": "Jak se rozhoduješ?",
-
   "message": "Vzkaz:",
-
   "attachProof": "Přiložit důkaz",
-
   "sendReaction": "💌 Odeslat reakci",
-
   "emotionExcited": "❤️ Nadšení",
-
   "emotionCalm": "😊 Pohoda",
-
   "emotionTurnedOn": "🔥 Vzrušení",
-
   "emotionNervous": "😳 Nervozita",
-
   "emotionUnsure": "🤔 Nejistota",
-
   "emotionThinking": "💭 Přemýšlení",
-
   "stateWillDo": "splním",
-
   "stateMaybeLater": "možná později",
-
   "stateWillNotDo": "nesplním",
-  
-  "scenarioHistoryTitle": "📚 Historie scénářů",
-
   "noScenariosYet": "Zatím žádné scénáře",
-
   "reactions": "reakcí",
-  
-  
-
   "linkedSuccess": "✅ Jste propojeni",
-
   "unlink": "Odpojit",
-
   "yourCode": "Tvůj kód:",
-
   "enterPartnerCode": "Zadej kód partnera:",
-
   "link": "Propojit",
-  
   "partnerLink": "Propojení s partnerem",
-
-  "linkedSuccess": "✅ Jste propojeni",
-
-  "unlink": "Odpojit",
-
-  "yourCode": "Tvůj kód:",
-
-  "enterPartnerCode": "Zadej kód partnera:",
-
-  "link": "Propojit",
-  
-  "shareToCommunity": "Sdílet do komunity",
   "taskShared": "Úkol byl sdílen do komunity",
   "taskShareFailed": "Sdílení úkolu se nezdařilo",
   "communityTasks": "Komunitní úkoly",
   "noCommunityTasks": "Zatím nebyly sdíleny žádné úkoly",
   "communityLoadError": "Chyba při načítání komunitních úkolů",
   "likes": "To se mi líbí",
-  
-  
   "importTask": "Importovat úkol",
   "taskImported": "Úkol byl importován",
   "reportTask": "Nahlásit",
   "taskReported": "Úkol byl nahlášen",
   "reportTaskQuestion": "Opravdu chcete nahlásit tento úkol?",
-  "taskAlreadyImported": "Tento úkol už máte importovaný"
-
+  "taskAlreadyImported": "Tento úkol už máte importovaný",
+  "completed": "✅ Splněno",
+  "notCompleted": "❌ Nesplněno"
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
