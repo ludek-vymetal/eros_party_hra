@@ -7,6 +7,8 @@ import '../models/cloud_partner_scenario.dart';
 import '../services/cloud_partner_reaction_service.dart';
 import '../services/partner_link_service.dart';
 
+
+
 class CloudPartnerScenarioDetailScreen
     extends StatelessWidget {
   final CloudPartnerScenario scenario;

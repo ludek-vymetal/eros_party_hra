@@ -16,7 +16,7 @@ class CloudPartnerReactionService {
             'partner_reactions',
           );
 
-  static Future<void> sendReaction({
+  static Future<String?> sendReaction({
     required String receiverUid,
     required String scenarioId,
     required String message,
@@ -25,7 +25,7 @@ class CloudPartnerReactionService {
     final user = _auth.currentUser;
 
     if (user == null) {
-      return;
+      return null;
     }
 
     final reaction =
@@ -41,9 +41,12 @@ class CloudPartnerReactionService {
       createdAt: DateTime.now(),
     );
 
-    await _reactions.add(
+    final doc =
+        await _reactions.add(
       reaction.toMap(),
     );
+
+    return doc.id;
   }
 
   static Future<void> markProofSent(

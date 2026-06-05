@@ -265,3 +265,22 @@ Všichni uživatelé vidí:
 🚧 Cloud partner scénáře - příjem
 🚧 Cloud inbox
 🚧 Live synchronizace
+
+✅ Firebase Authentication
+✅ Propojení partnerů kódem
+✅ Ukládání partner UID
+✅ Firestore pravidla
+✅ Odesílání scénářů
+✅ Přijímání scénářů
+✅ Test mezi PC a mobilem
+
+✅ Cloud scénáře
+✅ Odesílání scénářů
+✅ Doručené scénáře
+✅ Detail scénáře
+✅ Reakce
+✅ Splněno / Nesplněno
+✅ Doručené reakce
+✅ Detail reakce
+✅ Firestore ukládá completed
+✅ Firestore ukládá proofAccepted
