@@ -172,5 +172,13 @@
   "inboxReceived": "📥 Doručené",
   "inboxPostponed": "⏳ Odložené",
   "inboxCompleted": "✅ Splněné",
-  "inboxRejected": "❌ Odmítnuté"
+  "inboxRejected": "❌ Odmítnuté",
+  "reactionMessageRequired": "✍️ Napiš prosím důvod nebo reakci.",
+  "receivedStatus": "📥 Doručeno",
+  "postponedStatus": "⏳ Odloženo",
+  "rejectedStatus": "❌ Odmítnuto",
+  "reactionDecision": "Rozhodnutí",
+  "reactionComplete": "✅ Splním",
+  "reactionPostpone": "⏳ Odložím",
+  "reactionReject": "❌ Odmítnu"
 }

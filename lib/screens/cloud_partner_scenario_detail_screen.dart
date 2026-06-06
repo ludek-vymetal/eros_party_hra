@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -6,10 +7,7 @@ import '../models/cloud_partner_scenario.dart';
 
 import '../services/cloud_partner_reaction_service.dart';
 import '../services/partner_link_service.dart';
-
 import '../services/cloud_partner_scenario_service.dart';
-
-
 
 class CloudPartnerScenarioDetailScreen
     extends StatelessWidget {
@@ -40,8 +38,7 @@ class CloudPartnerScenarioDetailScreen
         ),
         child: Column(
           crossAxisAlignment:
-              CrossAxisAlignment
-                  .start,
+              CrossAxisAlignment.start,
           children: [
             Text(
               scenario.nazev,
@@ -51,6 +48,23 @@ class CloudPartnerScenarioDetailScreen
                 fontWeight:
                     FontWeight.bold,
               ),
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
+
+            Text(
+              switch (scenario.status) {
+                'completed' =>
+                  l10n.completed,
+                'postponed' =>
+                  l10n.postponedStatus,
+                'rejected' =>
+                  l10n.rejectedStatus,
+                _ =>
+                  l10n.receivedStatus,
+              },
             ),
 
             const SizedBox(
@@ -74,184 +88,216 @@ class CloudPartnerScenarioDetailScreen
               height: 32,
             ),
 
-            // 💬 REAGOVAT
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  final controller =
-                      TextEditingController();
-                      String selectedStatus =
-                          'completed';
-                      
+            if (scenario.status ==
+                    'received' ||
+                scenario.status ==
+                    'postponed')
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final controller =
+                        TextEditingController();
 
-                  final result =
-                      await showDialog<Map<String, dynamic>>(
-                    context: context,
-                    builder: (_) {
-                      return StatefulBuilder(
-                        builder: (
-                          context,
-                          setState,
-                        ) {
-                          return AlertDialog(
-                            title: Text(
-                              l10n.sendReactionTitle,
-                            ),
-                            content: Column(
-                              mainAxisSize:
-                                  MainAxisSize.min,
-                              children: [
-                                DropdownButtonFormField<String>(
-                                  initialValue: 'completed',
-                                  decoration:
-                                      const InputDecoration(
-                                    labelText: 'Rozhodnutí',
+                    String selectedStatus =
+                        'completed';
+
+                    final result =
+                        await showDialog<Map<String, dynamic>>(
+                      context: context,
+                      builder: (_) {
+                        return StatefulBuilder(
+                          builder: (
+                            context,
+                            setState,
+                          ) {
+                            return AlertDialog(
+                              title: Text(
+                                l10n.sendReactionTitle,
+                              ),
+                              content: Column(
+                                mainAxisSize:
+                                    MainAxisSize.min,
+                                children: [
+                                  DropdownButtonFormField<String>(
+                                    initialValue:
+                                        'completed',
+                                    decoration:
+                                        InputDecoration(
+                                      labelText:
+                                          l10n.reactionDecision,
+                                    ),
+                                    items: [
+                                      DropdownMenuItem(
+                                        value:
+                                            'completed',
+                                        child: Text(
+                                          l10n.reactionComplete,
+                                        ),
+                                      ),
+                                      DropdownMenuItem(
+                                        value:
+                                            'postponed',
+                                        child: Text(
+                                          l10n.reactionPostpone,
+                                        ),
+                                      ),
+                                      DropdownMenuItem(
+                                        value:
+                                            'rejected',
+                                        child: Text(
+                                          l10n.reactionReject,
+                                        ),
+                                      ),
+                                    ],
+                                    onChanged: (
+                                      value,
+                                    ) {
+                                      selectedStatus =
+                                          value ??
+                                              'completed';
+                                    },
                                   ),
-                                  items: const [
-                                    DropdownMenuItem(
-                                      value: 'completed',
-                                      child: Text(
-                                        '✅ Splním',
-                                      ),
+
+                                  TextField(
+                                    controller:
+                                        controller,
+                                    decoration:
+                                        InputDecoration(
+                                      hintText:
+                                          l10n.reactionMessage,
                                     ),
-                                    DropdownMenuItem(
-                                      value: 'postponed',
-                                      child: Text(
-                                        '⏳ Odložím',
-                                      ),
-                                    ),
-                                    DropdownMenuItem(
-                                      value: 'rejected',
-                                      child: Text(
-                                        '❌ Odmítnu',
-                                      ),
-                                    ),
-                                  ],
-                                  onChanged: (value) {
-                                    selectedStatus =
-                                        value ??
-                                        'completed';
+                                    maxLines: 3,
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(
+                                      context,
+                                    );
                                   },
-                                ),
-
-                                TextField(
-                                  controller:
-                                      controller,
-                                  decoration:
-                                      InputDecoration(
-                                    hintText:
-                                        l10n.reactionMessage,
+                                  child: Text(
+                                    l10n.cancel,
                                   ),
-                                  maxLines: 3,
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(
+                                      context,
+                                      {
+                                        'message':
+                                            controller.text,
+                                        'status':
+                                            selectedStatus,
+                                      },
+                                    );
+                                  },
+                                  child: Text(
+                                    l10n.send,
+                                  ),
                                 ),
                               ],
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(
-                                    context,
-                                  );
-                                },
-                                child: Text(
-                                  l10n.cancel,
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(
-                                    context,
-                                    {
-                                      'message':
-                                          controller.text,
-                                      'status':
-                                          selectedStatus,
-                                    },
-                                  );
-                                },
-                                child: Text(
-                                  l10n.send,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                            );
+                          },
+                        );
+                      },
+                    );
+
+                    if (result == null) {
+                      return;
+                    }
+
+                    if (!context.mounted) {
+                      return;
+                    }
+
+                    final message =
+                        result['message']
+                            as String;
+
+                    final status =
+                        result['status']
+                            as String;
+
+                    if (message
+                        .trim()
+                        .isEmpty) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            l10n.reactionMessageRequired,
+                          ),
+                        ),
                       );
-                    },
-                  );
 
-                  if (result == null) {
-                    return;
-                  }
+                      return;
+                    }
 
-                  final message =
-                      result['message']
-                          as String;
+                    final partnerUid =
+                        await PartnerLinkService
+                            .getPartnerUid();
 
-                  final status =
-                      result['status']
-                          as String;
+                    if (!context.mounted) {
+                      return;
+                    }
 
-                  if (message.trim().isEmpty) {
-                    return;
-                  }
+                    if (partnerUid == null) {
+                      return;
+                    }
 
-                  final partnerUid =
-                      await PartnerLinkService
-                          .getPartnerUid();
+                    await CloudPartnerScenarioService
+                        .updateScenarioStatus(
+                      scenario.id,
+                      status,
+                    );
 
-                  if (partnerUid == null) {
-                    return;
-                  }
-                  await CloudPartnerScenarioService
-                      .updateScenarioStatus(
-                    scenario.id,
-                    status,
-                  );
+                    await CloudPartnerReactionService
+                        .sendReaction(
+                      receiverUid:
+                          partnerUid,
+                      scenarioId:
+                          scenario.id,
+                      message:
+                          message.trim(),
+                      completed:
+                          status ==
+                              'completed',
+                    );
 
-                  await CloudPartnerReactionService
-                      .sendReaction(
-                    receiverUid: partnerUid,
-                    scenarioId: scenario.id,
-                    message: message.trim(),
-                    completed:
-                      status ==
-                          'completed',
-                  );
+                    if (!context.mounted) {
+                      return;
+                    }
 
-                  if (!context.mounted) {
-                    return;
-                  }
-
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        l10n.reactionSent,
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          l10n.reactionSent,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                                child: Text(
-                  l10n.reactToScenario,
+                    );
+                  },
+                  child: Text(
+                    l10n.reactToScenario,
+                  ),
                 ),
               ),
-            ),
 
             const SizedBox(
               height: 12,
             ),
 
-            // ❌ ZAVŘÍT
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pop(
-                    context,
-                  );
+                    context);
                 },
                 child: Text(
                   l10n.close,
@@ -264,3 +310,4 @@ class CloudPartnerScenarioDetailScreen
     );
   }
 }
+

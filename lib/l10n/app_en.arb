@@ -172,7 +172,15 @@
   "inboxReceived": "📥 Received",
   "inboxPostponed": "⏳ Postponed",
   "inboxCompleted": "✅ Completed",
-  "inboxRejected": "❌ Rejected"
+  "inboxRejected": "❌ Rejected",
+  "reactionMessageRequired": "✍️ Please write a reason or reaction.",
+  "receivedStatus": "📥 Received",
+  "postponedStatus": "⏳ Postponed",
+  "rejectedStatus": "❌ Rejected",
+  "reactionDecision": "Decision",
+  "reactionComplete": "✅ I will do it",
+  "reactionPostpone": "⏳ Postpone",
+  "reactionReject": "❌ I refuse"
 }
 
 

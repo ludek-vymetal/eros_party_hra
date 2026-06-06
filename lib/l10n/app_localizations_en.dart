@@ -531,4 +531,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inboxRejected => '❌ Rejected';
+
+  @override
+  String get reactionMessageRequired => '✍️ Please write a reason or reaction.';
+
+  @override
+  String get receivedStatus => '📥 Received';
+
+  @override
+  String get postponedStatus => '⏳ Postponed';
+
+  @override
+  String get rejectedStatus => '❌ Rejected';
+
+  @override
+  String get reactionDecision => 'Decision';
+
+  @override
+  String get reactionComplete => '✅ I will do it';
+
+  @override
+  String get reactionPostpone => '⏳ Postpone';
+
+  @override
+  String get reactionReject => '❌ I refuse';
 }

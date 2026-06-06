@@ -284,3 +284,116 @@ Všichni uživatelé vidí:
 ✅ Detail reakce
 ✅ Firestore ukládá completed
 ✅ Firestore ukládá proofAccepted
+
+📋 Budoucí úkoly EROS
+✅ Krátkodobé (další verze)
+1. Stav v detailu scénáře
+
+Zobrazovat:
+
+📥 Doručeno
+⏳ Odloženo
+✅ Splněno
+❌ Odmítnuto
+2. Počítadla u záložek
+
+Například:
+
+📥 Doručené (2)
+⏳ Odložené (5)
+✅ Splněné (12)
+❌ Odmítnuté (1)
+3. Skrýt tlačítko „Reagovat“
+
+Pouze pro:
+
+📥 Doručené
+⏳ Odložené
+⭐ Střednědobé
+4. Chci odmítnutý scénář znovu zvážit
+
+U odmítnutého scénáře:
+
+❌ Tento scénář byl odmítnut.
+
+Chceš ho znovu zvážit?
+
+ANO / NE
+
+ANO:
+
+❌ Odmítnuté
+↓
+⏳ Odložené
+5. Bohatší historie scénářů
+
+Zobrazovat:
+
+aktuální stav;
+reakci partnera;
+datum;
+📷 důkaz odeslán;
+❤️ důkaz potvrzen;
+případně hodnocení.
+❤️ Dlouhodobé (moje oblíbená část)
+🔄 Chcete tento scénář zkusit znovu?
+
+V historii scénáře:
+
+🔄 Chcete tento scénář zkusit znovu?
+
+ANO / NE
+
+Po kliknutí na ANO:
+
+vytvoří se nový scénář se stejným obsahem;
+odešle se partnerovi;
+celý proces začne od začátku.
+🕰 Historie opakování
+
+Například:
+
+Romantická večeře
+
+1. pokus
+14.2.2026
+✅ Splněno
+
+2. pokus
+7.5.2028
+✅ Splněno
+
+3. pokus
+20.10.2031
+❌ Odmítnuto
+
+4. pokus
+14.2.2034
+✅ Splněno
+⭐ Hodnocení scénáře
+
+Po dokončení:
+
+😍 Předčilo očekávání
+😊 Skvělé
+😐 Průměrné
+😕 Nic moc
+❌ Už nikdy
+❤️ Kronika vztahu
+
+Za několik let:
+
+2026 ❤️ Začátek používání EROS
+
+2027
+34 scénářů
+28 splněno
+
+2029
+💍 Svatba
+
+2031
+👶 První dítě
+
+2034
+❤️ 200 společných scénářů

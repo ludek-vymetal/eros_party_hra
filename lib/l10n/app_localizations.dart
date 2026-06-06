@@ -1135,6 +1135,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'❌ Rejected'**
   String get inboxRejected;
+
+  /// No description provided for @reactionMessageRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'✍️ Please write a reason or reaction.'**
+  String get reactionMessageRequired;
+
+  /// No description provided for @receivedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'📥 Received'**
+  String get receivedStatus;
+
+  /// No description provided for @postponedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Postponed'**
+  String get postponedStatus;
+
+  /// No description provided for @rejectedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ Rejected'**
+  String get rejectedStatus;
+
+  /// No description provided for @reactionDecision.
+  ///
+  /// In en, this message translates to:
+  /// **'Decision'**
+  String get reactionDecision;
+
+  /// No description provided for @reactionComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ I will do it'**
+  String get reactionComplete;
+
+  /// No description provided for @reactionPostpone.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Postpone'**
+  String get reactionPostpone;
+
+  /// No description provided for @reactionReject.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ I refuse'**
+  String get reactionReject;
 }
 
 class _AppLocalizationsDelegate

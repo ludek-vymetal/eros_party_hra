@@ -531,4 +531,28 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get inboxRejected => '❌ Odmítnuté';
+
+  @override
+  String get reactionMessageRequired => '✍️ Napiš prosím důvod nebo reakci.';
+
+  @override
+  String get receivedStatus => '📥 Doručeno';
+
+  @override
+  String get postponedStatus => '⏳ Odloženo';
+
+  @override
+  String get rejectedStatus => '❌ Odmítnuto';
+
+  @override
+  String get reactionDecision => 'Rozhodnutí';
+
+  @override
+  String get reactionComplete => '✅ Splním';
+
+  @override
+  String get reactionPostpone => '⏳ Odložím';
+
+  @override
+  String get reactionReject => '❌ Odmítnu';
 }
