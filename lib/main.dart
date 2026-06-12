@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
@@ -25,6 +25,8 @@ import 'screens/auth_wrapper.dart';
 // 🌍 L10N
 import 'l10n/app_localizations.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -34,11 +36,6 @@ Future<void> main() async {
             .currentPlatform,
   );
 
-  if (FirebaseAuth.instance.currentUser ==
-      null) {
-    await FirebaseAuth.instance
-        .signInAnonymously();
-  }
 
   runApp(const MyApp());
 }
@@ -259,9 +256,15 @@ class _MainMenuScreenState
         title: const Text('EROS'),
 
         actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+            },
+          ),
+
           Padding(
-            padding:
-                const EdgeInsets.only(
+            padding: const EdgeInsets.only(
               right: 12,
             ),
 
