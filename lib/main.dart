@@ -20,6 +20,7 @@ import 'party/services/party_game_engine.dart';
 import 'core/age_gate/age_gate_controller.dart';
 import 'core/age_gate/age_gate_storage.dart';
 import 'core/age_gate/age_gate_screen.dart';
+import 'screens/auth_wrapper.dart';
 
 // 🌍 L10N
 import 'l10n/app_localizations.dart';
@@ -153,7 +154,7 @@ class _MyAppState extends State<MyApp> {
                 });
               },
             )
-          : const MainMenuScreen(),
+          :  const AuthWrapper(),
     );
   }
 }
