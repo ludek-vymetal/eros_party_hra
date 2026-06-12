@@ -15,10 +15,12 @@ import '../services/cloud_partner_scenario_service.dart';
 
 class PartnerWriteScreen extends StatefulWidget {
   final ScenarioRecord? existingRecord;
+  final bool repeatScenario;
 
   const PartnerWriteScreen({
     super.key,
     this.existingRecord,
+    this.repeatScenario = false,
   });
 
   @override
@@ -54,8 +56,8 @@ class _PartnerWriteScreenState
       vybraneEmoce = {};
 
   bool get isEdit =>
-      widget.existingRecord !=
-      null;
+      widget.existingRecord != null &&
+      !widget.repeatScenario;
 
   bool shareToCommunity = false;
   bool anonymousShare = true;    
@@ -64,23 +66,24 @@ class _PartnerWriteScreenState
   void initState() {
     super.initState();
 
-    if (isEdit) {
-      final s =
-          widget
-              .existingRecord!
-              .scenar;
+    if (widget.existingRecord != null) {
+      final s = widget.existingRecord!.scenar;
 
       _autorCtrl.text = s.autor;
       _proCtrl.text = s.pro;
       _nazevCtrl.text = s.nazev;
       _cilCtrl.text = s.cil;
-      _hraniceCtrl.text =
-          s.hranice;
+      _hraniceCtrl.text = s.hranice;
       _textCtrl.text = s.text;
+
+      for (final emoce in s.emoce) {
+        vybraneEmoce[emoce] = true;
+      }
     }
-  }
+  } 
 
   Future<void> _save() async {
+    
     final l10n =
         AppLocalizations.of(context);
 
@@ -151,12 +154,15 @@ class _PartnerWriteScreenState
     );
 
     if (isEdit) {
-      final updated =
-          widget
-              .existingRecord!
-              .copyWith(
-                scenar: scenar,
-              );
+
+          debugPrint('EDIT MODE');
+
+          final updated =
+              widget
+                  .existingRecord!
+                  .copyWith(
+                    scenar: scenar,
+                  );
 
       await ScenarioRecordStorage
           .update(updated);
@@ -169,19 +175,20 @@ class _PartnerWriteScreenState
       });
     
     } else {
-      final record =
-          ScenarioRecord(
-            id: recordId,
-            scenar: scenar,
-            reactions: [],
-          );
+      debugPrint('NEW RECORD MODE');
 
-      await ScenarioRecordStorage
-          .add(record);
+      if (!widget.repeatScenario) {
+        final record = ScenarioRecord(
+          id: recordId,
+          parentScenarioId: recordId,
+          scenar: scenar,
+          reactions: [],
+        );
 
-      debugPrint(
-        'shareToCommunity = $shareToCommunity',
-      );
+        await ScenarioRecordStorage.add(record);
+      }
+
+     
 
       if (shareToCommunity) {
         await CommunityScenarioService
@@ -207,6 +214,12 @@ class _PartnerWriteScreenState
       await CloudPartnerScenarioService
           .sendScenario(
         receiverUid: partnerUid,
+
+        parentScenarioId:
+            widget.repeatScenario
+                ? widget.existingRecord!.parentScenarioId
+                : recordId,
+
         nazev: scenar.nazev,
         text: scenar.text,
       );

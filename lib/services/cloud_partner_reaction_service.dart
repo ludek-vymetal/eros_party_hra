@@ -18,6 +18,7 @@ class CloudPartnerReactionService {
 
   static Future<String?> sendReaction({
     required String receiverUid,
+    required String scenarioName,
     required String scenarioId,
     required String message,
     required bool completed,
@@ -28,12 +29,12 @@ class CloudPartnerReactionService {
       return null;
     }
 
-    final reaction =
-        CloudPartnerReaction(
+    final reaction = CloudPartnerReaction(
       id: '',
       senderUid: user.uid,
       receiverUid: receiverUid,
       scenarioId: scenarioId,
+      scenarioName: scenarioName,
       message: message,
       completed: completed,
       proofSent: false,
@@ -41,12 +42,42 @@ class CloudPartnerReactionService {
       createdAt: DateTime.now(),
     );
 
-    final doc =
-        await _reactions.add(
+    final doc = await _reactions.add(
       reaction.toMap(),
     );
 
     return doc.id;
+  }
+
+  // ⭐ kopie reakce i pro autora reakce
+  static Future<void> sendReactionToSelf({
+    required String scenarioName,
+    required String scenarioId,
+    required String message,
+    required bool completed,
+  }) async {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      return;
+    }
+
+    final reaction = CloudPartnerReaction(
+      id: '',
+      senderUid: user.uid,
+      receiverUid: user.uid,
+      scenarioId: scenarioId,
+      scenarioName: scenarioName,
+      message: message,
+      completed: completed,
+      proofSent: false,
+      proofAccepted: false,
+      createdAt: DateTime.now(),
+    );
+
+    await _reactions.add(
+      reaction.toMap(),
+    );
   }
 
   static Future<void> markProofSent(

@@ -8,6 +8,11 @@ import '../models/cloud_partner_scenario.dart';
 import '../services/cloud_partner_reaction_service.dart';
 import '../services/partner_link_service.dart';
 import '../services/cloud_partner_scenario_service.dart';
+import '../models/reaction.dart';
+import '../services/scenario_record_storage.dart';
+import '../models/scenar.dart';
+import '../models/scenario_record.dart';
+
 
 class CloudPartnerScenarioDetailScreen
     extends StatelessWidget {
@@ -87,6 +92,60 @@ class CloudPartnerScenarioDetailScreen
             const SizedBox(
               height: 32,
             ),
+            
+            if (scenario.status == 'rejected')
+              Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.rejectedScenarioInfo,
+                  ),
+
+                  const SizedBox(
+                    height: 12,
+                  ),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await CloudPartnerScenarioService
+                            .updateScenarioStatus(
+                          scenario.id,
+                          'postponed',
+                        );
+
+                        if (!context.mounted) {
+                          return;
+                        }
+
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              l10n.scenarioMovedToPostponed,
+                            ),
+                          ),
+                        );
+
+                        Navigator.pop(
+                          context,
+                        );
+                      },
+                      child: Text(
+                        l10n.reconsiderScenario,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 24,
+                  ),
+                ],
+              ),
+
 
             if (scenario.status ==
                     'received' ||
@@ -249,28 +308,77 @@ class CloudPartnerScenarioDetailScreen
                       return;
                     }
 
-                    await CloudPartnerScenarioService
-                        .updateScenarioStatus(
-                      scenario.id,
-                      status,
+                    //await CloudPartnerScenarioService.updateScenarioStatus(
+                    //  scenario.id,
+                    //  status,
+                    //);
+
+                    await CloudPartnerReactionService.sendReaction(
+                      receiverUid: partnerUid,
+                      scenarioName: scenario.nazev,
+                      scenarioId: scenario.parentScenarioId,
+                      message: message.trim(),
+                      completed: status == 'completed',
                     );
 
-                    await CloudPartnerReactionService
-                        .sendReaction(
-                      receiverUid:
-                          partnerUid,
-                      scenarioId:
-                          scenario.id,
-                      message:
-                          message.trim(),
-                      completed:
-                          status ==
-                              'completed',
+                    // ⭐ uložit reakci i autorovi
+                    await CloudPartnerReactionService.sendReactionToSelf(
+                      scenarioName: scenario.nazev,
+                      scenarioId: scenario.parentScenarioId,
+                      message: message.trim(),
+                      completed: status == 'completed',
+                    );
+
+                    // vytvořit lokální scénář pokud ještě neexistuje
+                    final existing =
+                        await ScenarioRecordStorage.getById(
+                      scenario.parentScenarioId,
+                    );
+
+                    if (existing == null) {
+                      final localScenar = Scenar(
+                        id: scenario.parentScenarioId,
+                        autor: '',
+                        pro: '',
+                        nazev: scenario.nazev,
+                        cil: '',
+                        text: scenario.text,
+                        hranice: '',
+                        emoce: [],
+                      );
+
+                      await ScenarioRecordStorage.add(
+                        ScenarioRecord(
+                          id: scenario.parentScenarioId,
+                          parentScenarioId: scenario.parentScenarioId,
+                          scenar: localScenar,
+                        ),
+                      );
+                    }
+
+                    // uložit reakci do historie
+                    await ScenarioRecordStorage.addReaction(
+                      scenario.parentScenarioId,
+                      Reaction(
+                        scenarioId: scenario.parentScenarioId,
+                        nazev: scenario.nazev,
+                        stav: status,
+                        vzkaz: message.trim(),
+                        datum: DateTime.now(),
+                      ),
                     );
 
                     if (!context.mounted) {
                       return;
                     }
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          l10n.reactionSent,
+                        ),
+                      ),
+                    );
 
                     ScaffoldMessenger.of(
                       context,
@@ -280,7 +388,7 @@ class CloudPartnerScenarioDetailScreen
                           l10n.reactionSent,
                         ),
                       ),
-                    );
+                    ); 
                   },
                   child: Text(
                     l10n.reactToScenario,

@@ -180,5 +180,28 @@
   "reactionDecision": "Rozhodnutí",
   "reactionComplete": "✅ Splním",
   "reactionPostpone": "⏳ Odložím",
-  "reactionReject": "❌ Odmítnu"
+  "reactionReject": "❌ Odmítnu",
+  "rejectedScenarioInfo": "❌ Tento scénář byl odmítnut.\n\nChceš ho znovu zvážit?",
+  "reconsiderScenario": "❤️ Znovu zvážit",
+  "scenarioMovedToPostponed": "⏳ Scénář byl přesunut mezi odložené",
+  "reactionDetail": "Detail reakce",
+"reactionCompleted": "Splněno",
+"reactionNotCompleted": "Nesplněno",
+
+"reactionMessageLabel": "Zpráva:",
+"reactionDateLabel": "Datum:",
+
+"proofAccepted": "✅ Důkaz přijat",
+"proofSentWhatsapp": "📷 Důkaz odeslán přes WhatsApp",
+"proofWaiting": "⏳ Čeká na odeslání důkazu",
+
+"proofSentButton": "📷 Odeslal jsem důkaz přes WhatsApp",
+
+"confirmation": "Potvrzení",
+"proofSentQuestion": "Opravdu jsi odeslal důkaz partnerovi přes WhatsApp?",
+
+"proofMarkedSent": "📷 Důkaz označen jako odeslaný",
+"proofAcceptedSnackBar": "Důkaz byl přijat",
+
+"proofAcceptedButton": "Důkaz přijat"
 }

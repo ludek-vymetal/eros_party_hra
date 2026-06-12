@@ -1,19 +1,17 @@
-# EROS PARTY GAME — ROADMAP
+# EROS PARTY GAME — AKTUÁLNÍ ROADMAP
 
-## ✅ HOTOVO
-
-### Projekt
+# ✅ PROJEKT
 
 * [x] Flutter projekt vytvořen
-* [x] GitHub repository vytvořeno
+* [x] GitHub repository
 * [x] Git push funkční
-* [x] Windows build funkční
-* [x] Flutter analyze bez chyb
-* [x] Flutter test funkční
+* [x] Windows build
+* [x] Android build
+* [x] flutter analyze bez chyb
 
 ---
 
-## ✅ Lokalizace (l10n)
+# ✅ LOKALIZACE (l10n)
 
 * [x] Čeština
 * [x] Angličtina
@@ -23,377 +21,397 @@
 * [x] flutter gen-l10n
 * [x] Lokalizace Community Tasks
 * [x] Lokalizace Community Scenarios
-* [ ] Kompletní kontrola všech starších obrazovek
+
+### Chybí
+
+* [ ] Kompletní kontrola starších obrazovek
 
 ---
 
-## ✅ Party hra
+# ✅ PARTY HRA
 
 * [x] Výběr hráčů
-* [x] Výběr pohlaví
-* [x] Obtížnost hry
-* [x] Party consent screen
+* [x] Pohlaví
+* [x] Obtížnost
+* [x] Consent screen
 * [x] Herní engine
 * [x] Svlékání oblečení
 * [x] Poslední kus oblečení overlay
 * [x] Rescue systém
 * [x] Rescue hlasování
-* [x] Lokální task banka
-* [x] QR export tasků
-* [x] QR import tasků
-
----
-
-## ✅ Partner režim
-
-* [x] Partner menu
-* [x] Partner propojení
-* [x] Partner kódy
-* [x] Historie scénářů
-* [x] Detail scénáře
-* [x] Úprava scénáře
-* [x] Mazání scénáře
-* [x] Reakce na scénáře
-* [x] Emoce
-* [x] Lokální ukládání scénářů
-* [x] Generování kódu po editaci scénáře
-* [x] Kopírování kódu do schránky
+* [x] Lokální TaskBank
+* [x] QR export
+* [x] QR import
 
 ---
 
 # ✅ FIREBASE
 
-## Firebase setup
+## Authentication
 
-* [x] Nový Firebase projekt
-* [x] FlutterFire configure
-* [x] Android propojení
-* [x] iOS propojení
-* [x] macOS propojení
-* [x] Windows propojení
-* [x] Web propojení
-* [x] firebase_options.dart
-
----
+* [x] Anonymous login
 
 ## Firestore
 
-* [x] Firestore databáze vytvořena
+* [x] Firestore databáze
 * [x] Europe region
-* [x] Firestore Rules nastaveny
-* [x] Firestore Rules pro Community Tasks
-* [x] Firestore Rules pro Community Scenarios
-* [x] Firestore Rules pro Reporty
-
----
-
-## Authentication
-
-* [x] Firebase Authentication
-* [x] Anonymous login
-* [x] Ověřený funkční login
-
----
-
-# 🔥 ARCHITEKTURA CLOUDU
-
-## Soukromý obsah
-
-Pouze vlastník vidí:
-
-* moje scénáře
-* moje tasky
-* partner data
-* soukromé reakce
-
----
-
-## Komunitní obsah
-
-Všichni uživatelé vidí:
-
-* komunitní scénáře
-* komunitní tasky
+* [x] Rules nastaveny
 
 ---
 
 # ✅ COMMUNITY TASKS
 
-* [x] community_tasks kolekce
-* [x] upload tasků
-* [x] download tasků
-* [x] sync tasků
-* [x] latest tasky
-* [x] top tasky
-* [x] like systém
-* [x] report tasků
-* [x] import do TaskBank
-* [x] ochrana proti duplicitnímu importu
+* [x] Upload
+* [x] Download
+* [x] Latest
+* [x] Top
+* [x] Like systém
+* [x] Report
+* [x] Import
+* [x] Ochrana proti duplicitám
 * [x] l10n
-* [x] flutter analyze bez chyb
 
 ### Chybí
 
 * [ ] Automatické skrytí nahlášených tasků
-* [ ] Moderace tasků
+* [ ] Moderace
 
 ---
 
 # ✅ COMMUNITY SCÉNÁŘE
 
-## Backend
-
-* [x] CommunityScenario model
-* [x] CommunityScenarioService
-* [x] community_scenarios kolekce
-* [x] upload scénářů
-* [x] download scénářů
-* [x] latest scénáře
-* [x] top scénáře
-* [x] anonymní sdílení
-* [x] Firestore Rules
-
-## UI
-
-* [x] CommunityScenariosScreen
-* [x] načítání z Firestore
-* [x] přepínání Latest / Top
-* [x] otevření detailu scénáře
-
-## Sdílení
-
-* [x] Sdílet s komunitou
-* [x] Sdílet anonymně
-* [x] Upload při vytvoření scénáře
+* [x] Upload
+* [x] Download
+* [x] Latest
+* [x] Top
+* [x] Sdílení anonymně
+* [x] Detail scénáře
+* [x] Import scénáře
+* [x] Like scénáře
+* [x] Report scénáře
+* [x] Ochrana proti duplicitám
 
 ### Chybí
 
-* [ ] Detail scénáře (kompletní obsah)
-* [ ] Import scénáře
-* [ ] Like scénáře (UI)
-* [ ] Report scénáře (UI)
-* [ ] Ochrana proti duplicitnímu importu scénáře
 * [ ] Oblíbené scénáře
 
 ---
 
-# 🔥 PARTNER SYNC
+# ✅ PARTNER PROPOJENÍ
 
-### Chybí
-
-* [ ] Cloud partner propojení
-* [ ] Sync mezi zařízeními
-* [ ] Windows ↔ Android sync
-* [ ] Windows ↔ iPhone sync
-* [ ] Cloud reakce
-* [ ] Cloud historie scénářů
+* [x] Generování kódu
+* [x] Vyhledání partnera podle kódu
+* [x] Uložení partner UID
+* [x] Propojení partnerů
 
 ---
 
-# 🎨 UI / UX
+# ✅ CLOUD PARTNER SCÉNÁŘE
 
-### Chybí
-
-* [ ] Animace
-* [ ] Lepší přechody
-* [ ] Modernější design
-* [ ] Dark erotic theme polish
-* [ ] Vlastní ikonografie
+* [x] Odesílání scénářů
+* [x] Přijímání scénářů
+* [x] Live synchronizace
+* [x] Test PC ↔ Android
+* [x] Test Android ↔ PC
 
 ---
 
-# 🍎 iOS RELEASE
+# ✅ REAKCE
 
-### Chybí
-
-* [ ] Apple Developer účet
-* [ ] TestFlight
-* [ ] App Store build
-* [ ] Privacy Policy
-* [ ] Age Rating 18+
-* [ ] App Store metadata
-
----
-
-# 🤖 BUDOUCNOST
-
-### AI
-
-* [ ] AI generování scénářů
-* [ ] AI doporučení scénářů
-* [ ] AI doporučení tasků
-
-### Community
-
-* [ ] Community Feed
-* [ ] Trending scénáře
-* [ ] Trending tasky
-* [ ] Hodnocení scénářů
-* [ ] Oblíbené scénáře
-
-### Multiplayer
-
-* [ ] Multiplayer režim
-* [ ] Online Party Rooms
-* [ ] Cloud Party Session
+* [x] Odeslání reakce
+* [x] Detail reakce
+* [x] Splněno
+* [x] Nesplněno
+* [x] proofSent
+* [x] proofAccepted
+* [x] Povinná zpráva
 
 ---
 
-# 🎯 NEJBLIŽŠÍ KROKY
+# ✅ STAVY SCÉNÁŘŮ
 
-1. Community Scenario Detail
-2. Import scénáře
-3. Like scénáře
-4. Report scénáře
-5. Duplicitní ochrana scénářů
-6. Kompletní l10n kontrola
-7. Cloud Partner Sync
+* [x] 📥 received
+* [x] ⏳ postponed
+* [x] ✅ completed
+* [x] ❌ rejected
 
-✅ flutter analyze čisté
-✅ Community Tasks hotové
-✅ Community Scenarios hotové
-✅ CloudPartnerService vytvořen
-✅ Firebase Authentication funkční
-✅ Firestore funkční
+---
 
-✅ Cloud partner propojení
-✅ Vyhledání partnera podle kódu
-✅ Uložení partner UID
-✅ partner_scenarios Firestore Rules
+# ✅ ZÁLOŽKY
 
-✅ Cloud partner scénáře - odesílání
-🚧 Cloud partner scénáře - příjem
-🚧 Cloud inbox
-🚧 Live synchronizace
+* [x] 📥 Doručené
+* [x] ⏳ Odložené
+* [x] ✅ Splněné
+* [x] ❌ Odmítnuté
 
-✅ Firebase Authentication
-✅ Propojení partnerů kódem
-✅ Ukládání partner UID
-✅ Firestore pravidla
-✅ Odesílání scénářů
-✅ Přijímání scénářů
-✅ Test mezi PC a mobilem
+---
 
-✅ Cloud scénáře
-✅ Odesílání scénářů
-✅ Doručené scénáře
-✅ Detail scénáře
-✅ Reakce
-✅ Splněno / Nesplněno
-✅ Doručené reakce
-✅ Detail reakce
-✅ Firestore ukládá completed
-✅ Firestore ukládá proofAccepted
+# 🚧 AKTUÁLNĚ DĚLÁME
 
-📋 Budoucí úkoly EROS
-✅ Krátkodobé (další verze)
-1. Stav v detailu scénáře
+## 1. Stav scénáře v detailu
 
 Zobrazovat:
 
 📥 Doručeno
+
 ⏳ Odloženo
+
 ✅ Splněno
+
 ❌ Odmítnuto
-2. Počítadla u záložek
+
+---
+
+## 2. Skrýt tlačítko "💬 Reagovat"
+
+Pouze:
+
+* received
+* postponed
+
+---
+
+## 3. Počítadla u záložek
 
 Například:
 
 📥 Doručené (2)
+
 ⏳ Odložené (5)
+
 ✅ Splněné (12)
+
 ❌ Odmítnuté (1)
-3. Skrýt tlačítko „Reagovat“
 
-Pouze pro:
+---
 
-📥 Doručené
+# 🔜 DALŠÍ VERZE
+
+## Bohatší historie scénářů
+
+Zobrazovat:
+
+* datum
+* stav
+* reakci partnera
+* důkaz odeslán
+* důkaz přijat
+
+---
+
+## Znovu zvážit odmítnutý scénář
+
+❌ Odmítnuté
+
+↓
+
 ⏳ Odložené
-⭐ Střednědobé
-4. Chci odmítnutý scénář znovu zvážit
 
-U odmítnutého scénáře:
+---
 
-❌ Tento scénář byl odmítnut.
+# ❤️ BUDOUCNOST EROSU
 
-Chceš ho znovu zvážit?
+## Zkusit scénář znovu
+
+Po letech:
+
+🔄 Chcete tento scénář zkusit znovu?
 
 ANO / NE
 
 ANO:
 
-❌ Odmítnuté
-↓
-⏳ Odložené
-5. Bohatší historie scénářů
+* vytvoří nový scénář
+* odešle partnerovi
+* celý proces začne znovu
 
-Zobrazovat:
+---
 
-aktuální stav;
-reakci partnera;
-datum;
-📷 důkaz odeslán;
-❤️ důkaz potvrzen;
-případně hodnocení.
-❤️ Dlouhodobé (moje oblíbená část)
-🔄 Chcete tento scénář zkusit znovu?
-
-V historii scénáře:
-
-🔄 Chcete tento scénář zkusit znovu?
-
-ANO / NE
-
-Po kliknutí na ANO:
-
-vytvoří se nový scénář se stejným obsahem;
-odešle se partnerovi;
-celý proces začne od začátku.
-🕰 Historie opakování
-
-Například:
+## Historie opakování
 
 Romantická večeře
 
-1. pokus
-14.2.2026
-✅ Splněno
+2026 ✅
 
-2. pokus
-7.5.2028
-✅ Splněno
+2028 ✅
 
-3. pokus
-20.10.2031
-❌ Odmítnuto
+2031 ❌
 
-4. pokus
-14.2.2034
-✅ Splněno
-⭐ Hodnocení scénáře
+2034 ✅
 
-Po dokončení:
+---
+
+## Hodnocení scénáře
 
 😍 Předčilo očekávání
+
 😊 Skvělé
+
 😐 Průměrné
+
 😕 Nic moc
+
 ❌ Už nikdy
-❤️ Kronika vztahu
 
-Za několik let:
+---
 
-2026 ❤️ Začátek používání EROS
+## Kronika vztahu
 
-2027
-34 scénářů
-28 splněno
+2026 ❤️ začátek
 
-2029
-💍 Svatba
+2029 💍 svatba
 
-2031
-👶 První dítě
+2031 👶 dítě
 
-2034
-❤️ 200 společných scénářů
+2034 ❤️ 200 společných scénářů
+
+---
+
+# FILOZOFIE PROJEKTU
+
+EROS není jen seznam úkolů.
+
+EROS je digitální kronika vztahu a společných vzpomínek. ❤️
+
+Tohle bych do roadmapy určitě přidal. A souhlasím s tebou – odmítnutý scénář nesmí znamenat „navždy smazanou možnost“. U lidí se mění:
+
+věk,
+zkušenosti,
+důvěra,
+hranice,
+životní situace.
+
+Co bylo v roce 2026 nepřijatelné, může být v roce 2034 úplně v pořádku.
+
+Já bych to dokonce považoval za jednu z hlavních filozofií EROSU:
+
+Nic nemusí být navždy. ❤️
+
+🚧 AKTUÁLNĚ DĚLÁME
+Bohatší historie scénářů
+
+Zobrazovat:
+
+ datum
+ stav
+ reakci partnera
+ 📷 důkaz odeslán
+ ❤️ důkaz přijat
+Znovu zvážit odmítnutý scénář
+
+❌ Odmítnuté
+
+↓
+
+⏳ Odložené
+
+ funkce existuje
+ vylepšit UX
+🔜 DALŠÍ VERZE
+🔄 Zopakovat scénář
+
+Po otevření historie:
+
+🔄 Chcete si tento scénář zopakovat?
+
+ANO / NE
+
+ANO:
+
+vytvoří nový scénář
+otevře editor
+umožní úpravy
+odešle partnerovi
+celý proces začne znovu
+❤️ Návrat k odloženým scénářům
+
+Po letech:
+
+⏳ Tento scénář byl kdysi odložen.
+
+Chceš se k němu vrátit?
+
+ANO / NE
+
+ANO:
+
+postponed
+↓
+received
+❤️ Návrat k odmítnutým scénářům
+
+Po letech:
+
+❌ Tento scénář byl kdysi odmítnut.
+
+Možná dnes už situaci vidíš jinak.
+
+Chceš mu dát druhou šanci?
+
+ANO / NE
+
+ANO:
+
+rejected
+↓
+received
+
+Tím se znovu aktivuje a partner na něj může znovu reagovat.
+
+Historie opakování
+
+Romantická večeře
+
+2026 ✅
+2028 ✅
+2031 ❌
+2034 ✅
+2040 ✅
+Hodnocení scénáře
+
+😍 Předčilo očekávání
+
+😊 Skvělé
+
+😐 Průměrné
+
+😕 Nic moc
+
+❌ Už nikdy
+
+Strom scénářů
+
+Původní scénář:
+
+Romantická večeře
+
+opakování:
+
+2026 ✅
+2032 ✅
+2035 ❌
+2038 ✅
+2042 ❤️
+❤️ DIGITÁLNÍ KRONIKA VZTAHU
+Významné události
+2026 ❤️ první scénář
+2028 🌅 první společná dovolená
+2029 💍 svatba
+2031 👶 narození dítěte
+2034 ❤️ 200 společných scénářů
+2040 ❤️ zopakovali jsme romantickou večeři po 14 letech
+FILOZOFIE PROJEKTU
+
+EROS není seznam úkolů.
+
+EROS není jen hra.
+
+EROS je digitální kronika vztahu a společných vzpomínek. ❤️
+
+Scénáře nejsou jednorázové.
+
+Lidé se mění.
+
+Důvěra se vyvíjí.
+
+Co bylo kdysi odmítnuté, může být za několik let krásnou společnou vzpomínkou. ❤️

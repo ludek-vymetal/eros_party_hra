@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -37,125 +38,157 @@ class _CloudPartnerInboxScreenState
           l10n.cloudInbox,
         ),
       ),
-      body: Column(
-        children: [
-          SingleChildScrollView(
-            scrollDirection:
-                Axis.horizontal,
-            child: Row(
-              children: [
-                _buildFilterButton(
-                  l10n.inboxReceived,
-                  'received',
-                ),
+      body: StreamBuilder(
+        stream:
+            CloudPartnerScenarioService
+                .incomingScenarios(
+          FirebaseAuth
+              .instance
+              .currentUser!
+              .uid,
+        ),
+        builder: (
+          context,
+          snapshot,
+        ) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child:
+                  CircularProgressIndicator(),
+            );
+          }
 
-                _buildFilterButton(
-                  l10n.inboxPostponed,
-                  'postponed',
-                ),
+          final allScenarios =
+              snapshot.data!;
 
-                _buildFilterButton(
-                  l10n.inboxCompleted,
-                  'completed',
-                ),
+          final receivedCount =
+              allScenarios
+                  .where(
+                    (s) =>
+                        s.status ==
+                        'received',
+                  )
+                  .length;
 
-                _buildFilterButton(
-                  l10n.inboxRejected,
-                  'rejected',
-                ),
-              ],
-            ),
-          ),
+          final postponedCount =
+              allScenarios
+                  .where(
+                    (s) =>
+                        s.status ==
+                        'postponed',
+                  )
+                  .length;
 
-          Expanded(
-            child: StreamBuilder(
-              stream:
-                  CloudPartnerScenarioService
-                      .incomingScenarios(
-                FirebaseAuth
-                    .instance
-                    .currentUser!
-                    .uid,
-              ),
-              builder: (
-                context,
-                snapshot,
-              ) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child:
-                        CircularProgressIndicator(),
-                  );
-                }
+          final completedCount =
+              allScenarios
+                  .where(
+                    (s) =>
+                        s.status ==
+                        'completed',
+                  )
+                  .length;
 
-                final allScenarios =
-                    snapshot.data!;
+          final rejectedCount =
+              allScenarios
+                  .where(
+                    (s) =>
+                        s.status ==
+                        'rejected',
+                  )
+                  .length;
 
-                final scenarios =
-                    allScenarios
-                        .where(
-                          (scenario) =>
-                              scenario
-                                  .status ==
-                              selectedStatus,
-                        )
-                        .toList();
+          final scenarios =
+              allScenarios
+                  .where(
+                    (scenario) =>
+                        scenario.status ==
+                        selectedStatus,
+                  )
+                  .toList();
 
-                if (scenarios
-                    .isEmpty) {
-                  return Center(
-                    child: Text(
-                      l10n.noCloudScenarios,
+          return Column(
+            children: [
+              SingleChildScrollView(
+                scrollDirection:
+                    Axis.horizontal,
+                child: Row(
+                  children: [
+                    _buildFilterButton(
+                      '${l10n.inboxReceived} ($receivedCount)',
+                      'received',
                     ),
-                  );
-                }
 
-                return ListView.builder(
-                  itemCount:
-                      scenarios.length,
-                  itemBuilder: (
-                    context,
-                    index,
-                  ) {
-                    final scenario =
-                        scenarios[index];
+                    _buildFilterButton(
+                      '${l10n.inboxPostponed} ($postponedCount)',
+                      'postponed',
+                    ),
 
-                    return Card(
-                      margin:
-                          const EdgeInsets.all(
-                        8,
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  CloudPartnerScenarioDetailScreen(
-                                scenario:
-                                    scenario,
+                    _buildFilterButton(
+                      '${l10n.inboxCompleted} ($completedCount)',
+                      'completed',
+                    ),
+
+                    _buildFilterButton(
+                      '${l10n.inboxRejected} ($rejectedCount)',
+                      'rejected',
+                    ),
+                  ],
+                ),
+              ),
+
+              Expanded(
+                child: scenarios.isEmpty
+                    ? Center(
+                        child: Text(
+                          l10n.noCloudScenarios,
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount:
+                            scenarios.length,
+                        itemBuilder: (
+                          context,
+                          index,
+                        ) {
+                          final scenario =
+                              scenarios[index];
+
+                          return Card(
+                            margin:
+                                const EdgeInsets.all(
+                              8,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        CloudPartnerScenarioDetailScreen(
+                                      scenario:
+                                          scenario,
+                                    ),
+                                  ),
+                                );
+                              },
+                              title: Text(
+                                scenario.nazev,
+                              ),
+                              subtitle: Text(
+                                scenario.text,
+                                maxLines: 2,
+                                overflow:
+                                    TextOverflow
+                                        .ellipsis,
                               ),
                             ),
                           );
                         },
-                        title: Text(
-                          scenario.nazev,
-                        ),
-                        subtitle: Text(
-                          scenario.text,
-                          maxLines: 2,
-                          overflow:
-                              TextOverflow
-                                  .ellipsis,
-                        ),
                       ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }

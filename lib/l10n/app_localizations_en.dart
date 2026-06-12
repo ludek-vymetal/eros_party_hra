@@ -555,4 +555,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reactionReject => '❌ I refuse';
+
+  @override
+  String get rejectedScenarioInfo =>
+      '❌ This scenario was rejected.\n\nWould you like to reconsider it?';
+
+  @override
+  String get reconsiderScenario => '❤️ Reconsider';
+
+  @override
+  String get scenarioMovedToPostponed => '⏳ Scenario moved to postponed';
+
+  @override
+  String get reactionDetail => 'Reaction Detail';
+
+  @override
+  String get reactionCompleted => 'Completed';
+
+  @override
+  String get reactionNotCompleted => 'Not Completed';
+
+  @override
+  String get reactionMessageLabel => 'Message:';
+
+  @override
+  String get reactionDateLabel => 'Date:';
+
+  @override
+  String get proofAccepted => '✅ Proof Accepted';
+
+  @override
+  String get proofSentWhatsapp => '📷 Proof Sent via WhatsApp';
+
+  @override
+  String get proofWaiting => '⏳ Waiting for Proof';
+
+  @override
+  String get proofSentButton => '📷 I Sent Proof via WhatsApp';
+
+  @override
+  String get confirmation => 'Confirmation';
+
+  @override
+  String get proofSentQuestion =>
+      'Did you really send proof to your partner via WhatsApp?';
+
+  @override
+  String get proofMarkedSent => '📷 Proof marked as sent';
+
+  @override
+  String get proofAcceptedSnackBar => 'Proof accepted';
+
+  @override
+  String get proofAcceptedButton => 'Proof Accepted';
 }

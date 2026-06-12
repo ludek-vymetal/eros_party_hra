@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../models/cloud_partner_reaction.dart';
 import '../services/cloud_partner_reaction_service.dart';
+import '../../l10n/app_localizations.dart';
+
 
 
 
 class CloudPartnerReactionDetailScreen
     extends StatelessWidget {
   final CloudPartnerReaction reaction;
+  
 
   const CloudPartnerReactionDetailScreen({
     super.key,
@@ -16,10 +19,12 @@ class CloudPartnerReactionDetailScreen
 
   @override
   Widget build(BuildContext context) {
+    final l10n =
+        AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Detail reakce',
+        title: Text(
+          l10n.reactionDetail,
         ),
       ),
       body: Padding(
@@ -62,8 +67,8 @@ class CloudPartnerReactionDetailScreen
                   ),
                   Text(
                     reaction.completed
-                        ? 'Splněno'
-                        : 'Nesplněno',
+                        ? l10n.reactionCompleted
+                        : l10n.reactionNotCompleted,
                     style:
                         const TextStyle(
                       fontSize: 18,
@@ -79,8 +84,8 @@ class CloudPartnerReactionDetailScreen
               height: 24,
             ),
 
-            const Text(
-              'Zpráva:',
+            Text(
+                l10n.reactionMessageLabel,
               style: TextStyle(
                 fontWeight:
                     FontWeight.bold,
@@ -102,8 +107,8 @@ class CloudPartnerReactionDetailScreen
               height: 24,
             ),
 
-            const Text(
-              'Datum:',
+            Text(
+                    l10n.reactionDateLabel,
               style: TextStyle(
                 fontWeight:
                     FontWeight.bold,
@@ -123,7 +128,7 @@ class CloudPartnerReactionDetailScreen
             ),
 
             if (reaction.proofAccepted)
-              const Row(
+              Row(
                 children: [
                   Icon(
                     Icons.verified,
@@ -133,8 +138,8 @@ class CloudPartnerReactionDetailScreen
                     width: 8,
                   ),
                   Text(
-                    '✅ Důkaz přijat',
-                  ),
+                    l10n.proofAccepted,
+                  )
                 ],
               )
             else if (reaction.proofSent)
@@ -153,7 +158,7 @@ class CloudPartnerReactionDetailScreen
                 ],
               )
             else
-              const Row(
+              Row(
                 children: [
                   Icon(
                     Icons.hourglass_top,
@@ -163,8 +168,8 @@ class CloudPartnerReactionDetailScreen
                     width: 8,
                   ),
                   Text(
-                    '⏳ Čeká na odeslání důkazu',
-                  ),
+                    l10n.proofWaiting,
+                  )
                 ],
               ),
 
@@ -180,8 +185,8 @@ class CloudPartnerReactionDetailScreen
                 icon: const Icon(
                   Icons.photo_camera,
                 ),
-                label: const Text(
-                  '📷 Odeslal jsem důkaz přes WhatsApp',
+                label: Text(
+                  l10n.proofSentButton,
                 ),
                 onPressed: () async {
                   final confirm =
@@ -189,11 +194,11 @@ class CloudPartnerReactionDetailScreen
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: const Text(
-                          'Potvrzení',
+                        title: Text(
+                          l10n.confirmation,
                         ),
-                        content: const Text(
-                          'Opravdu jsi odeslal důkaz partnerovi přes WhatsApp?',
+                        content: Text(
+                          l10n.proofSentQuestion,
                         ),
                         actions: [
                           TextButton(
@@ -203,10 +208,10 @@ class CloudPartnerReactionDetailScreen
                                 false,
                               );
                             },
-                            child: const Text(
-                              'Ne',
+                            child: Text(
+                              l10n.no,
                             ),
-                          ),
+                                                      ),
                           ElevatedButton(
                             onPressed: () {
                               Navigator.pop(
@@ -214,8 +219,8 @@ class CloudPartnerReactionDetailScreen
                                 true,
                               );
                             },
-                            child: const Text(
-                              'Ano',
+                            child: Text(
+                              l10n.yes,
                             ),
                           ),
                         ],
@@ -239,9 +244,9 @@ class CloudPartnerReactionDetailScreen
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       content: Text(
-                        '📷 Důkaz označen jako odeslaný',
+                        l10n.proofAcceptedSnackBar,
                       ),
                     ),
                   );
@@ -275,9 +280,9 @@ class CloudPartnerReactionDetailScreen
                     ScaffoldMessenger.of(
                       context,
                     ).showSnackBar(
-                      const SnackBar(
+                      SnackBar(
                         content: Text(
-                          'Důkaz byl přijat',
+                          l10n.proofAcceptedSnackBar,
                         ),
                       ),
                     );
@@ -286,8 +291,8 @@ class CloudPartnerReactionDetailScreen
                       context,
                     );
                   },
-                  child: const Text(
-                    'Důkaz přijat',
+                  child: Text(
+                    l10n.proofAcceptedButton,
                   ),
                 ),
               ),

@@ -5,13 +5,15 @@ class CloudPartnerReaction {
 
   final String senderUid;
   final String receiverUid;
+  
 
   final String scenarioId;
-
+  final String scenarioName;
   final String message;
 
   // ✅ splněno / nesplněno
   final bool completed;
+
 
   // 📷 důkaz odeslán přes WhatsApp
   final bool proofSent;
@@ -26,6 +28,7 @@ class CloudPartnerReaction {
     required this.senderUid,
     required this.receiverUid,
     required this.scenarioId,
+    required this.scenarioName,
     required this.message,
     required this.completed,
     required this.proofSent,
@@ -43,11 +46,11 @@ class CloudPartnerReaction {
       senderUid: data['senderUid'] ?? '',
       receiverUid: data['receiverUid'] ?? '',
       scenarioId: data['scenarioId'] ?? '',
+      scenarioName: data['scenarioName'] ?? '',
       message: data['message'] ?? '',
       completed: data['completed'] ?? false,
       proofSent: data['proofSent'] ?? false,
-      proofAccepted:
-          data['proofAccepted'] ?? false,
+      proofAccepted: data['proofAccepted'] ?? false,
       createdAt:
           (data['createdAt'] as Timestamp?)
                   ?.toDate() ??
@@ -58,6 +61,7 @@ class CloudPartnerReaction {
   Map<String, dynamic> toMap() {
     return {
       'senderUid': senderUid,
+      'scenarioName': scenarioName,
       'receiverUid': receiverUid,
       'scenarioId': scenarioId,
       'message': message,

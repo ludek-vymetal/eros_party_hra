@@ -70,11 +70,12 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
 
     await ScenarioRecordStorage.delete(record.id);
 
+    
+
     if (context.mounted) {
-      Navigator.pop(context); // zpět do seznamu
+      Navigator.pop(context);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +103,7 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
             onPressed: () => _delete(context),
           ),
         ],
-),
-
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -117,6 +117,7 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
               _section('❤️ Emoce', s.emoce.join(', ')),
 
             const SizedBox(height: 24),
+
             const Text(
               '💬 Reakce',
               style: TextStyle(
@@ -153,13 +154,13 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
                         if (r.emoce != null)
                           Text(
                             r.emoce!,
-                            style:
-                                const TextStyle(color: Colors.white70),
+                            style: const TextStyle(
+                              color: Colors.white70,
+                            ),
                           ),
                         if (r.vzkaz != null && r.vzkaz!.isNotEmpty)
                           Padding(
-                            padding:
-                                const EdgeInsets.only(top: 6),
+                            padding: const EdgeInsets.only(top: 6),
                             child: Text(
                               '💬 ${r.vzkaz}',
                               style: const TextStyle(
@@ -181,6 +182,42 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
                   ),
                 );
               }),
+
+            const SizedBox(height: 32),
+
+            const Divider(color: Colors.white24),
+
+            const SizedBox(height: 16),
+
+            const Text(
+              '🔄 Chcete si tento scénář zopakovat?',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.refresh),
+                label: const Text('Zopakovat scénář'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PartnerWriteScreen(
+                        existingRecord: record,
+                        repeatScenario: true,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -203,7 +240,9 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             text.isEmpty ? '—' : text,
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(
+              color: Colors.white,
+            ),
           ),
         ],
       ),

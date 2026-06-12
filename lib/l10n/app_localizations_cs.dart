@@ -555,4 +555,57 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get reactionReject => '❌ Odmítnu';
+
+  @override
+  String get rejectedScenarioInfo =>
+      '❌ Tento scénář byl odmítnut.\n\nChceš ho znovu zvážit?';
+
+  @override
+  String get reconsiderScenario => '❤️ Znovu zvážit';
+
+  @override
+  String get scenarioMovedToPostponed => '⏳ Scénář byl přesunut mezi odložené';
+
+  @override
+  String get reactionDetail => 'Detail reakce';
+
+  @override
+  String get reactionCompleted => 'Splněno';
+
+  @override
+  String get reactionNotCompleted => 'Nesplněno';
+
+  @override
+  String get reactionMessageLabel => 'Zpráva:';
+
+  @override
+  String get reactionDateLabel => 'Datum:';
+
+  @override
+  String get proofAccepted => '✅ Důkaz přijat';
+
+  @override
+  String get proofSentWhatsapp => '📷 Důkaz odeslán přes WhatsApp';
+
+  @override
+  String get proofWaiting => '⏳ Čeká na odeslání důkazu';
+
+  @override
+  String get proofSentButton => '📷 Odeslal jsem důkaz přes WhatsApp';
+
+  @override
+  String get confirmation => 'Potvrzení';
+
+  @override
+  String get proofSentQuestion =>
+      'Opravdu jsi odeslal důkaz partnerovi přes WhatsApp?';
+
+  @override
+  String get proofMarkedSent => '📷 Důkaz označen jako odeslaný';
+
+  @override
+  String get proofAcceptedSnackBar => 'Důkaz byl přijat';
+
+  @override
+  String get proofAcceptedButton => 'Důkaz přijat';
 }

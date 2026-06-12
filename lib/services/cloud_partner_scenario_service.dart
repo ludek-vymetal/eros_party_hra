@@ -18,11 +18,11 @@ class CloudPartnerScenarioService {
 
   static Future<void> sendScenario({
     required String receiverUid,
+    required String parentScenarioId,
     required String nazev,
     required String text,
   }) async {
-    final user =
-        _auth.currentUser;
+    final user = _auth.currentUser;
 
     if (user == null) {
       return;
@@ -33,6 +33,9 @@ class CloudPartnerScenarioService {
       id: '',
       senderUid: user.uid,
       receiverUid: receiverUid,
+
+      parentScenarioId: parentScenarioId,
+
       nazev: nazev,
       text: text,
       status: 'received',

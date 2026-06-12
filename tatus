@@ -1,0 +1,146 @@
+[33mcommit 6c8b14e283d68adf085260d907a745bcaf5677c7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Your Name <you@example.com>
+Date:   Sat Jun 6 12:20:08 2026 +0200
+
+    Partner scenarios status system
+
+ lib/docs/project_roadmap.md                        | 115 [32m++++++[m[31m-[m
+ lib/l10n/app_cs.arb                                |  10 [32m+[m[31m-[m
+ lib/l10n/app_en.arb                                |  10 [32m+[m[31m-[m
+ lib/l10n/app_localizations.dart                    |  48 [32m+++[m
+ lib/l10n/app_localizations_cs.dart                 |  24 [32m++[m
+ lib/l10n/app_localizations_en.dart                 |  24 [32m++[m
+ .../cloud_partner_scenario_detail_screen.dart      | 369 [32m++++++++++++[m[31m---------[m
+ 7 files changed, 436 insertions(+), 164 deletions(-)
+
+[33mcommit cd6016c690194babced60ce020156ac7be04bb74[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Your Name <you@example.com>
+Date:   Fri Jun 5 18:44:56 2026 +0200
+
+    Partner scenarios status system
+
+ lib/l10n/app_cs.arb                                |   6 [32m+[m[31m-[m
+ lib/l10n/app_en.arb                                |   6 [32m+[m[31m-[m
+ lib/l10n/app_localizations.dart                    |  24 [32m+++[m
+ lib/l10n/app_localizations_cs.dart                 |  12 [32m++[m
+ lib/l10n/app_localizations_en.dart                 |  12 [32m++[m
+ lib/models/cloud_partner_scenario.dart             |  17 [32m++[m
+ lib/screens/cloud_partner_inbox_screen.dart        | 230 [32m++++++++++++++[m[31m-------[m
+ .../cloud_partner_scenario_detail_screen.dart      |  66 [32m++++[m[31m--[m
+ lib/services/cloud_partner_scenario_service.dart   |  13 [32m+[m[31m-[m
+ 9 files changed, 287 insertions(+), 99 deletions(-)
+
+[33mcommit 2f79ed708beb4575c0135ca115dcedf8a7867cdb[m
+Author: Your Name <you@example.com>
+Date:   Fri Jun 5 14:31:37 2026 +0200
+
+    whatsap
+
+ lib/docs/project_roadmap.md                         | 21 [32m++++++++++++++++++++[m[31m-[m
+ .../cloud_partner_scenario_detail_screen.dart       |  2 [32m++[m
+ lib/services/cloud_partner_reaction_service.dart    |  9 [32m++++++[m[31m---[m
+ 3 files changed, 28 insertions(+), 4 deletions(-)
+
+[33mcommit d3c2dd4d15eb19def4d2de317ee73ca84f72908a[m
+Author: Your Name <you@example.com>
+Date:   Fri Jun 5 14:24:39 2026 +0200
+
+    whatsap
+
+ lib/l10n/app_cs.arb                                | 252 [32m+++[m[31m-----------------[m
+ lib/l10n/app_en.arb                                | 249 [32m+++[m[31m-----------------[m
+ lib/l10n/app_localizations.dart                    |  36 [32m+[m[31m--[m
+ lib/l10n/app_localizations_cs.dart                 |  21 [32m+[m[31m-[m
+ lib/l10n/app_localizations_en.dart                 |  21 [32m+[m[31m-[m
+ lib/models/cloud_partner_reaction.dart             |  19 [32m++[m
+ .../cloud_partner_reaction_detail_screen.dart      | 258 [32m++++++++++++++++++++[m[31m-[m
+ lib/screens/cloud_partner_reactions_screen.dart    |  43 [32m+++[m[31m-[m
+ .../cloud_partner_scenario_detail_screen.dart      | 124 [32m+++++++[m[31m---[m
+ lib/screens/partner_menu.dart                      |   4 [32m+[m[31m-[m
+ lib/screens/scenario_record_list_screen.dart       |   2 [32m+[m[31m-[m
+ lib/services/cloud_partner_reaction_service.dart   |  24 [32m++[m
+ linux/flutter/generated_plugin_registrant.cc       |   4 [32m+[m
+ linux/flutter/generated_plugins.cmake              |   1 [32m+[m
+ macos/Flutter/GeneratedPluginRegistrant.swift      |   4 [32m+[m
+ pubspec.lock                                       |  92 [32m+++++++[m[31m-[m
+ pubspec.yaml                                       |   2 [32m+[m
+ windows/flutter/generated_plugin_registrant.cc     |   6 [32m+[m
+ windows/flutter/generated_plugins.cmake            |   2 [32m+[m
+ 19 files changed, 648 insertions(+), 516 deletions(-)
+
+[33mcommit e74a0beb9fd7ff7e06bc74860f2be2dded3c5e2b[m
+Author: Your Name <you@example.com>
+Date:   Thu Jun 4 08:51:24 2026 +0200
+
+    Add reactions inbox and localization
+
+ lib/l10n/app_cs.arb                             |  4 [32m++[m[31m--[m
+ lib/l10n/app_en.arb                             |  4 [32m++[m[31m--[m
+ lib/l10n/app_localizations.dart                 | 12 [32m++++++++++++[m
+ lib/l10n/app_localizations_cs.dart              |  6 [32m++++++[m
+ lib/l10n/app_localizations_en.dart              |  6 [32m++++++[m
+ lib/screens/cloud_partner_reactions_screen.dart |  4 [32m++[m[31m--[m
+ lib/screens/partner_menu.dart                   | 13 [32m+++++++++++++[m
+ 7 files changed, 43 insertions(+), 6 deletions(-)
+
+[33mcommit afd520b2f7c85836f23c350b0ae0dc874c968666[m
+Author: Your Name <you@example.com>
+Date:   Wed Jun 3 19:02:30 2026 +0200
+
+    Add cloud partner reactions
+
+ lib/l10n/app_cs.arb                                |  12 [32m+[m[31m-[m
+ lib/l10n/app_en.arb                                |  12 [32m+[m[31m-[m
+ lib/l10n/app_localizations.dart                    |  54 [32m++++++[m
+ lib/l10n/app_localizations_cs.dart                 |  27 [32m+++[m
+ lib/l10n/app_localizations_en.dart                 |  27 [32m+++[m
+ lib/models/cloud_partner_reaction.dart             |  56 [32m++++++[m
+ lib/screens/cloud_partner_inbox_screen.dart        |  44 [32m+++[m[31m--[m
+ .../cloud_partner_reaction_detail_screen.dart      |  53 [32m++++++[m
+ lib/screens/cloud_partner_reactions_screen.dart    | 106 [32m++++++++++++[m
+ .../cloud_partner_scenario_detail_screen.dart      | 188 [32m+++++++++++++++++++++[m
+ lib/services/cloud_partner_reaction_service.dart   |  64 [32m+++++++[m
+ 11 files changed, 620 insertions(+), 23 deletions(-)
+
+[33mcommit ad283413832b4c9eca7a17d4011d0c2d5bef5b8d[m
+Author: Your Name <you@example.com>
+Date:   Wed Jun 3 07:58:57 2026 +0200
+
+    Partner cloud messaging working
+
+ lib/main.dart                                    |   3 [31m-[m
+ lib/screens/cloud_partner_inbox_screen.dart      | 141 [32m+++++[m[31m-----[m
+ lib/screens/partner_link_screen.dart             | 324 [32m+++++++++++++[m[31m----------[m
+ lib/services/cloud_partner_scenario_service.dart |   5 [32m+[m[31m-[m
+ lib/services/partner_link_service.dart           |  19 [32m+[m[31m-[m
+ 5 files changed, 272 insertions(+), 220 deletions(-)
+
+[33mcommit 28ce373668db084d415d4052174f6e4409ce05a8[m
+Author: Your Name <you@example.com>
+Date:   Tue Jun 2 13:55:47 2026 +0200
+
+    Community partner zona
+
+ l10n.yaml                                          |   8 [32m+[m[31m-[m
+ lib/docs/project_roadmap.md                        | 172 [32m++++++[m[31m---[m
+ lib/l10n/app_cs.arb                                |  45 [32m++[m[31m-[m
+ lib/l10n/app_en.arb                                |  43 [32m++[m[31m-[m
+ lib/l10n/app_localizations.dart                    | 166 [32m+++++++[m[31m-[m
+ lib/l10n/app_localizations_cs.dart                 |  83 [32m+++[m[31m-[m
+ lib/l10n/app_localizations_en.dart                 |  83 [32m+++[m[31m-[m
+ lib/main.dart                                      |   2 [32m+[m[31m-[m
+ lib/models/cloud_partner_scenario.dart             |  50 [32m+++[m
+ lib/models/community_scenario.dart                 |  78 [32m++++[m
+ lib/party/rescue/rescue_overlay.dart               |   2 [32m+[m[31m-[m
+ lib/party/screens/community_tasks_screen.dart      | 429 [32m++++++++++[m[31m-----------[m
+ lib/party/screens/party_consent_screen.dart        |   2 [32m+[m[31m-[m
+ lib/party/screens/party_game_screen.dart           |   6 [32m+[m[31m-[m
+ .../screens/party_setup_difficulty_screen.dart     |   2 [32m+[m[31m-[m
+ lib/party/screens/party_setup_players_screen.dart  |   6 [32m+[m[31m-[m
+ lib/party/screens/task_manager_screen.dart         |   2 [32m+[m[31m-[m
+ lib/party/services/community_task_service.dart     |   2 [32m+[m[31m-[m
+ lib/party/widgets/last_clothing_overlay.dart       |   2 [32m+[m[31m-[m
+ lib/party/widgets/rescue_vote_overlay.dart         |   2 [32m+[m[31m-[m
+ lib/screens/cloud_partner_inbox_screen.dart        |  99 [32m+++++[m
+ lib/screens/community_scenario_detail_screen.dart  | 314 [32m+++++++++++++++[m
+ lib/screens/community_sc

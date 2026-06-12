@@ -18,6 +18,7 @@ class CloudPartnerReactionsScreen
   ) {
     final l10n =
         AppLocalizations.of(context);
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -63,13 +64,11 @@ class CloudPartnerReactionsScreen
           }
 
           return ListView.builder(
-            itemCount:
-                reactions.length,
-            itemBuilder:
-                (
-                  context,
-                  index,
-                ) {
+            itemCount: reactions.length,
+            itemBuilder: (
+              context,
+              index,
+            ) {
               final reaction =
                   reactions[index];
 
@@ -88,28 +87,47 @@ class CloudPartnerReactionsScreen
                             ? Colors.green
                             : Colors.red,
                   ),
+
                   title: Text(
-                    reaction.completed
-                        ? l10n.completed
-                        : l10n.notCompleted,
+                    '🏷️ ${reaction.scenarioName}',
                   ),
+
                   subtitle: Column(
                     crossAxisAlignment:
                         CrossAxisAlignment
                             .start,
                     children: [
                       Text(
-                        reaction.message,
-                        maxLines: 1,
-                        overflow:
-                            TextOverflow
-                                .ellipsis,
+                        reaction.completed
+                            ? '✅ ${l10n.completed}'
+                            : '❌ ${l10n.notCompleted}',
                       ),
+
                       Text(
-                        reaction.datumFormatted,
+                        '📅 ${reaction.datumFormatted}',
                       ),
+
+                      if (reaction.proofAccepted)
+                        const Text(
+                          '✔️ Důkaz potvrzen',
+                        )
+                      else if (reaction.proofSent)
+                        const Text(
+                          '📷 Důkaz odeslán',
+                        ),
+
+                      if (reaction.message
+                          .isNotEmpty)
+                        Text(
+                          '💬 ${reaction.message}',
+                          maxLines: 1,
+                          overflow:
+                              TextOverflow
+                                  .ellipsis,
+                        ),
                     ],
                   ),
+
                   onTap: () {
                     Navigator.push(
                       context,

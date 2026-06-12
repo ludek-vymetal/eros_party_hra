@@ -36,24 +36,31 @@ class _ScenarioRecordListScreenState
   }
 
   Future<void> _load() async {
-    final data =
-        await ScenarioRecordStorage
-            .load();
+    final data = await ScenarioRecordStorage.load();
 
     data.sort(
-      (a, b) => b.createdAt
-          .compareTo(
-        a.createdAt,
-      ),
+      (a, b) => b.createdAt.compareTo(a.createdAt),
     );
+
+    // seskupení podle parentScenarioId
+    final Map<String, ScenarioRecord> grouped = {};
+
+    for (final record in data) {
+      grouped.putIfAbsent(
+        record.parentScenarioId,
+        () => record,
+      );
+    }
 
     if (!mounted) return;
 
     setState(() {
-      records = data;
+      records = grouped.values.toList();
       loading = false;
     });
   }
+
+   
 
   @override
   Widget build(
@@ -164,20 +171,17 @@ class _ScenarioRecordListScreenState
                                   Colors.white54,
                             ),
 
-                            onTap:
-                                () {
-                              Navigator.push(
+                            onTap: () async {
+                              await Navigator.push(
                                 context,
-
                                 MaterialPageRoute(
-                                  builder:
-                                      (_) =>
-                                          ScenarioRecordDetailScreen(
-                                    record:
-                                        r,
+                                  builder: (_) => ScenarioRecordDetailScreen(
+                                    record: r,
                                   ),
                                 ),
                               );
+
+                              _load();
                             },
                           ),
                         );

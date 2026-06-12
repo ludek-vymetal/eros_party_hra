@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 
 import '../../l10n/app_localizations.dart';
 
@@ -34,15 +34,12 @@ class _PartnerLinkScreenState
 
   Future<void> _load() async {
     final code =
-        await PartnerLinkService
-            .getOrCreateMyCode();
+        await PartnerLinkService.getOrCreateMyCode();
 
-    await CloudPartnerService
-        .registerMyCode(code);
+    await CloudPartnerService.registerMyCode(code);
 
     final isLinked =
-        await PartnerLinkService
-            .isLinked();
+        await PartnerLinkService.isLinked();
 
     if (!mounted) return;
 
@@ -51,7 +48,6 @@ class _PartnerLinkScreenState
       linked = isLinked;
     });
   }
-
   @override
   void dispose() {
     controller.dispose();
@@ -105,31 +101,7 @@ class _PartnerLinkScreenState
                     ),
                   ),
 
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  ElevatedButton(
-                    onPressed:
-                        () async {
-                      await FirebaseAuth
-                          .instance
-                          .signOut();
-
-                      await PartnerLinkService
-                          .resetMyCode();
-
-                      await FirebaseAuth
-                          .instance
-                          .signInAnonymously();
-
-                      await _load();
-                    },
-                    child:
-                        const Text(
-                      'NOVÝ TEST ÚČET',
-                    ),
-                  ),
+                 
                 ],
               )
             : Column(
@@ -232,27 +204,8 @@ class _PartnerLinkScreenState
                     height: 20,
                   ),
 
-                  ElevatedButton(
-                    onPressed:
-                        () async {
-                      await FirebaseAuth
-                          .instance
-                          .signOut();
-
-                      await PartnerLinkService
-                          .resetMyCode();
-
-                      await FirebaseAuth
-                          .instance
-                          .signInAnonymously();
-
-                      await _load();
-                    },
-                    child:
-                        const Text(
-                      'NOVÝ TEST ÚČET',
-                    ),
-                  ),
+                  
+                   
                 ],
               ),
       ),

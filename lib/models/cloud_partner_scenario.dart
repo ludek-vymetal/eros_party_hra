@@ -5,6 +5,9 @@ class CloudPartnerScenario {
   final String senderUid;
   final String receiverUid;
 
+  // ❤️ stejné pro všechna opakování jednoho scénáře
+  final String parentScenarioId;
+
   final String nazev;
   final String text;
 
@@ -20,6 +23,7 @@ class CloudPartnerScenario {
     required this.id,
     required this.senderUid,
     required this.receiverUid,
+    required this.parentScenarioId,
     required this.nazev,
     required this.text,
     required this.status,
@@ -35,10 +39,14 @@ class CloudPartnerScenario {
       id: doc.id,
       senderUid: data['senderUid'] ?? '',
       receiverUid: data['receiverUid'] ?? '',
+
+      // staré scénáře budou mít parent = svoje ID
+      parentScenarioId:
+          data['parentScenarioId'] ?? doc.id,
+
       nazev: data['nazev'] ?? '',
       text: data['text'] ?? '',
 
-      // staré scénáře budou automaticky doručené
       status:
           data['status'] ??
           'received',
@@ -54,10 +62,12 @@ class CloudPartnerScenario {
     return {
       'senderUid': senderUid,
       'receiverUid': receiverUid,
+
+      'parentScenarioId': parentScenarioId,
+
       'nazev': nazev,
       'text': text,
 
-      // nový scénář
       'status': 'received',
 
       'createdAt':

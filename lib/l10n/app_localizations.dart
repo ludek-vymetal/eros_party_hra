@@ -1183,6 +1183,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'❌ I refuse'**
   String get reactionReject;
+
+  /// No description provided for @rejectedScenarioInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ This scenario was rejected.\n\nWould you like to reconsider it?'**
+  String get rejectedScenarioInfo;
+
+  /// No description provided for @reconsiderScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'❤️ Reconsider'**
+  String get reconsiderScenario;
+
+  /// No description provided for @scenarioMovedToPostponed.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Scenario moved to postponed'**
+  String get scenarioMovedToPostponed;
+
+  /// No description provided for @reactionDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Reaction Detail'**
+  String get reactionDetail;
+
+  /// No description provided for @reactionCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get reactionCompleted;
+
+  /// No description provided for @reactionNotCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Completed'**
+  String get reactionNotCompleted;
+
+  /// No description provided for @reactionMessageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Message:'**
+  String get reactionMessageLabel;
+
+  /// No description provided for @reactionDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date:'**
+  String get reactionDateLabel;
+
+  /// No description provided for @proofAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Proof Accepted'**
+  String get proofAccepted;
+
+  /// No description provided for @proofSentWhatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'📷 Proof Sent via WhatsApp'**
+  String get proofSentWhatsapp;
+
+  /// No description provided for @proofWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Waiting for Proof'**
+  String get proofWaiting;
+
+  /// No description provided for @proofSentButton.
+  ///
+  /// In en, this message translates to:
+  /// **'📷 I Sent Proof via WhatsApp'**
+  String get proofSentButton;
+
+  /// No description provided for @confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmation'**
+  String get confirmation;
+
+  /// No description provided for @proofSentQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Did you really send proof to your partner via WhatsApp?'**
+  String get proofSentQuestion;
+
+  /// No description provided for @proofMarkedSent.
+  ///
+  /// In en, this message translates to:
+  /// **'📷 Proof marked as sent'**
+  String get proofMarkedSent;
+
+  /// No description provided for @proofAcceptedSnackBar.
+  ///
+  /// In en, this message translates to:
+  /// **'Proof accepted'**
+  String get proofAcceptedSnackBar;
+
+  /// No description provided for @proofAcceptedButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Proof Accepted'**
+  String get proofAcceptedButton;
 }
 
 class _AppLocalizationsDelegate

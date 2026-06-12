@@ -38,10 +38,19 @@ class ScenarioRecordStorage {
   // =========================
   // ➕ ADD RECORD
   // =========================
-  static Future<void> add(ScenarioRecord record) async {
+  static Future<void> add(
+    ScenarioRecord record,
+  ) async {
     final all = await load();
-    all.add(record);
-    await save(all);
+
+    final exists = all.any(
+      (r) => r.id == record.id,
+    );
+
+    if (!exists) {
+      all.add(record);
+      await save(all);
+    }
   }
 
   // =========================
@@ -73,25 +82,46 @@ class ScenarioRecordStorage {
     Reaction reaction,
   ) async {
     final all = await load();
-    final index = all.indexWhere((r) => r.id == recordId);
+    final index =
+        all.indexWhere(
+          (r) => r.parentScenarioId == recordId,
+        );
     if (index == -1) return;
 
     final record = all[index];
 
-    all[index] = record.copyWith(
-      reactions: [...record.reactions, reaction],
-    );
+// ochrana proti duplicitám z Firebase
+final exists = record.reactions.any(
+  (r) =>
+      r.remoteId != null &&
+      r.remoteId == reaction.remoteId,
+);
 
-    await save(all);
+if (exists) {
+  return;
+}
+
+all[index] = record.copyWith(
+  reactions: [...record.reactions, reaction],
+);
+
+await save(all);
   }
 
   // =========================
   // 🔎 GET BY ID
   // =========================
-  static Future<ScenarioRecord?> getById(String id) async {
+  static Future<ScenarioRecord?> getById(
+    String id,
+  ) async {
     final all = await load();
+
     try {
-      return all.firstWhere((r) => r.id == id);
+      return all.firstWhere(
+        (r) =>
+            r.id == id ||
+            r.parentScenarioId == id,
+      );
     } catch (_) {
       return null;
     }
