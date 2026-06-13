@@ -25,7 +25,7 @@ import 'screens/auth_wrapper.dart';
 // 🌍 L10N
 import 'l10n/app_localizations.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -256,21 +256,14 @@ class _MainMenuScreenState
         title: const Text('EROS'),
 
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-            },
-          ),
-
           Padding(
             padding: const EdgeInsets.only(
               right: 12,
             ),
 
             child: Center(
-              child:
-                  DropdownButtonHideUnderline(
+              child: DropdownButtonHideUnderline(
+                  
                 child:
                     DropdownButton<
                       Locale

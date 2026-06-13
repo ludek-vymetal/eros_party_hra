@@ -1285,6 +1285,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Proof Accepted'**
   String get proofAcceptedButton;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'⚙️ Settings'**
+  String get settings;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'👤 Account'**
+  String get account;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'🚪 Sign out'**
+  String get logout;
+
+  /// No description provided for @emailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'📧 Email'**
+  String get emailAddress;
 }
 
 class _AppLocalizationsDelegate

@@ -203,7 +203,11 @@
 "proofMarkedSent": "📷 Proof marked as sent",
 "proofAcceptedSnackBar": "Proof accepted",
 
-"proofAcceptedButton": "Proof Accepted"
+"proofAcceptedButton": "Proof Accepted",
+"settings": "⚙️ Settings",
+"account": "👤 Account",
+"logout": "🚪 Sign out",
+"emailAddress": "📧 Email"
 }
 
 

@@ -608,4 +608,16 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get proofAcceptedButton => 'Důkaz přijat';
+
+  @override
+  String get settings => '⚙️ Nastavení';
+
+  @override
+  String get account => '👤 Účet';
+
+  @override
+  String get logout => '🚪 Odhlásit se';
+
+  @override
+  String get emailAddress => '📧 Email';
 }

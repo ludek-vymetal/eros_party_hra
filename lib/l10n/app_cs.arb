@@ -203,5 +203,9 @@
 "proofMarkedSent": "📷 Důkaz označen jako odeslaný",
 "proofAcceptedSnackBar": "Důkaz byl přijat",
 
-"proofAcceptedButton": "Důkaz přijat"
+"proofAcceptedButton": "Důkaz přijat",
+"settings": "⚙️ Nastavení",
+"account": "👤 Účet",
+"logout": "🚪 Odhlásit se",
+"emailAddress": "📧 Email"
 }

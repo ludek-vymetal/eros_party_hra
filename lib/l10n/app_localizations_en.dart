@@ -608,4 +608,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get proofAcceptedButton => 'Proof Accepted';
+
+  @override
+  String get settings => '⚙️ Settings';
+
+  @override
+  String get account => '👤 Account';
+
+  @override
+  String get logout => '🚪 Sign out';
+
+  @override
+  String get emailAddress => '📧 Email';
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
-
+import 'settings_screen.dart';
 import 'partner_write.dart';
 import 'partner_read.dart';
 import 'partner_link_screen.dart';
@@ -183,6 +183,16 @@ class _PartnerMenuScreenState
                 ),
               ),
 
+              _btn(
+                l10n.settings,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const SettingsScreen(),
+                  ),
+                ),
+              ),
               _btn(
                 linked
                     ? l10n.connected
