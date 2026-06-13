@@ -47,4 +47,28 @@ class CloudPartnerService {
 
     return data?['uid'];
   }
+
+  /// vytvoří dokument uživatele v kolekci users
+  static Future<void> ensureUserDocument() async {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      return;
+    }
+
+    final doc = _firestore
+        .collection('users')
+        .doc(user.uid);
+
+    final snapshot = await doc.get();
+
+    if (snapshot.exists) {
+      return;
+    }
+
+    await doc.set({
+      'createdAt':
+          FieldValue.serverTimestamp(),
+    });
+  }
 }

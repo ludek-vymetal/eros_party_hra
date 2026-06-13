@@ -46,6 +46,14 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () async {
                 await FirebaseAuth.instance
                     .signOut();
+
+                if (context.mounted) {
+                  Navigator.of(
+                    context,
+                  ).popUntil(
+                    (route) => route.isFirst,
+                  );
+                }
               },
 
               child: Text(

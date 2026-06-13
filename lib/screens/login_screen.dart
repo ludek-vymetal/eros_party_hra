@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../services/cloud_partner_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,6 +29,10 @@ class _LoginScreenState
         password:
             _passwordController.text,
       );
+
+      await CloudPartnerService
+          .ensureUserDocument();
+
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -44,6 +49,10 @@ class _LoginScreenState
         password:
             _passwordController.text,
       );
+
+      await CloudPartnerService
+          .ensureUserDocument();
+
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
