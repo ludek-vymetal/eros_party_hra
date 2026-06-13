@@ -415,3 +415,12 @@ Lidé se mění.
 Důvěra se vyvíjí.
 
 Co bylo kdysi odmítnuté, může být za několik let krásnou společnou vzpomínkou. ❤️
+✅ odstranění Anonymous Auth
+✅ stabilní Firebase UID
+✅ LoginScreen
+✅ AuthWrapper
+✅ Email/Password registrace
+✅ odhlášení uživatele
+✅ SettingsScreen
+✅ l10n pro Settings
+✅ čistý flutter analyze

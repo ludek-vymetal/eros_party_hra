@@ -71,4 +71,66 @@ class CloudPartnerService {
           FieldValue.serverTimestamp(),
     });
   }
+  /// uloží partnerovo UID do users/UID
+static Future<void> savePartnerUid(
+  String partnerUid,
+) async {
+  final user = _auth.currentUser;
+
+  if (user == null) {
+    return;
+  }
+
+  await _firestore
+      .collection('users')
+      .doc(user.uid)
+      .set(
+    {
+      'partnerUid': partnerUid,
+    },
+    SetOptions(
+      merge: true,
+    ),
+  );
+}
+
+/// načte partnerovo UID z users/UID
+static Future<String?> getPartnerUid() async {
+  final user = _auth.currentUser;
+
+  if (user == null) {
+    return null;
+  }
+
+  final snapshot =
+      await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+  return snapshot.data()?['partnerUid'];
+}
+
+  /// uloží vlastní partnerský kód do users/UID
+  static Future<void> saveMyCode(
+    String code,
+  ) async {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      return;
+    }
+
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .set(
+      {
+        'myCode': code,
+      },
+      SetOptions(
+        merge: true,
+      ),
+    );
+  }
 }

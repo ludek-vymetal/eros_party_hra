@@ -34,12 +34,18 @@ class _PartnerLinkScreenState
 
   Future<void> _load() async {
     final code =
-        await PartnerLinkService.getOrCreateMyCode();
+      await PartnerLinkService.getOrCreateMyCode();
 
-    await CloudPartnerService.registerMyCode(code);
+  await CloudPartnerService.registerMyCode(
+    code,
+  );
 
-    final isLinked =
-        await PartnerLinkService.isLinked();
+  await CloudPartnerService.saveMyCode(
+    code,
+  );
+
+  final isLinked =
+      await PartnerLinkService.isLinked();
 
     if (!mounted) return;
 
@@ -189,6 +195,16 @@ class _PartnerLinkScreenState
                       );
 
                       await PartnerLinkService
+                          .savePartnerCode(
+                        code,
+                      );
+
+                      await PartnerLinkService
+                          .savePartnerUid(
+                        partnerUid,
+                      );
+
+                      await CloudPartnerService
                           .savePartnerUid(
                         partnerUid,
                       );
