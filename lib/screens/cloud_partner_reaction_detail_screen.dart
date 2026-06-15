@@ -7,10 +7,8 @@ import '../../l10n/app_localizations.dart';
 
 
 
-class CloudPartnerReactionDetailScreen
-    extends StatelessWidget {
+class CloudPartnerReactionDetailScreen extends StatelessWidget {
   final CloudPartnerReaction reaction;
-  
 
   const CloudPartnerReactionDetailScreen({
     super.key,
@@ -232,9 +230,8 @@ class CloudPartnerReactionDetailScreen
                     return;
                   }
 
-                  await CloudPartnerReactionService
-                      .markProofSent(
-                    reaction.id,
+                  await CloudPartnerReactionService.markProofSent(
+                    reaction.correlationId, // ZDE MUSÍ BÝT CORRELATIONID
                   );
 
                   if (!context.mounted) {
@@ -268,9 +265,8 @@ class CloudPartnerReactionDetailScreen
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await CloudPartnerReactionService
-                        .acceptProof(
-                      reaction.id,
+                    await CloudPartnerReactionService.acceptProof(
+                      reaction.correlationId, // ZDE MUSÍ BÝT CORRELATIONID
                     );
 
                     if (!context.mounted) {

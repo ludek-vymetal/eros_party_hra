@@ -13,9 +13,7 @@ import '../services/scenario_record_storage.dart';
 import '../models/scenar.dart';
 import '../models/scenario_record.dart';
 
-
-class CloudPartnerScenarioDetailScreen
-    extends StatelessWidget {
+class CloudPartnerScenarioDetailScreen extends StatelessWidget {
   final CloudPartnerScenario scenario;
 
   const CloudPartnerScenarioDetailScreen({
@@ -24,11 +22,8 @@ class CloudPartnerScenarioDetailScreen
   });
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final l10n =
-        AppLocalizations.of(context);
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -37,81 +32,61 @@ class CloudPartnerScenarioDetailScreen
         ),
       ),
       body: SingleChildScrollView(
-        padding:
-            const EdgeInsets.all(
+        padding: const EdgeInsets.all(
           16,
         ),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               scenario.nazev,
-              style:
-                  const TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
-                fontWeight:
-                    FontWeight.bold,
+                fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(
               height: 16,
             ),
-
             Text(
               switch (scenario.status) {
-                'completed' =>
-                  l10n.completed,
-                'postponed' =>
-                  l10n.postponedStatus,
-                'rejected' =>
-                  l10n.rejectedStatus,
-                _ =>
-                  l10n.receivedStatus,
+                'completed' => l10n.completed,
+                'postponed' => l10n.postponedStatus,
+                'rejected' => l10n.rejectedStatus,
+                _ => l10n.receivedStatus,
               },
             ),
-
             const SizedBox(
               height: 16,
             ),
-
             Text(
               '${l10n.sentAt}: '
               '${scenario.createdAt.day}.${scenario.createdAt.month}.${scenario.createdAt.year}',
             ),
-
             const SizedBox(
               height: 24,
             ),
-
             Text(
               scenario.text,
             ),
-
             const SizedBox(
               height: 32,
             ),
-            
             if (scenario.status == 'rejected')
               Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     l10n.rejectedScenarioInfo,
                   ),
-
                   const SizedBox(
                     height: 12,
                   ),
-
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
-                        await CloudPartnerScenarioService
-                            .updateScenarioStatus(
+                        await CloudPartnerScenarioService.updateScenarioStatus(
                           scenario.id,
                           'postponed',
                         );
@@ -139,27 +114,19 @@ class CloudPartnerScenarioDetailScreen
                       ),
                     ),
                   ),
-
                   const SizedBox(
                     height: 24,
                   ),
                 ],
               ),
-
-
-            if (scenario.status ==
-                    'received' ||
-                scenario.status ==
-                    'postponed')
+            if (scenario.status == 'received' ||
+                scenario.status == 'postponed')
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    final controller =
-                        TextEditingController();
-
-                    String selectedStatus =
-                        'completed';
+                    final controller = TextEditingController();
+                    String selectedStatus = 'completed';
 
                     final result =
                         await showDialog<Map<String, dynamic>>(
@@ -175,56 +142,44 @@ class CloudPartnerScenarioDetailScreen
                                 l10n.sendReactionTitle,
                               ),
                               content: Column(
-                                mainAxisSize:
-                                    MainAxisSize.min,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   DropdownButtonFormField<String>(
-                                    initialValue:
-                                        'completed',
-                                    decoration:
-                                        InputDecoration(
-                                      labelText:
-                                          l10n.reactionDecision,
+                                    initialValue: selectedStatus, // <--- Tady to je správně
+                                    decoration: InputDecoration(
+                                      labelText: l10n.reactionDecision,
                                     ),
                                     items: [
                                       DropdownMenuItem(
-                                        value:
-                                            'completed',
+                                        value: 'completed',
                                         child: Text(
                                           l10n.reactionComplete,
                                         ),
                                       ),
                                       DropdownMenuItem(
-                                        value:
-                                            'postponed',
+                                        value: 'postponed',
                                         child: Text(
                                           l10n.reactionPostpone,
                                         ),
                                       ),
                                       DropdownMenuItem(
-                                        value:
-                                            'rejected',
+                                        value: 'rejected',
                                         child: Text(
                                           l10n.reactionReject,
                                         ),
                                       ),
                                     ],
-                                    onChanged: (
-                                      value,
-                                    ) {
-                                      selectedStatus =
-                                          value ??
-                                              'completed';
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedStatus =
+                                            value ?? 'completed';
+                                      });
                                     },
                                   ),
-
                                   TextField(
-                                    controller:
-                                        controller,
-                                    decoration:
-                                        InputDecoration(
-                                      hintText:
-                                          l10n.reactionMessage,
+                                    controller: controller,
+                                    decoration: InputDecoration(
+                                      hintText: l10n.reactionMessage,
                                     ),
                                     maxLines: 3,
                                   ),
@@ -246,10 +201,8 @@ class CloudPartnerScenarioDetailScreen
                                     Navigator.pop(
                                       context,
                                       {
-                                        'message':
-                                            controller.text,
-                                        'status':
-                                            selectedStatus,
+                                        'message': controller.text,
+                                        'status': selectedStatus,
                                       },
                                     );
                                   },
@@ -272,20 +225,11 @@ class CloudPartnerScenarioDetailScreen
                       return;
                     }
 
-                    final message =
-                        result['message']
-                            as String;
+                    final message = result['message'] as String;
+                    final status = result['status'] as String;
 
-                    final status =
-                        result['status']
-                            as String;
-
-                    if (message
-                        .trim()
-                        .isEmpty) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(
+                    if (message.trim().isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
                             l10n.reactionMessageRequired,
@@ -297,8 +241,7 @@ class CloudPartnerScenarioDetailScreen
                     }
 
                     final partnerUid =
-                        await PartnerLinkService
-                            .getPartnerUid();
+                        await PartnerLinkService.getPartnerUid();
 
                     if (!context.mounted) {
                       return;
@@ -308,21 +251,9 @@ class CloudPartnerScenarioDetailScreen
                       return;
                     }
 
-                    //await CloudPartnerScenarioService.updateScenarioStatus(
-                    //  scenario.id,
-                    //  status,
-                    //);
-
+                    // ⭐ Zde voláme novou službu, která si vše zařídí interně
                     await CloudPartnerReactionService.sendReaction(
                       receiverUid: partnerUid,
-                      scenarioName: scenario.nazev,
-                      scenarioId: scenario.parentScenarioId,
-                      message: message.trim(),
-                      completed: status == 'completed',
-                    );
-
-                    // ⭐ uložit reakci i autorovi
-                    await CloudPartnerReactionService.sendReactionToSelf(
                       scenarioName: scenario.nazev,
                       scenarioId: scenario.parentScenarioId,
                       message: message.trim(),
@@ -379,33 +310,20 @@ class CloudPartnerScenarioDetailScreen
                         ),
                       ),
                     );
-
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          l10n.reactionSent,
-                        ),
-                      ),
-                    ); 
                   },
                   child: Text(
                     l10n.reactToScenario,
                   ),
                 ),
               ),
-
             const SizedBox(
               height: 12,
             ),
-
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(
-                    context);
+                  Navigator.pop(context);
                 },
                 child: Text(
                   l10n.close,
@@ -418,4 +336,3 @@ class CloudPartnerScenarioDetailScreen
     );
   }
 }
-

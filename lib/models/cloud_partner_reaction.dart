@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CloudPartnerReaction {
   final String id;
+  final String correlationId; // Klíčové pro propojení obou stran
 
   final String senderUid;
   final String receiverUid;
-  
 
   final String scenarioId;
   final String scenarioName;
@@ -13,7 +13,6 @@ class CloudPartnerReaction {
 
   // ✅ splněno / nesplněno
   final bool completed;
-
 
   // 📷 důkaz odeslán přes WhatsApp
   final bool proofSent;
@@ -25,6 +24,7 @@ class CloudPartnerReaction {
 
   CloudPartnerReaction({
     required this.id,
+    required this.correlationId,
     required this.senderUid,
     required this.receiverUid,
     required this.scenarioId,
@@ -43,6 +43,7 @@ class CloudPartnerReaction {
 
     return CloudPartnerReaction(
       id: doc.id,
+      correlationId: data['correlationId'] ?? '',
       senderUid: data['senderUid'] ?? '',
       receiverUid: data['receiverUid'] ?? '',
       scenarioId: data['scenarioId'] ?? '',
@@ -51,25 +52,22 @@ class CloudPartnerReaction {
       completed: data['completed'] ?? false,
       proofSent: data['proofSent'] ?? false,
       proofAccepted: data['proofAccepted'] ?? false,
-      createdAt:
-          (data['createdAt'] as Timestamp?)
-                  ?.toDate() ??
-              DateTime.now(),
+      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'correlationId': correlationId,
       'senderUid': senderUid,
-      'scenarioName': scenarioName,
       'receiverUid': receiverUid,
       'scenarioId': scenarioId,
+      'scenarioName': scenarioName,
       'message': message,
       'completed': completed,
       'proofSent': proofSent,
       'proofAccepted': proofAccepted,
-      'createdAt':
-          FieldValue.serverTimestamp(),
+      'createdAt': FieldValue.serverTimestamp(),
     };
   }
 
