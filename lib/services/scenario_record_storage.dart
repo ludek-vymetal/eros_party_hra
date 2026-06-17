@@ -82,30 +82,30 @@ class ScenarioRecordStorage {
     Reaction reaction,
   ) async {
     final all = await load();
-    final index =
-        all.indexWhere(
-          (r) => r.parentScenarioId == recordId,
-        );
+
+    final index = all.indexWhere(
+      (r) => r.parentScenarioId == recordId,
+    );
+
     if (index == -1) return;
 
     final record = all[index];
 
-// ochrana proti duplicitám z Firebase
-final exists = record.reactions.any(
-  (r) =>
-      r.remoteId != null &&
-      r.remoteId == reaction.remoteId,
-);
+    final exists = record.reactions.any(
+      (r) =>
+          r.remoteId != null &&
+          r.remoteId == reaction.remoteId,
+    );
 
-if (exists) {
-  return;
-}
+    if (exists) {
+      return;
+    }
 
-all[index] = record.copyWith(
-  reactions: [...record.reactions, reaction],
-);
+    all[index] = record.copyWith(
+      reactions: [...record.reactions, reaction],
+    );
 
-await save(all);
+    await save(all);
   }
 
   // =========================

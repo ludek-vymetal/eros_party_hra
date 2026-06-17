@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../l10n/app_localizations.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/scenar.dart';
 import '../models/scenario_record.dart';
 
@@ -177,69 +177,61 @@ class _PartnerWriteScreenState
     } else {
       debugPrint('NEW RECORD MODE');
 
-      if (!widget.repeatScenario) {
-        final record = ScenarioRecord(
-          id: recordId,
-          parentScenarioId: recordId,
-          scenar: scenar,
-          reactions: [],
-        );
+      // 1. Získáme aktuálního uživatele a partnera jednou pro celou metodu
+      final currentUserUid = FirebaseAuth.instance.currentUser?.uid ?? '';
+      final partnerUid = await PartnerLinkService.getPartnerUid();
 
-        await ScenarioRecordStorage.add(record);
-      }
+      debugPrint('PARTNER UID: $partnerUid');
 
-     
+      // 2. Uložení lokálního záznamu (do storage pro historii) – PROVÁDÍ SE VŽDY
+      final record = ScenarioRecord(
+        id: recordId,
+        // Pokud opakujeme, zachováme ID původního scénáře pro seskupení v historii
+        parentScenarioId: widget.repeatScenario
+            ? (widget.existingRecord!.parentScenarioId ??
+                widget.existingRecord!.id)
+            : recordId,
+        scenar: scenar,
+        reactions: [],
+        senderUid: currentUserUid,
+        receiverUid: partnerUid ?? '', 
+      );
 
+      await ScenarioRecordStorage.add(record);
+
+      // 3. Sdílení do komunity (pokud je zvoleno)
       if (shareToCommunity) {
-        await CommunityScenarioService
-            .uploadScenario(
+        await CommunityScenarioService.uploadScenario(
           scenar: scenar,
           anonymous: anonymousShare,
         );
       }
 
-      final partnerUid =
-        await PartnerLinkService
-            .getPartnerUid();
+      // 4. Odeslání do Firebase (pokud máme partnera)
+      if (partnerUid != null) {
+        debugPrint('SENDING TO FIREBASE');
 
-    debugPrint(
-      'PARTNER UID: $partnerUid',
-    );
+        await CloudPartnerScenarioService.sendScenario(
+          receiverUid: partnerUid,
+          parentScenarioId: widget.repeatScenario
+              ? (widget.existingRecord!.parentScenarioId ??
+                  widget.existingRecord!.id)
+              : recordId,
+          nazev: scenar.nazev,
+          text: scenar.text,
+        );
 
-    if (partnerUid != null) {
-      debugPrint(
-        'SENDING TO FIREBASE',
-      );
+        debugPrint('SENT');
+      }
 
-      await CloudPartnerScenarioService
-          .sendScenario(
-        receiverUid: partnerUid,
-
-        parentScenarioId:
-            widget.repeatScenario
-                ? widget.existingRecord!.parentScenarioId
-                : recordId,
-
-        nazev: scenar.nazev,
-        text: scenar.text,
-      );
-
-      debugPrint(
-        'SENT',
-      );
-    }
-      
-      // Zde opraveno uzavření metody
+      // 5. Aktualizace UI
       setState(() {
-        generatedCode =
-            CryptoService.encodeScenar(
-              scenar,
-            );
-      
+        generatedCode = CryptoService.encodeScenar(
+          scenar,
+        );
       });
     }
   }
-
   @override
   Widget build(
     BuildContext context,

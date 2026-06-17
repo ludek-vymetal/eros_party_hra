@@ -95,9 +95,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                           return;
                         }
 
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
                               l10n.scenarioMovedToPostponed,
@@ -105,9 +103,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                           ),
                         );
 
-                        Navigator.pop(
-                          context,
-                        );
+                        Navigator.pop(context);
                       },
                       child: Text(
                         l10n.reconsiderScenario,
@@ -251,7 +247,8 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                       return;
                     }
 
-                    // ⭐ Zde voláme novou službu, která si vše zařídí interně
+                    print('1 START SEND REACTION');
+
                     await CloudPartnerReactionService.sendReaction(
                       receiverUid: partnerUid,
                       scenarioName: scenario.nazev,
@@ -259,6 +256,15 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                       message: message.trim(),
                       completed: status == 'completed',
                     );
+
+                    print('2 REACTION SENT');
+
+                    await CloudPartnerScenarioService.updateScenarioStatus(
+                      scenario.id,
+                      status,
+                    );
+
+                    print('3 STATUS UPDATED');
 
                     // vytvořit lokální scénář pokud ještě neexistuje
                     final existing =
@@ -311,6 +317,8 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                       ),
                     );
                   },
+                  
+
                   child: Text(
                     l10n.reactToScenario,
                   ),

@@ -17,35 +17,34 @@ class CloudPartnerScenarioService {
           );
 
   static Future<void> sendScenario({
-    required String receiverUid,
-    required String parentScenarioId,
-    required String nazev,
-    required String text,
-  }) async {
-    final user = _auth.currentUser;
+  required String receiverUid,
+  required String parentScenarioId,
+  required String nazev,
+  required String text,
+}) async {
+  final user = _auth.currentUser;
+  if (user == null) return;
 
-    if (user == null) {
-      return;
-    }
+  // Vytvoříme mapu přímo, abychom měli kontrolu nad tím, 
+  // co přesně do Firebase posíláme.
+  final Map<String, dynamic> scenarioData = {
+    'senderUid': user.uid,
+    'receiverUid': receiverUid,
+    'parentScenarioId': parentScenarioId,
+    'nazev': nazev,
+    'text': text,
+    'status': 'received',
+    // Použijeme serverový čas, aby nedocházelo ke kolizím
+    'createdAt': FieldValue.serverTimestamp(), 
+  };
 
-    final scenario =
-        CloudPartnerScenario(
-      id: '',
-      senderUid: user.uid,
-      receiverUid: receiverUid,
-
-      parentScenarioId: parentScenarioId,
-
-      nazev: nazev,
-      text: text,
-      status: 'received',
-      createdAt: DateTime.now(),
-    );
-
-    await _scenarios.add(
-      scenario.toMap(),
-    );
+  try {
+    await _scenarios.add(scenarioData);
+    print("DEBUG: Scénář úspěšně odeslán do Firebase.");
+  } catch (e) {
+    print("DEBUG: CHYBA PŘI ODESÍLÁNÍ: $e");
   }
+}
 
   static Future<void> updateScenarioStatus(
     String scenarioId,

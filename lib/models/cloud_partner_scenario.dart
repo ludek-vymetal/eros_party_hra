@@ -35,26 +35,27 @@ class CloudPartnerScenario {
   ) {
     final data = doc.data();
 
+    // Pomocná proměnná pro bezpečné načtení data
+    DateTime createdAt;
+    final rawCreatedAt = data['createdAt'];
+
+    if (rawCreatedAt is Timestamp) {
+      createdAt = rawCreatedAt.toDate();
+    } else if (rawCreatedAt is DateTime) {
+      createdAt = rawCreatedAt;
+    } else {
+      createdAt = DateTime.now();
+    }
+
     return CloudPartnerScenario(
       id: doc.id,
       senderUid: data['senderUid'] ?? '',
       receiverUid: data['receiverUid'] ?? '',
-
-      // staré scénáře budou mít parent = svoje ID
-      parentScenarioId:
-          data['parentScenarioId'] ?? doc.id,
-
+      parentScenarioId: data['parentScenarioId'] ?? doc.id,
       nazev: data['nazev'] ?? '',
       text: data['text'] ?? '',
-
-      status:
-          data['status'] ??
-          'received',
-
-      createdAt:
-          (data['createdAt'] as Timestamp?)
-                  ?.toDate() ??
-              DateTime.now(),
+      status: data['status'] ?? 'received',
+      createdAt: createdAt,
     );
   }
 

@@ -45,6 +45,11 @@ class Scenar {
   }
 
   factory Scenar.fromJson(Map<String, dynamic> json) {
+    print('===== SCENAR =====');
+    print(json);
+    print('emoce typ: ${json['emoce'].runtimeType}');
+    print('ocekavanaReakce typ: ${json['ocekavanaReakce'].runtimeType}');
+
     return Scenar(
       id: json['id'],
       autor: json['autor'] ?? '',
