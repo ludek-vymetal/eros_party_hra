@@ -37,13 +37,30 @@ class _ScenarioRecordListScreenState extends State<ScenarioRecordListScreen> {
       final localData = await ScenarioRecordStorage.load();
 
       // 2. Cloud data
-      final snapshot = await FirebaseFirestore.instance
+      final receivedSnapshot = await FirebaseFirestore.instance
           .collection('partner_scenarios')
           .where('receiverUid', isEqualTo: currentUser.uid)
           .get();
 
+      final sentSnapshot = await FirebaseFirestore.instance
+          .collection('partner_scenarios')
+          .where('senderUid', isEqualTo: currentUser.uid)
+          .get();
+
+      final Map<String, QueryDocumentSnapshot<Map<String, dynamic>>> uniqueDocs = {};
+
+      for (final doc in receivedSnapshot.docs) {
+        uniqueDocs[doc.id] = doc;
+      }
+
+      for (final doc in sentSnapshot.docs) {
+        uniqueDocs[doc.id] = doc;
+      }
+
+      final docs = uniqueDocs.values.toList();
+
       // ... v rámci metody _load, uvnitř cloudData mapování ...
-      final cloudData = snapshot.docs.map((doc) {
+      final cloudData = docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         
         // Musíme vytvořit správnou strukturu, aby seděla do modelu
@@ -127,32 +144,135 @@ class _ScenarioRecordListScreenState extends State<ScenarioRecordListScreen> {
                     final r = records[i];
                     final s = r.scenar;
 
-                    return Card(
-                      color: const Color(0xFF1f0d14),
-                      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      child: ListTile(
-                        title: Text(
-                          s.nazev,
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          '${s.autor} → ${s.pro}\n${r.reactions.length} ${l10n.reactions}',
-                          style: const TextStyle(color: Colors.white70),
-                        ),
-                        trailing: const Icon(Icons.chevron_right, color: Colors.white54),
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ScenarioRecordDetailScreen(record: r),
+                              return Card(
+            color: const Color(0xFF1f0d14),
+            margin: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 8,
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ScenarioRecordDetailScreen(record: r),
+                  ),
+                );
+                _load();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      r.reactions.isEmpty
+                          ? Icons.mail
+                          : r.reactions.last.stav == 'completed'
+                              ? Icons.check_circle
+                              : r.reactions.last.stav == 'postponed'
+                                  ? Icons.schedule
+                                  : Icons.cancel,
+                      color: r.reactions.isEmpty
+                          ? Colors.orange
+                          : r.reactions.last.stav == 'completed'
+                              ? Colors.green
+                              : r.reactions.last.stav == 'postponed'
+                                  ? Colors.orange
+                                  : Colors.red,
+                      size: 32,
+                    ),
+
+                    const SizedBox(width: 16),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '🏷️ ${s.nazev}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                          _load();
-                        },
+                          ),
+
+                          const SizedBox(height: 8),
+
+                          Text(
+                            r.senderUid ==
+                                    FirebaseAuth.instance.currentUser?.uid
+                                ? '📤 Odesláno partnerovi'
+                                : '📥 Přijato od partnera',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                            ),
+                          ),
+
+                          const SizedBox(height: 4),
+
+                          if (r.reactions.isEmpty)
+                            const Text(
+                              '📥 Doručeno',
+                              style: TextStyle(color: Colors.orange),
+                            )
+                          else if (r.reactions.last.stav == 'completed')
+                            const Text(
+                              '✅ Splněno',
+                              style: TextStyle(color: Colors.green),
+                            )
+                          else if (r.reactions.last.stav == 'postponed')
+                            const Text(
+                              '⏳ Odloženo',
+                              style: TextStyle(color: Colors.orange),
+                            )
+                          else if (r.reactions.last.stav == 'rejected')
+                            const Text(
+                              '❌ Odmítnuto',
+                              style: TextStyle(color: Colors.red),
+                            ),
+
+                          const SizedBox(height: 6),
+
+                          Text(
+                            '📅 ${r.createdAt.day}.${r.createdAt.month}.${r.createdAt.year}',
+                            style: const TextStyle(
+                              color: Colors.white54,
+                            ),
+                          ),
+
+                          if (r.reactions.isNotEmpty &&
+                              r.reactions.last.vzkaz != null &&
+                              r.reactions.last.vzkaz!.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Text(
+                                '💬 ${r.reactions.last.vzkaz}',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                    );
-                  },
+                    ),
+
+                    const Icon(
+                      Icons.chevron_right,
+                      color: Colors.white38,
+                    ),
+                  ],
                 ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
