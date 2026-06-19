@@ -17,11 +17,16 @@ class CloudPartnerScenarioService {
           );
 
   static Future<void> sendScenario({
-  required String receiverUid,
-  required String parentScenarioId,
-  required String nazev,
-  required String text,
-}) async {
+    required String receiverUid,
+    required String parentScenarioId,
+    required String nazev,
+    required String text,
+    required String cil,
+    required String hranice,
+    required List<String> emoce,
+    required String autor,
+    required String pro,
+  }) async {
   final user = _auth.currentUser;
   if (user == null) return;
 
@@ -31,11 +36,17 @@ class CloudPartnerScenarioService {
     'senderUid': user.uid,
     'receiverUid': receiverUid,
     'parentScenarioId': parentScenarioId,
+
     'nazev': nazev,
     'text': text,
+    'cil': cil,
+    'hranice': hranice,
+    'emoce': emoce,
+    'autor': autor,
+    'pro': pro,
+
     'status': 'received',
-    // Použijeme serverový čas, aby nedocházelo ke kolizím
-    'createdAt': FieldValue.serverTimestamp(), 
+    'createdAt': FieldValue.serverTimestamp(),
   };
 
   try {

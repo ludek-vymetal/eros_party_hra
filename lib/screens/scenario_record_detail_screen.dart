@@ -4,7 +4,7 @@ import '../services/crypto_service.dart';
 import '../services/scenario_record_storage.dart';
 import 'partner_write.dart';
 
-class ScenarioRecordDetailScreen extends StatelessWidget {
+class ScenarioRecordDetailScreen extends StatefulWidget {
   final ScenarioRecord record;
 
   const ScenarioRecordDetailScreen({
@@ -12,8 +12,36 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
     required this.record,
   });
 
+  @override
+  State<ScenarioRecordDetailScreen> createState() =>
+      _ScenarioRecordDetailScreenState();
+}
+
+class _ScenarioRecordDetailScreenState
+    extends State<ScenarioRecordDetailScreen> {
+
+  List<ScenarioRecord> historyRecords = [];
+  @override
+  void initState() {
+    super.initState();
+    _loadHistory();
+  }
+
+  Future<void> _loadHistory() async {
+    final all = await ScenarioRecordStorage.load();
+
+    historyRecords = all.where(
+      (r) => r.parentScenarioId == widget.record.parentScenarioId,
+    ).toList();
+
+    historyRecords.sort(
+      (a, b) => a.createdAt.compareTo(b.createdAt),
+    );
+
+    setState(() {});
+  }
   void _resend(BuildContext context) {
-    final code = CryptoService.encodeScenar(record.scenar);
+    final code = CryptoService.encodeScenar(widget.record.scenar);
 
     showDialog(
       context: context,
@@ -35,7 +63,7 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (_) => PartnerWriteScreen(
-          existingRecord: record,
+          existingRecord: widget.record,
         ),
       ),
     );
@@ -68,7 +96,7 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
 
     if (!ok) return;
 
-    await ScenarioRecordStorage.delete(record.id);
+    await ScenarioRecordStorage.delete(widget.record.id);
 
     
 
@@ -79,7 +107,10 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = record.scenar;
+    final s = widget.record.scenar;
+    final currentIndex = historyRecords.indexWhere(
+      (r) => r.id == widget.record.id,
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xFF12080c),
@@ -109,12 +140,39 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _section('🎯 Cíl', s.cil),
-            _section('📜 Text scénáře', s.text),
-            _section('⚠️ Hranice', s.hranice),
+            ...historyRecords.asMap().entries.map((entry) {
+              final index = entry.key;
+              final r = entry.value;
+              final s = r.scenar;
 
-            if (s.emoce.isNotEmpty)
-              _section('❤️ Emoce', s.emoce.join(', ')),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  Text(
+                    'Pokus ${index + 1}',
+                    style: const TextStyle(
+                      color: Colors.orange,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  _section('🎯 Cíl', s.cil),
+                  _section('📜 Text scénáře', s.text),
+                  _section('⚠️ Hranice', s.hranice),
+
+                  if (s.emoce.isNotEmpty)
+                    _section('❤️ Emoce', s.emoce.join(', ')),
+
+                  const Divider(color: Colors.white24),
+
+                  const SizedBox(height: 20),
+                ],
+              );
+            }),
 
             const SizedBox(height: 24),
 
@@ -129,13 +187,13 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            if (record.reactions.isEmpty)
+            if (widget.record.reactions.isEmpty)
               const Text(
                 'Zatím žádné reakce',
                 style: TextStyle(color: Colors.white54),
               )
             else
-              ...record.reactions.map((r) {
+              ...widget.record.reactions.map((r) {
                 return Card(
                   color: const Color(0xFF1f0d14),
                   margin: const EdgeInsets.symmetric(vertical: 6),
@@ -210,7 +268,7 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) => PartnerWriteScreen(
-                        existingRecord: record,
+                        existingRecord: widget.record,
                         repeatScenario: true,
                       ),
                     ),

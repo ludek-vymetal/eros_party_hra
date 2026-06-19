@@ -217,10 +217,15 @@ class _PartnerWriteScreenState
               ? (widget.existingRecord!.parentScenarioId ??
                   widget.existingRecord!.id)
               : recordId,
+
           nazev: scenar.nazev,
           text: scenar.text,
+          cil: scenar.cil,
+          hranice: scenar.hranice,
+          emoce: scenar.emoce,
+          autor: scenar.autor,
+          pro: scenar.pro,
         );
-
         debugPrint('SENT');
       }
 

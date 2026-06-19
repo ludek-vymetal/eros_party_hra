@@ -71,8 +71,8 @@ class _ScenarioRecordListScreenState extends State<ScenarioRecordListScreen> {
             id: data['parentScenarioId'] ?? doc.id,
             nazev: data['nazev'] ?? '',
             text: data['text'] ?? '',
-            autor: 'Partner',
-            pro: 'Já',
+            autor: data['autor'] ?? '',
+            pro: data['pro'] ?? '',
             cil: data['cil'] ?? '',
             hranice: data['hranice'] ?? '',
             emoce: data['emoce'] is List
@@ -94,10 +94,15 @@ class _ScenarioRecordListScreenState extends State<ScenarioRecordListScreen> {
       }).toList();
 
       // 3. Spojení a seskupení záznamů
+      // 3. Spojení a seskupení záznamů
       final allRecords = [...localData, ...cloudData];
-      final Map<String, ScenarioRecord> grouped = {};
 
-      allRecords.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      // nejdřív seřadit od nejnovějších
+      allRecords.sort(
+        (a, b) => b.createdAt.compareTo(a.createdAt),
+      );
+
+      final Map<String, ScenarioRecord> grouped = {};
 
       for (final record in allRecords) {
         if (!grouped.containsKey(record.parentScenarioId)) {
@@ -105,8 +110,8 @@ class _ScenarioRecordListScreenState extends State<ScenarioRecordListScreen> {
         }
       }
 
-      // 4. Aktualizace UI
       if (!mounted) return;
+
       setState(() {
         records = grouped.values.toList();
         loading = false;
