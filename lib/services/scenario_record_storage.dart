@@ -84,8 +84,8 @@ class ScenarioRecordStorage {
     final all = await load();
 
     final index = all.indexWhere(
-      (r) => r.parentScenarioId == recordId,
-    );
+    (r) => r.id == recordId,
+  );
 
     if (index == -1) return;
 

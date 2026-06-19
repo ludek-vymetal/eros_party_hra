@@ -108,10 +108,7 @@ class _ScenarioRecordDetailScreenState
   @override
   Widget build(BuildContext context) {
     final s = widget.record.scenar;
-    final currentIndex = historyRecords.indexWhere(
-      (r) => r.id == widget.record.id,
-    );
-
+    
     return Scaffold(
       backgroundColor: const Color(0xFF12080c),
       appBar: AppBar(
@@ -167,6 +164,76 @@ class _ScenarioRecordDetailScreenState
                   if (s.emoce.isNotEmpty)
                     _section('❤️ Emoce', s.emoce.join(', ')),
 
+                  const Text(
+                    '💬 Reakce',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  if (r.reactions.isEmpty)
+                    const Text(
+                      'Zatím žádné reakce',
+                      style: TextStyle(color: Colors.white54),
+                    )
+                  else
+                    ...r.reactions.map((reaction) {
+                      return Card(
+                        color: const Color(0xFF1f0d14),
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                reaction.stav,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              if (reaction.emoce != null)
+                                Text(
+                                  reaction.emoce!,
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                  ),
+                                ),
+
+                              if (reaction.vzkaz != null &&
+                                  reaction.vzkaz!.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 6),
+                                  child: Text(
+                                    '💬 ${reaction.vzkaz}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                ),
+
+                              const SizedBox(height: 6),
+
+                              Text(
+                                reaction.datumFormatted,
+                                style: const TextStyle(
+                                  color: Colors.white38,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+
                   const Divider(color: Colors.white24),
 
                   const SizedBox(height: 20),
@@ -174,72 +241,8 @@ class _ScenarioRecordDetailScreenState
               );
             }),
 
-            const SizedBox(height: 24),
-
-            const Text(
-              '💬 Reakce',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            if (widget.record.reactions.isEmpty)
-              const Text(
-                'Zatím žádné reakce',
-                style: TextStyle(color: Colors.white54),
-              )
-            else
-              ...widget.record.reactions.map((r) {
-                return Card(
-                  color: const Color(0xFF1f0d14),
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          r.stav,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        if (r.emoce != null)
-                          Text(
-                            r.emoce!,
-                            style: const TextStyle(
-                              color: Colors.white70,
-                            ),
-                          ),
-                        if (r.vzkaz != null && r.vzkaz!.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 6),
-                            child: Text(
-                              '💬 ${r.vzkaz}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        const SizedBox(height: 6),
-                        Text(
-                          r.datumFormatted,
-                          style: const TextStyle(
-                            color: Colors.white38,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
+            
+                
 
             const SizedBox(height: 32),
 

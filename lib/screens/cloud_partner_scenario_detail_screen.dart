@@ -267,37 +267,31 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                     print('3 STATUS UPDATED');
 
                     // vytvořit lokální scénář pokud ještě neexistuje
-                    final existing =
-                        await ScenarioRecordStorage.getById(
-                      scenario.parentScenarioId,
+                    
+                    final localScenar = Scenar(
+                      id: scenario.id,
+                      autor: '',
+                      pro: '',
+                      nazev: scenario.nazev,
+                      cil: '',
+                      text: scenario.text,
+                      hranice: '',
+                      emoce: [],
                     );
 
-                    if (existing == null) {
-                      final localScenar = Scenar(
-                        id: scenario.parentScenarioId,
-                        autor: '',
-                        pro: '',
-                        nazev: scenario.nazev,
-                        cil: '',
-                        text: scenario.text,
-                        hranice: '',
-                        emoce: [],
-                      );
-
-                      await ScenarioRecordStorage.add(
-                        ScenarioRecord(
-                          id: scenario.parentScenarioId,
-                          parentScenarioId: scenario.parentScenarioId,
-                          scenar: localScenar,
-                        ),
-                      );
-                    }
+                    await ScenarioRecordStorage.add(
+                      ScenarioRecord(
+                        id: scenario.id,
+                        parentScenarioId: scenario.parentScenarioId,
+                        scenar: localScenar,
+                      ),
+                    );
 
                     // uložit reakci do historie
                     await ScenarioRecordStorage.addReaction(
-                      scenario.parentScenarioId,
+                      scenario.id,
                       Reaction(
-                        scenarioId: scenario.parentScenarioId,
+                        scenarioId: scenario.id,
                         nazev: scenario.nazev,
                         stav: status,
                         vzkaz: message.trim(),
