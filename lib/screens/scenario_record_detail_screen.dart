@@ -3,7 +3,7 @@ import '../models/scenario_record.dart';
 import '../services/crypto_service.dart';
 import '../services/scenario_record_storage.dart';
 import 'partner_write.dart';
-
+import '../services/cloud_partner_scenario_service.dart';
 class ScenarioRecordDetailScreen extends StatefulWidget {
   final ScenarioRecord record;
 
@@ -96,14 +96,27 @@ class _ScenarioRecordDetailScreenState
 
     if (!ok) return;
 
-    await ScenarioRecordStorage.delete(widget.record.id);
-
+    debugPrint('ID = ${widget.record.id}');
+    debugPrint('PARENT = ${widget.record.parentScenarioId}');
     
-
-    if (context.mounted) {
-      Navigator.pop(context);
+    try {
+      await CloudPartnerScenarioService.deleteScenario(
+        widget.record.parentScenarioId,
+      );
+    } catch (e) {
+      debugPrint(
+        'Firebase dokument už neexistuje nebo ho nelze smazat: $e',
+      );
     }
-  }
+
+    await ScenarioRecordStorage.delete(
+      widget.record.parentScenarioId,
+    );
+              
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
+    }
 
   @override
   Widget build(BuildContext context) {

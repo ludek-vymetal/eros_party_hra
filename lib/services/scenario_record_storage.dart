@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/scenario_record.dart';
 import '../models/reaction.dart';
+import 'package:flutter/foundation.dart';
 
 class ScenarioRecordStorage {
   static const _key = 'scenario_records';
@@ -17,12 +18,21 @@ class ScenarioRecordStorage {
     if (raw == null || raw.isEmpty) return [];
 
     final decoded = jsonDecode(raw) as List;
-    return decoded
+
+    final list = decoded
         .map((e) => ScenarioRecord.fromJson(
               Map<String, dynamic>.from(e),
             ))
         .toList();
-  }
+
+    for (final r in list) {
+      debugPrint(
+        'ID=${r.id}  PARENT=${r.parentScenarioId}',
+      );
+    }
+
+    return list;
+    }
 
   // =========================
   // 💾 SAVE
@@ -66,14 +76,29 @@ class ScenarioRecordStorage {
   }
 
   // =========================
-  // 🗑️ DELETE RECORD
-  // =========================
-  static Future<void> delete(String id) async {
-    final all = await load();
-    all.removeWhere((r) => r.id == id);
-    await save(all);
+// 🗑️ DELETE RECORD
+// =========================
+static Future<void> delete(String parentId) async {
+  final all = await load();
+
+  debugPrint('Mažu parentId = $parentId');
+
+  for (final r in all) {
+    debugPrint(
+      'ID=${r.id}  PARENT=${r.parentScenarioId}',
+    );
   }
 
+  all.removeWhere(
+    (r) => r.parentScenarioId == parentId,
+  );
+
+  debugPrint('Po: ${all.length}');
+
+  await save(all);
+
+  debugPrint('Uloženo');
+}
   // =========================
   // ➕ ADD REACTION
   // =========================

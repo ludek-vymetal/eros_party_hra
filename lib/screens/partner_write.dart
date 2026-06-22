@@ -188,8 +188,7 @@ class _PartnerWriteScreenState
         id: recordId,
         // Pokud opakujeme, zachováme ID původního scénáře pro seskupení v historii
         parentScenarioId: widget.repeatScenario
-            ? (widget.existingRecord!.parentScenarioId ??
-                widget.existingRecord!.id)
+            ? widget.existingRecord!.parentScenarioId
             : recordId,
         scenar: scenar,
         reactions: [],
@@ -214,8 +213,7 @@ class _PartnerWriteScreenState
         await CloudPartnerScenarioService.sendScenario(
           receiverUid: partnerUid,
           parentScenarioId: widget.repeatScenario
-              ? (widget.existingRecord!.parentScenarioId ??
-                  widget.existingRecord!.id)
+              ? widget.existingRecord!.parentScenarioId
               : recordId,
 
           nazev: scenar.nazev,

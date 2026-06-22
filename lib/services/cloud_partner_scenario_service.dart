@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/cloud_partner_scenario.dart';
-
+import 'package:flutter/foundation.dart';
 class CloudPartnerScenarioService {
   static final _firestore =
       FirebaseFirestore.instance;
@@ -50,12 +50,15 @@ class CloudPartnerScenarioService {
   };
 
   try {
-    await _scenarios.add(scenarioData);
-    print("DEBUG: Scénář úspěšně odeslán do Firebase.");
+    await _scenarios
+        .doc(parentScenarioId)
+        .set(scenarioData);
+
+    debugPrint('DEBUG: Scénář úspěšně odeslán do Firebase.');
   } catch (e) {
-    print("DEBUG: CHYBA PŘI ODESÍLÁNÍ: $e");
+    debugPrint('DEBUG: CHYBA PŘI ODESÍLÁNÍ: $e');
   }
-}
+  }
 
   static Future<void> updateScenarioStatus(
     String scenarioId,
@@ -67,7 +70,17 @@ class CloudPartnerScenarioService {
       'status': status,
     });
   }
+  static Future<void> deleteScenario(
+    String scenarioId,
+  ) async {
 
+    final doc = await _scenarios.doc(scenarioId).get();
+
+    debugPrint('DOKUMENT FIREBASE:');
+    debugPrint(doc.data().toString());
+
+    await _scenarios.doc(scenarioId).delete();
+  }
   static Stream<List<CloudPartnerScenario>>
       incomingScenarios(
     String myUid,

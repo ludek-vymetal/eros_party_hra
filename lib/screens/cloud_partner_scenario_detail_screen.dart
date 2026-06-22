@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -98,7 +97,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              l10n.scenarioMovedToPostponed,
+                              l10n.reactionSent,
                             ),
                           ),
                         );
@@ -124,15 +123,11 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                     final controller = TextEditingController();
                     String selectedStatus = 'completed';
 
-                    final result =
-                        await showDialog<Map<String, dynamic>>(
+                    final result = await showDialog<Map<String, dynamic>>(
                       context: context,
                       builder: (_) {
                         return StatefulBuilder(
-                          builder: (
-                            context,
-                            setState,
-                          ) {
+                          builder: (context, setState) {
                             return AlertDialog(
                               title: Text(
                                 l10n.sendReactionTitle,
@@ -141,7 +136,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   DropdownButtonFormField<String>(
-                                    initialValue: selectedStatus, // <--- Tady to je správně
+                                    initialValue: selectedStatus,
                                     decoration: InputDecoration(
                                       labelText: l10n.reactionDecision,
                                     ),
@@ -167,8 +162,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                                     ],
                                     onChanged: (value) {
                                       setState(() {
-                                        selectedStatus =
-                                            value ?? 'completed';
+                                        selectedStatus = value ?? 'completed';
                                       });
                                     },
                                   ),
@@ -184,9 +178,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(
-                                      context,
-                                    );
+                                    Navigator.pop(context);
                                   },
                                   child: Text(
                                     l10n.cancel,
@@ -194,13 +186,10 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pop(
-                                      context,
-                                      {
-                                        'message': controller.text,
-                                        'status': selectedStatus,
-                                      },
-                                    );
+                                    Navigator.pop(context, {
+                                      'message': controller.text,
+                                      'status': selectedStatus,
+                                    });
                                   },
                                   child: Text(
                                     l10n.send,
@@ -247,7 +236,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                       return;
                     }
 
-                    print('1 START SEND REACTION');
+                    debugPrint('1 START SEND REACTION');
 
                     await CloudPartnerReactionService.sendReaction(
                       receiverUid: partnerUid,
@@ -257,17 +246,15 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                       completed: status == 'completed',
                     );
 
-                    print('2 REACTION SENT');
+                    debugPrint('2 REACTION SENT');
 
                     await CloudPartnerScenarioService.updateScenarioStatus(
                       scenario.id,
                       status,
                     );
 
-                    print('3 STATUS UPDATED');
+                    debugPrint('3 STATUS UPDATED');
 
-                    // vytvořit lokální scénář pokud ještě neexistuje
-                    
                     final localScenar = Scenar(
                       id: scenario.id,
                       autor: '',
@@ -287,11 +274,10 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                       ),
                     );
 
-                    // uložit reakci do historie
                     await ScenarioRecordStorage.addReaction(
-                      scenario.id,
+                      scenario.parentScenarioId,
                       Reaction(
-                        scenarioId: scenario.id,
+                        scenarioId: scenario.parentScenarioId,
                         nazev: scenario.nazev,
                         stav: status,
                         vzkaz: message.trim(),
@@ -310,9 +296,9 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                         ),
                       ),
                     );
-                  },
-                  
 
+                    Navigator.pop(context);
+                  },
                   child: Text(
                     l10n.reactToScenario,
                   ),
