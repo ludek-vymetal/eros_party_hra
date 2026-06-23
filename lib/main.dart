@@ -1,13 +1,13 @@
-
+import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
+import 'services/cloud_partner_service.dart';
 import 'firebase_options.dart';
 
 import 'screens/partner_menu.dart';
-
+import 'package:flutter/foundation.dart';
 import 'party/screens/party_setup_players_screen.dart';
 import 'party/screens/party_game_screen.dart';
 import 'party/screens/task_manager_screen.dart';
@@ -21,21 +21,37 @@ import 'core/age_gate/age_gate_controller.dart';
 import 'core/age_gate/age_gate_storage.dart';
 import 'core/age_gate/age_gate_screen.dart';
 import 'screens/auth_wrapper.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 // 🌍 L10N
 import 'l10n/app_localizations.dart';
-
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
-    options:
-        DefaultFirebaseOptions
-            .currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  if (!kIsWeb &&
+      (Platform.isAndroid || Platform.isIOS)) {
+
+    await FirebaseMessaging.instance.requestPermission();
+
+    final token =
+        await FirebaseMessaging.instance.getToken();
+
+    if (token != null) {
+      debugPrint('FCM TOKEN: $token');
+
+      await CloudPartnerService.saveFcmToken(
+        token,
+      );
+
+      debugPrint('FCM TOKEN ULOZEN');
+    }
+    }
+  
 
   runApp(const MyApp());
 }

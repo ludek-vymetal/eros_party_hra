@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class CloudPartnerService {
   static final _firestore =
@@ -71,45 +72,46 @@ class CloudPartnerService {
           FieldValue.serverTimestamp(),
     });
   }
+
   /// uloží partnerovo UID do users/UID
-static Future<void> savePartnerUid(
-  String partnerUid,
-) async {
-  final user = _auth.currentUser;
+  static Future<void> savePartnerUid(
+    String partnerUid,
+  ) async {
+    final user = _auth.currentUser;
 
-  if (user == null) {
-    return;
+    if (user == null) {
+      return;
+    }
+
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .set(
+      {
+        'partnerUid': partnerUid,
+      },
+      SetOptions(
+        merge: true,
+      ),
+    );
   }
 
-  await _firestore
-      .collection('users')
-      .doc(user.uid)
-      .set(
-    {
-      'partnerUid': partnerUid,
-    },
-    SetOptions(
-      merge: true,
-    ),
-  );
-}
+  /// načte partnerovo UID z users/UID
+  static Future<String?> getPartnerUid() async {
+    final user = _auth.currentUser;
 
-/// načte partnerovo UID z users/UID
-static Future<String?> getPartnerUid() async {
-  final user = _auth.currentUser;
+    if (user == null) {
+      return null;
+    }
 
-  if (user == null) {
-    return null;
+    final snapshot =
+        await _firestore
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+    return snapshot.data()?['partnerUid'];
   }
-
-  final snapshot =
-      await _firestore
-          .collection('users')
-          .doc(user.uid)
-          .get();
-
-  return snapshot.data()?['partnerUid'];
-}
 
   /// uloží vlastní partnerský kód do users/UID
   static Future<void> saveMyCode(
@@ -133,4 +135,33 @@ static Future<String?> getPartnerUid() async {
       ),
     );
   }
-}
+
+  /// uloží FCM token do users/UID
+  static Future<void> saveFcmToken(
+    String token,
+  ) async {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      debugPrint('UZIVATEL JE NULL');
+      return;
+    }
+
+    debugPrint('UKLADAM TOKEN PRO UID: ${user.uid}');
+
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .set(
+      {
+        'fcmToken': token,
+      },
+      SetOptions(
+        merge: true,
+      ),
+    );
+
+    debugPrint('TOKEN ULOZEN DO FIRESTORE');
+  }
+    
+  }
