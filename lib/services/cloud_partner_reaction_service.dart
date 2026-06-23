@@ -5,7 +5,7 @@ import '../models/cloud_partner_reaction.dart';
 class CloudPartnerReactionService {
   static final _firestore = FirebaseFirestore.instance;
   static final _auth = FirebaseAuth.instance;
-
+  
   static CollectionReference<Map<String, dynamic>> get _reactions =>
       _firestore.collection('partner_reactions');
 
@@ -94,6 +94,24 @@ class CloudPartnerReactionService {
       batch.update(doc.reference, {'proofAccepted': true});
     }
     await batch.commit();
+  }
+  static Future<void> deleteReaction(
+    String correlationId,
+  ) async {
+
+    
+
+    final snapshot = await _reactions
+        .where(
+          'correlationId',
+          isEqualTo: correlationId,
+        )
+        .get();
+
+   
+    final batch = _firestore.batch();
+
+        await batch.commit();
   }
 
   static Stream<List<CloudPartnerReaction>> incomingReactions(String myUid) {

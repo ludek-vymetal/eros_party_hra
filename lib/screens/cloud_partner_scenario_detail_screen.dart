@@ -236,7 +236,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                       return;
                     }
 
-                    debugPrint('1 START SEND REACTION');
+                    
 
                     await CloudPartnerReactionService.sendReaction(
                       receiverUid: partnerUid,

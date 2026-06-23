@@ -424,3 +424,83 @@ Co bylo kdysi odmítnuté, může být za několik let krásnou společnou vzpom
 ✅ SettingsScreen
 ✅ l10n pro Settings
 ✅ čistý flutter analyze
+
+Souhlasím. ❤️ Tohle je podle mě nejlepší směr pro EROS, protože historie pak nebude jen seznam názvů, ale opravdu příběh toho, co se mezi partnery odehrálo.
+
+Já bych kartu v historii udělal například takto:
+
+🏷️ testovani opacny
+
+📤 Odesláno partnerovi
+
+✅ Splněno
+
+📅 17.6.2026 8:45
+
+✔ Důkaz potvrzen
+
+💬 Ok
+
+A pro jiné stavy:
+
+Přijatý, ještě bez reakce
+
+🏷️ Romantická večeře
+
+📥 Přijato od partnera
+
+📥 Doručeno
+
+📅 20.6.2026
+
+Odloženo
+
+🏷️ Výlet do hor
+
+📤 Odesláno partnerovi
+
+⏳ Odloženo
+
+📅 5.7.2026
+
+💬 Teď na to ještě nejsem připravená
+
+Odmítnuto
+
+🏷️ Skok padákem
+
+📥 Přijato od partnera
+
+❌ Odmítnuto
+
+📅 10.8.2026
+
+💬 Mám z toho strach
+
+Splněno, ale důkaz ještě nebyl potvrzen
+
+🏷️ testovani opacny
+
+📤 Odesláno partnerovi
+
+✅ Splněno
+
+📅 17.6.2026 8:45
+
+📷 Důkaz odeslán
+
+💬 Ok
+
+Splněno a důkaz potvrzen
+
+🏷️ testovani opacny
+
+📤 Odesláno partnerovi
+
+✅ Splněno
+
+📅 17.6.2026 8:45
+
+✔ Důkaz potvrzen
+
+💬 Ok

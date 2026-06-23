@@ -73,11 +73,7 @@ class _PartySetupDifficultyScreenState
       difficulty: _difficulty,
     );
 
-    for (final p in widget.players) {
-      debugPrint(
-        '👕 ${p.name}: ${p.clothes}',
-      );
-    }
+    
 
     final taskBank =
         await TaskBankLoader.load();

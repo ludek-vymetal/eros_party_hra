@@ -2,23 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../l10n/app_localizations.dart';
-
 import '../services/cloud_partner_reaction_service.dart';
 import 'cloud_partner_reaction_detail_screen.dart';
 
-class CloudPartnerReactionsScreen
-    extends StatelessWidget {
+class CloudPartnerReactionsScreen extends StatelessWidget {
   const CloudPartnerReactionsScreen({
     super.key,
   });
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final l10n =
-        AppLocalizations.of(context);
-    
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -27,32 +21,20 @@ class CloudPartnerReactionsScreen
         ),
       ),
       body: StreamBuilder(
-        stream:
-            CloudPartnerReactionService
-                .incomingReactions(
-          FirebaseAuth
-              .instance
-              .currentUser!
-              .uid,
+        stream: CloudPartnerReactionService.incomingReactions(
+          FirebaseAuth.instance.currentUser!.uid,
         ),
-        builder: (
-          context,
-          snapshot,
-        ) {
+        builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-              child:
-                  CircularProgressIndicator(),
+              child: CircularProgressIndicator(),
             );
           }
 
-          final reactions =
-              List.of(snapshot.data!);
+          final reactions = List.of(snapshot.data!);
 
           reactions.sort(
-            (a, b) => b.createdAt.compareTo(
-              a.createdAt,
-            ),
+            (a, b) => b.createdAt.compareTo(a.createdAt),
           );
 
           if (reactions.isEmpty) {
@@ -65,27 +47,19 @@ class CloudPartnerReactionsScreen
 
           return ListView.builder(
             itemCount: reactions.length,
-            itemBuilder: (
-              context,
-              index,
-            ) {
-              final reaction =
-                  reactions[index];
+            itemBuilder: (context, index) {
+              final reaction = reactions[index];
 
               return Card(
-                margin:
-                    const EdgeInsets.all(
-                  8,
-                ),
+                margin: const EdgeInsets.all(8),
                 child: ListTile(
                   leading: Icon(
                     reaction.completed
                         ? Icons.check_circle
                         : Icons.cancel,
-                    color:
-                        reaction.completed
-                            ? Colors.green
-                            : Colors.red,
+                    color: reaction.completed
+                        ? Colors.green
+                        : Colors.red,
                   ),
 
                   title: Text(
@@ -94,8 +68,7 @@ class CloudPartnerReactionsScreen
 
                   subtitle: Column(
                     crossAxisAlignment:
-                        CrossAxisAlignment
-                            .start,
+                        CrossAxisAlignment.start,
                     children: [
                       Text(
                         reaction.completed
@@ -116,16 +89,69 @@ class CloudPartnerReactionsScreen
                           '📷 Důkaz odeslán',
                         ),
 
-                      if (reaction.message
-                          .isNotEmpty)
+                      if (reaction.message.isNotEmpty)
                         Text(
                           '💬 ${reaction.message}',
                           maxLines: 1,
-                          overflow:
-                              TextOverflow
-                                  .ellipsis,
+                          overflow: TextOverflow.ellipsis,
                         ),
                     ],
+                  ),
+
+                  trailing: IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                    onPressed: () async {
+                      final ok =
+                          await showDialog<bool>(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: const Text(
+                                    'Smazat reakci?',
+                                  ),
+                                  content: const Text(
+                                    'Tato reakce bude trvale odstraněna.',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(
+                                        context,
+                                        false,
+                                      ),
+                                      child: const Text(
+                                        'Zrušit',
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () =>
+                                          Navigator.pop(
+                                        context,
+                                        true,
+                                      ),
+                                      child: const Text(
+                                        'Smazat',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ) ??
+                              false;
+
+                      if (!ok) return;
+
+                      try {
+                        await CloudPartnerReactionService.deleteReaction(
+                          reaction.correlationId,
+                        );
+                      } catch (e) {
+                        debugPrint(
+                          'Chyba mazání: $e',
+                        );
+                      }
+                    },
                   ),
 
                   onTap: () {
@@ -134,8 +160,7 @@ class CloudPartnerReactionsScreen
                       MaterialPageRoute(
                         builder: (_) =>
                             CloudPartnerReactionDetailScreen(
-                          reaction:
-                              reaction,
+                          reaction: reaction,
                         ),
                       ),
                     );

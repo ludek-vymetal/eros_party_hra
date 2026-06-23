@@ -155,8 +155,7 @@ class _PartnerWriteScreenState
 
     if (isEdit) {
 
-          debugPrint('EDIT MODE');
-
+          
           final updated =
               widget
                   .existingRecord!
@@ -181,7 +180,7 @@ class _PartnerWriteScreenState
       final currentUserUid = FirebaseAuth.instance.currentUser?.uid ?? '';
       final partnerUid = await PartnerLinkService.getPartnerUid();
 
-      debugPrint('PARTNER UID: $partnerUid');
+      
 
       // 2. Uložení lokálního záznamu (do storage pro historii) – PROVÁDÍ SE VŽDY
       final record = ScenarioRecord(
@@ -224,7 +223,7 @@ class _PartnerWriteScreenState
           autor: scenar.autor,
           pro: scenar.pro,
         );
-        debugPrint('SENT');
+        
       }
 
       // 5. Aktualizace UI

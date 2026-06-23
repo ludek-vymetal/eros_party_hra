@@ -45,26 +45,22 @@ class Scenar {
   }
 
   factory Scenar.fromJson(Map<String, dynamic> json) {
-    print('===== SCENAR =====');
-    print(json);
-    print('emoce typ: ${json['emoce'].runtimeType}');
-    print('ocekavanaReakce typ: ${json['ocekavanaReakce'].runtimeType}');
-
-    return Scenar(
-      id: json['id'],
-      autor: json['autor'] ?? '',
-      pro: json['pro'] ?? '',
-      nazev: json['nazev'] ?? '',
-      cil: json['cil'] ?? '',
-      text: json['text'] ?? '',
-      hranice: json['hranice'] ?? '',
-      emoce: List<String>.from(json['emoce'] ?? []),
-      ocekavanaReakce:
-          List<String>.from(json['ocekavanaReakce'] ?? []),
-      createdAt: DateTime.tryParse(json['createdAt'] ?? ''),
-      archived: json['archived'] ?? false,
-    );
-  }
+  
+  return Scenar(
+    id: json['id'],
+    autor: json['autor'] ?? '',
+    pro: json['pro'] ?? '',
+    nazev: json['nazev'] ?? '',
+    cil: json['cil'] ?? '',
+    text: json['text'] ?? '',
+    hranice: json['hranice'] ?? '',
+    emoce: List<String>.from(json['emoce'] ?? []),
+    ocekavanaReakce:
+        List<String>.from(json['ocekavanaReakce'] ?? []),
+    createdAt: DateTime.tryParse(json['createdAt'] ?? ''),
+    archived: json['archived'] ?? false,
+  );
+}
 
   // =========================
   // ✏️ KOPIE (pro úpravy)
