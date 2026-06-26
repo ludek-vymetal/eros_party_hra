@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/cloud_partner_reaction.dart';
 import '../services/cloud_partner_reaction_service.dart';
 import '../../l10n/app_localizations.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 
@@ -15,10 +15,70 @@ class CloudPartnerReactionDetailScreen extends StatelessWidget {
     required this.reaction,
   });
 
+  Widget _buildProofState(
+    BuildContext context,
+    AppLocalizations l10n,
+    bool isAuthor,
+    bool isCompleter,
+  ) {
+    if (reaction.proofAccepted) {
+      return Row(
+        children: [
+          const Icon(Icons.verified, color: Colors.green),
+          const SizedBox(width: 8),
+          Text(
+            isAuthor
+                ? l10n.proofAccepted
+                : '✅ Partner potvrdil důkaz',
+          ),
+        ],
+      );
+    }
+
+    if (reaction.proofSent) {
+      return Row(
+        children: [
+          const Icon(Icons.photo_camera, color: Colors.orange),
+          const SizedBox(width: 8),
+          Text(
+            isAuthor
+                ? '📷 Čeká na potvrzení důkazu'
+                : '📷 Důkaz odeslán',
+          ),
+        ],
+      );
+    }
+
+    return Row(
+      children: [
+        const Icon(Icons.hourglass_top, color: Colors.orange),
+        const SizedBox(width: 8),
+        Text(
+          isAuthor
+              ? '⏳ Čeká na důkaz'
+              : '⏳ Čeká na odeslání důkazu',
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final l10n =
-        AppLocalizations.of(context);
+    
+    final myUid = FirebaseAuth.instance.currentUser!.uid;
+    debugPrint('MY UID: $myUid');
+    debugPrint('senderUid: ${reaction.senderUid}');
+    debugPrint('receiverUid: ${reaction.receiverUid}');
+    // ten kdo scénář splnil a poslal reakci
+    final isCompleter = myUid == reaction.senderUid;
+
+    // autor scénáře
+    final isAuthor = myUid == reaction.receiverUid;
+    debugPrint('isCompleter: $isCompleter');
+    debugPrint('isAuthor: $isAuthor');
+    final l10n = AppLocalizations.of(context);
+
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -125,58 +185,24 @@ class CloudPartnerReactionDetailScreen extends StatelessWidget {
               height: 24,
             ),
 
-            if (reaction.proofAccepted)
-              Row(
-                children: [
-                  Icon(
-                    Icons.verified,
-                    color: Colors.green,
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    l10n.proofAccepted,
-                  )
-                ],
-              )
-            else if (reaction.proofSent)
-              const Row(
-                children: [
-                  Icon(
-                    Icons.photo_camera,
-                    color: Colors.orange,
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    '📷 Důkaz odeslán přes WhatsApp',
-                  ),
-                ],
-              )
-            else
-              Row(
-                children: [
-                  Icon(
-                    Icons.hourglass_top,
-                    color: Colors.orange,
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    l10n.proofWaiting,
-                  )
-                ],
-              ),
+            _buildProofState(
+              context,
+              l10n,
+              isAuthor,
+              isCompleter,
+            ),
 
             const SizedBox(
               height: 24,
             ),
 
-           if (reaction.completed &&
-              !reaction.proofSent)
+            if (isCompleter &&
+                reaction.completed &&
+                !reaction.proofSent)
+
+           if (isCompleter &&
+                reaction.completed &&
+                !reaction.proofSent)
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -259,8 +285,9 @@ class CloudPartnerReactionDetailScreen extends StatelessWidget {
             height: 12,
           ),
 
-            if (reaction.proofSent &&
-                !reaction.proofAccepted)
+            if (isAuthor &&
+              reaction.proofSent &&
+              !reaction.proofAccepted)
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
