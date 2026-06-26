@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter/foundation.dart';
 import '../models/cloud_partner_scenario.dart';
 
 class CloudPartnerScenarioService {
@@ -51,11 +51,15 @@ class CloudPartnerScenarioService {
     String scenarioId,
     String status,
   ) async {
-    await _scenarios
-        .doc(scenarioId)
-        .update({
+    debugPrint("========== UPDATE SCENARIO ==========");
+    debugPrint("DOC ID = $scenarioId");
+    debugPrint("STATUS = $status");
+
+    await _scenarios.doc(scenarioId).update({
       'status': status,
     });
+
+    debugPrint("UPDATE DONE");
   }
 
   static Stream<List<CloudPartnerScenario>>
