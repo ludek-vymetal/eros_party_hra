@@ -71,6 +71,10 @@ class CloudPartnerReactionsScreen
             ) {
               final reaction =
                   reactions[index];
+              final myUid = FirebaseAuth.instance.currentUser!.uid;
+
+              final isCompleter = reaction.senderUid == myUid;
+              final isAuthor = reaction.receiverUid == myUid;    
 
               return Card(
                 margin:
@@ -108,12 +112,22 @@ class CloudPartnerReactionsScreen
                       ),
 
                       if (reaction.proofAccepted)
-                        const Text(
-                          '✔️ Důkaz potvrzen',
+                        Text(
+                          isCompleter
+                              ? '✅ Partner potvrdil důkaz'
+                              : '✅ Důkaz potvrzen',
                         )
                       else if (reaction.proofSent)
-                        const Text(
-                          '📷 Důkaz odeslán',
+                        Text(
+                          isCompleter
+                              ? '📷 Důkaz odeslán'
+                              : '📷 Čeká na potvrzení důkazu',
+                        )
+                      else
+                        Text(
+                          isCompleter
+                              ? '⏳ Čeká na odeslání důkazu'
+                              : '⏳ Čeká na důkaz',
                         ),
 
                       if (reaction.message
