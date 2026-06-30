@@ -24,7 +24,46 @@ class StatisticsScreen extends StatelessWidget {
           }
 
           final records = snapshot.data!;
+          final totalReactions = records.fold<int>(
+            0,
+            (sum, record) => sum + record.reactions.length,
+          );
 
+          final accepted = records.fold<int>(
+            0,
+            (sum, record) =>
+                sum +
+                record.reactions.where((r) => r.stav == 'Splněno').length,
+          );
+
+          final rejected = records.fold<int>(
+            0,
+            (sum, record) =>
+                sum +
+                record.reactions.where((r) => r.stav != 'Splněno').length,
+          );
+          final successRate = totalReactions == 0
+            ? 0
+            : ((accepted / totalReactions) * 100).round();
+
+          
+
+          final emotionCount = <String, int>{};
+
+          for (final record in records) {
+            for (final emotion in record.scenar.emoce) {
+              emotionCount[emotion] =
+                  (emotionCount[emotion] ?? 0) + 1;
+            }
+          }
+
+        String favoriteEmotion = '-';
+
+        if (emotionCount.isNotEmpty) {
+          favoriteEmotion = emotionCount.entries
+              .reduce((a, b) => a.value > b.value ? a : b)
+              .key;
+        }
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -32,6 +71,28 @@ class StatisticsScreen extends StatelessWidget {
                 '📚 Celkem scénářů',
                 records.length.toString(),
               ),
+              _card(
+                '💬 Celkem reakcí',
+                totalReactions.toString(),
+              ),
+              _card(
+                '✅ Přijaté reakce',
+                accepted.toString(),
+              ),
+
+              _card(
+                '❌ Odmítnuté reakce',
+                rejected.toString(),
+              ),
+              _card(
+                '📈 Úspěšnost',
+                '$successRate %',
+              ),
+              _card(
+                '❤️ Nejčastější emoce',
+                favoriteEmotion,
+              ),
+              
             ],
           );
         },
@@ -42,21 +103,41 @@ class StatisticsScreen extends StatelessWidget {
   Widget _card(String title, String value) {
     return Card(
       color: const Color(0xFF1f0d14),
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
       margin: const EdgeInsets.only(bottom: 16),
-      child: ListTile(
-        title: Text(
-          title,
-          style: const TextStyle(color: Colors.white),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 18,
         ),
-        trailing: Text(
-          value,
-          style: const TextStyle(
-            color: Colors.amber,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+        child: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.amber,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
-}
+ } 

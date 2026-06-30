@@ -610,6 +610,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proofAcceptedSnackBar => 'Proof accepted';
 
   @override
+  String get favoriteScenarios => '⭐ Favorite Scenarios';
+
+  @override
+  String get favoriteScenariosEmpty =>
+      'You don\'t have any favorite scenarios yet.';
+
+  @override
+  String get favorite => 'Favorite';
+
+  @override
+  String get relationshipJournal => '❤️ Relationship Journal';
+
+  @override
+  String get relationshipJournalEmpty =>
+      'You don\'t have any shared memories yet.';
+
+  @override
+  String get saveToRelationshipJournal => 'Save to relationship journal';
+
+  @override
+  String get saveToRelationshipJournalQuestion =>
+      'Would you like to save this moment to your relationship journal?';
+
+  @override
+  String get chapterTitle => 'Chapter title';
+
+  @override
+  String get ourThoughts => 'Our thoughts';
+
+  @override
+  String get sharedMemory => 'Shared memory';
+
+  @override
+  String get relationshipStory => 'Our Story';
+
+  @override
   String get proofAcceptedButton => 'Proof Accepted';
 
   @override

@@ -87,6 +87,27 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF12080c),
         actions: [
           IconButton(
+            icon: Icon(
+              record.favorite
+                  ? Icons.star
+                  : Icons.star_border,
+              color: Colors.amber,
+            ),
+            tooltip: 'Oblíbené',
+            onPressed: () async {
+              await ScenarioRecordStorage.update(
+                record.copyWith(
+                  favorite: !record.favorite,
+                ),
+              );
+
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+            },
+          ),
+
+          IconButton(
             icon: const Icon(Icons.share),
             tooltip: 'Znovu odeslat',
             onPressed: () => _resend(context),

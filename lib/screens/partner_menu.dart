@@ -8,9 +8,9 @@ import 'partner_link_screen.dart';
 import 'scenario_record_list_screen.dart';
 import 'statistics_screen.dart';
 import 'cloud_partner_inbox_screen.dart';
-
+import 'favorite_scenarios_screen.dart';
 import 'community_scenarios_screen.dart';
-
+import 'relationship_journal_screen.dart';
 import '../services/partner_link_service.dart';
 
 import 'cloud_partner_reactions_screen.dart';
@@ -138,15 +138,7 @@ class _PartnerMenuScreenState
                 ),
               ),
 
-              _btn(
-                l10n.statistics,
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const StatisticsScreen(),
-                  ),
-                ),
-              ),
+              
               _btn(
                 l10n.cloudInbox,
                 () => Navigator.push(
@@ -169,6 +161,8 @@ class _PartnerMenuScreenState
                 ),
               ),  
 
+              
+
               _btn(
                 l10n.communityScenarios,
                 () => Navigator.push(
@@ -180,6 +174,7 @@ class _PartnerMenuScreenState
                 ),
               ),
 
+              
               _btn(
                 l10n
                     .scenarioHistory,
@@ -188,6 +183,35 @@ class _PartnerMenuScreenState
                   MaterialPageRoute(
                     builder: (_) =>
                         ScenarioRecordListScreen(),
+                  ),
+                ),
+              ),
+
+              _btn(
+                l10n.statistics,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const StatisticsScreen(),
+                  ),
+                ),
+              ),
+
+              _btn(
+                l10n.relationshipJournal,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const RelationshipJournalScreen(),
+                  ),
+                ),
+              ),
+              _btn(
+                l10n.favoriteScenarios,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const FavoriteScenariosScreen(),
                   ),
                 ),
               ),

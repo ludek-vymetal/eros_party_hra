@@ -610,6 +610,41 @@ class AppLocalizationsCs extends AppLocalizations {
   String get proofAcceptedSnackBar => 'Důkaz byl přijat';
 
   @override
+  String get favoriteScenarios => '⭐ Oblíbené scénáře';
+
+  @override
+  String get favoriteScenariosEmpty => 'Zatím nemáš žádné oblíbené scénáře.';
+
+  @override
+  String get favorite => 'Oblíbené';
+
+  @override
+  String get relationshipJournal => '❤️ Deník vztahu';
+
+  @override
+  String get relationshipJournalEmpty =>
+      'Zatím nemáte žádné společné vzpomínky.';
+
+  @override
+  String get saveToRelationshipJournal => 'Uložit do deníku vztahu';
+
+  @override
+  String get saveToRelationshipJournalQuestion =>
+      'Chcete tento okamžik uložit do deníku vztahu?';
+
+  @override
+  String get chapterTitle => 'Název kapitoly';
+
+  @override
+  String get ourThoughts => 'Naše myšlenky';
+
+  @override
+  String get sharedMemory => 'Společná vzpomínka';
+
+  @override
+  String get relationshipStory => 'Náš příběh';
+
+  @override
   String get proofAcceptedButton => 'Důkaz přijat';
 
   @override

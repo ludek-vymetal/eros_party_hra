@@ -4,6 +4,9 @@ import 'reaction.dart';
 class ScenarioRecord {
   // 🔑 jednoznačný záznam
   final String id;
+  
+  // ⭐ Oblíbený scénář
+  final bool favorite;
 
   // ❤️ ID celé rodiny scénářů
   final String parentScenarioId;
@@ -23,6 +26,7 @@ class ScenarioRecord {
   ScenarioRecord({
     required this.id,
     required this.scenar,
+    this.favorite = false,
     this.reactions = const [],
     DateTime? createdAt,
     this.archived = false,
@@ -36,6 +40,7 @@ class ScenarioRecord {
   Map<String, dynamic> toJson() => {
         'id': id,
         'parentScenarioId': parentScenarioId,
+        'favorite': favorite,
         'scenar': scenar.toJson(),
         'reactions': reactions.map((r) => r.toJson()).toList(),
         'createdAt': createdAt.toIso8601String(),
@@ -47,6 +52,7 @@ class ScenarioRecord {
   ) {
     return ScenarioRecord(
       id: json['id'],
+      favorite: json['favorite'] ?? false,
 
       // kompatibilita se starými scénáři
       parentScenarioId:
@@ -83,11 +89,13 @@ class ScenarioRecord {
   ScenarioRecord copyWith({
     Scenar? scenar,
     List<Reaction>? reactions,
+    bool? favorite,
     bool? archived,
     String? parentScenarioId,
   }) {
     return ScenarioRecord(
       id: id,
+      favorite: favorite ?? this.favorite,
       parentScenarioId:
           parentScenarioId ?? this.parentScenarioId,
       scenar: scenar ?? this.scenar,

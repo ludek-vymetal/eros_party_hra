@@ -1286,6 +1286,72 @@ abstract class AppLocalizations {
   /// **'Proof accepted'**
   String get proofAcceptedSnackBar;
 
+  /// No description provided for @favoriteScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'⭐ Favorite Scenarios'**
+  String get favoriteScenarios;
+
+  /// No description provided for @favoriteScenariosEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any favorite scenarios yet.'**
+  String get favoriteScenariosEmpty;
+
+  /// No description provided for @favorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite'**
+  String get favorite;
+
+  /// No description provided for @relationshipJournal.
+  ///
+  /// In en, this message translates to:
+  /// **'❤️ Relationship Journal'**
+  String get relationshipJournal;
+
+  /// No description provided for @relationshipJournalEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any shared memories yet.'**
+  String get relationshipJournalEmpty;
+
+  /// No description provided for @saveToRelationshipJournal.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to relationship journal'**
+  String get saveToRelationshipJournal;
+
+  /// No description provided for @saveToRelationshipJournalQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to save this moment to your relationship journal?'**
+  String get saveToRelationshipJournalQuestion;
+
+  /// No description provided for @chapterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter title'**
+  String get chapterTitle;
+
+  /// No description provided for @ourThoughts.
+  ///
+  /// In en, this message translates to:
+  /// **'Our thoughts'**
+  String get ourThoughts;
+
+  /// No description provided for @sharedMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared memory'**
+  String get sharedMemory;
+
+  /// No description provided for @relationshipStory.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Story'**
+  String get relationshipStory;
+
   /// No description provided for @proofAcceptedButton.
   ///
   /// In en, this message translates to:
