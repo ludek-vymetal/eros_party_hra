@@ -3,6 +3,7 @@ import '../models/scenario_record.dart';
 import '../services/crypto_service.dart';
 import '../services/scenario_record_storage.dart';
 import 'partner_write.dart';
+import 'scenario_history_screen.dart';
 
 class ScenarioRecordDetailScreen extends StatelessWidget {
   final ScenarioRecord record;
@@ -70,8 +71,6 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
 
     await ScenarioRecordStorage.delete(record.id);
 
-    
-
     if (context.mounted) {
       Navigator.pop(context);
     }
@@ -114,7 +113,10 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
             _section('⚠️ Hranice', s.hranice),
 
             if (s.emoce.isNotEmpty)
-              _section('❤️ Emoce', s.emoce.join(', ')),
+              _section(
+                '❤️ Emoce',
+                s.emoce.join(', '),
+              ),
 
             const SizedBox(height: 24),
 
@@ -154,9 +156,7 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
                         if (r.emoce != null)
                           Text(
                             r.emoce!,
-                            style: const TextStyle(
-                              color: Colors.white70,
-                            ),
+                            style: const TextStyle(color: Colors.white70),
                           ),
                         if (r.vzkaz != null && r.vzkaz!.isNotEmpty)
                           Padding(
@@ -184,11 +184,28 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
               }),
 
             const SizedBox(height: 32),
-
             const Divider(color: Colors.white24),
-
             const SizedBox(height: 16),
 
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.history),
+                label: const Text('📚 Historie všech pokusů'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ScenarioHistoryScreen(
+                        parentScenarioId: record.parentScenarioId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 20),
             const Text(
               '🔄 Chcete si tento scénář zopakovat?',
               style: TextStyle(
@@ -197,9 +214,7 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 12),
-
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -223,29 +238,29 @@ class ScenarioRecordDetailScreen extends StatelessWidget {
       ),
     );
   }
-
+    
   Widget _section(String title, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontWeight: FontWeight.bold,
-            ),
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white70,
+            fontWeight: FontWeight.bold,
           ),
-          const SizedBox(height: 4),
-          Text(
-            text.isEmpty ? '—' : text,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          text.isEmpty ? '—' : text,
+          style: const TextStyle(
+            color: Colors.white,
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 }

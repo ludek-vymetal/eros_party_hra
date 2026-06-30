@@ -1232,6 +1232,12 @@ abstract class AppLocalizations {
   /// **'Date:'**
   String get reactionDateLabel;
 
+  /// No description provided for @statistics.
+  ///
+  /// In en, this message translates to:
+  /// **'📊 Statistics'**
+  String get statistics;
+
   /// No description provided for @proofAccepted.
   ///
   /// In en, this message translates to:

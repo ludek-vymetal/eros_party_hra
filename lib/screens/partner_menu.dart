@@ -6,7 +6,7 @@ import 'partner_write.dart';
 import 'partner_read.dart';
 import 'partner_link_screen.dart';
 import 'scenario_record_list_screen.dart';
-
+import 'statistics_screen.dart';
 import 'cloud_partner_inbox_screen.dart';
 
 import 'community_scenarios_screen.dart';
@@ -138,6 +138,15 @@ class _PartnerMenuScreenState
                 ),
               ),
 
+              _btn(
+                l10n.statistics,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const StatisticsScreen(),
+                  ),
+                ),
+              ),
               _btn(
                 l10n.cloudInbox,
                 () => Navigator.push(

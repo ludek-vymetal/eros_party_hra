@@ -1,5 +1,5 @@
 import 'dart:developer' as developer;
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -128,9 +128,11 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               DropdownButtonFormField<String>(
-                value: selectedStatus,
-                decoration: InputDecoration(labelText: l10n.reactionDecision),
-                items: [
+                  initialValue: selectedStatus,
+                  decoration: InputDecoration(
+                    labelText: l10n.reactionDecision,
+                  ),
+                  items: [
                   DropdownMenuItem(value: 'completed', child: Text(l10n.reactionComplete)),
                   DropdownMenuItem(value: 'postponed', child: Text(l10n.reactionPostpone)),
                   DropdownMenuItem(value: 'rejected', child: Text(l10n.reactionReject)),

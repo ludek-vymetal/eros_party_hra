@@ -582,6 +582,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reactionDateLabel => 'Date:';
 
   @override
+  String get statistics => '📊 Statistics';
+
+  @override
   String get proofAccepted => '✅ Proof Accepted';
 
   @override

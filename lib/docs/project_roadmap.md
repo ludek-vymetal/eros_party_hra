@@ -424,3 +424,197 @@ Co bylo kdysi odmítnuté, může být za několik let krásnou společnou vzpom
 ✅ SettingsScreen
 ✅ l10n pro Settings
 ✅ čistý flutter analyze
+📒 EROS – Vývojový deník (hlavní plán)
+✅ STAV PROJEKTU
+Hotovo
+Firebase přihlášení
+Propojení partnerů
+Cloud scénáře
+Cloud reakce
+Potvrzení důkazu
+WhatsApp důkaz
+Lokální historie
+Opakování scénářů
+Lokalizace CZ/EN
+Windows i Android fungují
+Git je stabilní
+🔴 PRIORITA 1 – HISTORIE (aktuální práce)
+Cíl
+
+Vytvořit historii vztahu, ne jen seznam scénářů.
+
+Každý scénář bude mít:
+Scénář
+
+Pokus 1
+    reakce
+    datum
+    důkaz
+
+Pokus 2
+    reakce
+    datum
+    důkaz
+
+Pokus 3
+    ...
+parentScenarioId
+
+Bude představovat celou rodinu scénáře.
+
+Nikdy se nebude měnit.
+
+Detail historie
+
+Každý pokus zobrazí
+
+✅ datum
+
+✅ text scénáře
+
+✅ cíl
+
+✅ hranice
+
+✅ emoce
+
+✅ reakce partnera
+
+✅ stav
+
+✅ důkaz
+
+Seznam historie
+
+Jedna karta = jedna rodina scénáře
+
+například
+
+První masáž
+
+4 pokusy
+
+8 reakcí
+
+26.6.2026 → 18.8.2031
+🔴 PRIORITA 2 – DŮKAZY
+
+Každý pokus bude mít vlastní důkaz.
+
+Později:
+
+📷 více fotek
+
+🎥 video
+
+🎤 hlasová zpráva
+
+🔴 PRIORITA 3 – STATISTIKY
+
+Historie bude umět spočítat
+
+Scénář
+
+7 pokusů
+
+5 splněno
+
+2 odloženo
+
+1 odmítnuto
+🔴 PRIORITA 4 – ČASOVÁ OSA
+
+Partner bude moci listovat historií
+
+2026
+
+Scénáře
+
+Reakce
+
+Důkazy
+
+↓
+
+2027
+
+↓
+
+2028
+
+↓
+
+2034
+
+To podle mě bude jedna z nejhezčích funkcí aplikace.
+
+🔴 PRIORITA 5 – DENÍK VZTAHU
+
+Každý scénář se stane vzpomínkou.
+
+Například
+
+První masáž
+
+26.6.2026
+
+❤️ reakce
+
+📷 důkaz
+
+--------------------------------
+
+15.8.2027
+
+❤️ reakce
+
+📷 důkaz
+
+--------------------------------
+
+12.2.2032
+
+❤️ reakce
+
+📷 důkaz
+
+To bude podle mě obrovská hodnota aplikace.
+
+🔴 PRIORITA 6 – ARCHIV
+
+Po několika letech budou stovky scénářů.
+
+Přidáme
+
+filtr
+hledání
+oblíbené
+archiv
+🔴 PRIORITA 7 – EXPORT
+
+Možnost vytvořit
+
+PDF
+
+Historie vztahu
+
+2026–2036
+
+včetně reakcí a fotografií.
+
+🔴 PRIORITA 8 – BUDOUCNOST
+
+Architekturu navrhovat tak, aby šlo snadno přidat:
+
+AI analýzu vztahu
+doporučení dalších scénářů
+výroční statistiky
+připomenutí starých scénářů
+společnou časovou osu partnerů
+📌 Pravidla vývoje
+Nikdy neměnit datový model bez opravdu dobrého důvodu. Současný návrh je dostatečně flexibilní.
+Každou novou funkci navrhovat tak, aby byla kompatibilní se starými daty.
+Po každé větší funkci udělat Git commit.
+Po každé změně musí projít flutter analyze bez chyb.
+Velké funkce rozdělit na malé kroky a po každém kroku otestovat.
+Neřešit jen aktuální problém, ale myslet na to, jak bude aplikace fungovat za 5–10 let.

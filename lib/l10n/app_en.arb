@@ -190,7 +190,7 @@
 
 "reactionMessageLabel": "Message:",
 "reactionDateLabel": "Date:",
-
+"statistics": "📊 Statistics",
 "proofAccepted": "✅ Proof Accepted",
 "proofSentWhatsapp": "📷 Proof Sent via WhatsApp",
 "proofWaiting": "⏳ Waiting for Proof",
