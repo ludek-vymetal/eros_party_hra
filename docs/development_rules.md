@@ -58,3 +58,42 @@ Začali jsme navrhovat architekturu.
 Relationship Book bude samostatný modul.
 
 Vývoj bude probíhat po malých stabilních krocích.
+📍 Kde jsme
+
+Máme:
+
+✅ Dokumentace
+
+✅ Architektura
+
+✅ Roadmap
+
+✅ Firestore návrh
+
+✅ RelationshipMemory
+
+✅ MemoryParticipant
+
+✅ MemoryScenario
+
+✅ Repository
+
+✅ CloudService
+
+✅ Firestore kolekc
+## 2026-07-02
+
+### Architektura Relationship Book
+
+- Dokončeny základní modely:
+  - MemoryParticipant
+  - MemoryScenario
+  - ChapterStatus
+
+- Bylo rozhodnuto, že:
+  - jedna kapitola = jeden Firestore dokument
+  - kapitola má vlastní životní cyklus nezávislý na scénáři
+  - nový vývoj probíhá pouze ve složce lib/relationship_book
+
+- Bylo rozhodnuto odložit implementaci RelationshipMemory,
+  dokud nebude definitivně schválen datový model Firestore.
