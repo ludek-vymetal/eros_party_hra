@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/relationship_chapter.dart';
-
+import '../models/scenario_record.dart';
 class RelationshipJournalStorage {
   static const _key = 'relationship_journal';
 
@@ -66,4 +66,48 @@ class RelationshipJournalStorage {
 
     await prefs.remove(_key);
   }
+  static Future<void> addChapter(
+    RelationshipChapter chapter,
+  ) async {
+    final chapters = await getAll();
+
+    chapters.add(chapter);
+
+    await saveAll(chapters);
+  }
+  static Future<void> createChapter({
+    required ScenarioRecord record,
+    required String chapterTitle,
+    required String introduction,
+    String? imagePath,
+  }) async {
+    final chapter = RelationshipChapter(
+      id: '${DateTime.now().microsecondsSinceEpoch}_${record.id}',
+      createdAt: DateTime.now(),
+      record: record,
+      chapterTitle: chapterTitle,
+      introduction: introduction,
+      imagePath: imagePath,
+    );
+
+    await addChapter(chapter);
+
+  }
+  static Future<void> updateChapter(
+    RelationshipChapter chapter,
+  ) async {
+    final chapters = await getAll();
+
+    final index = chapters.indexWhere(
+      (c) => c.id == chapter.id,
+    );
+
+    if (index == -1) {
+      return;
+    }
+
+    chapters[index] = chapter;
+
+    await saveAll(chapters);
+  }  
 }

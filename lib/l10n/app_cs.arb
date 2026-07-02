@@ -206,9 +206,9 @@
 "favoriteScenarios": "⭐ Oblíbené scénáře",
 "favoriteScenariosEmpty": "Zatím nemáš žádné oblíbené scénáře.",
 "favorite": "Oblíbené",
-"favoriteScenarios": "⭐ Oblíbené scénáře",
-"favoriteScenariosEmpty": "Zatím nemáš žádné oblíbené scénáře.",
-"favorite": "Oblíbené",
+
+
+
 "relationshipJournal": "❤️ Deník vztahu",
 "relationshipJournalEmpty": "Zatím nemáte žádné společné vzpomínky.",
 "saveToRelationshipJournal": "Uložit do deníku vztahu",
@@ -217,6 +217,35 @@
 "ourThoughts": "Naše myšlenky",
 "sharedMemory": "Společná vzpomínka",
 "relationshipStory": "Náš příběh",
+"skip": "Přeskočit",
+"write": "Napsat",
+"proofConfirmedByPartner": "✅ Partner potvrdil důkaz",
+"proofConfirmed": "✅ Důkaz potvrzen",
+"proofSent": "📷 Důkaz odeslán",
+"waitingProofConfirmation": "📷 Čeká na potvrzení důkazu",
+"waitingProofUpload": "⏳ Čeká na odeslání důkazu",
+"waitingProof": "⏳ Čeká na důkaz",
+"relationshipStorySubtitle": "Každá společná vzpomínka tvoří další stránku vašeho příběhu.",
+
+"scenarioLabel": "🏷️ {name}",
+"@scenarioLabel": {
+  "placeholders": {
+    "name": {}
+  }
+},
+"messageLabel": "💬 {message}",
+"@messageLabel": {
+  "placeholders": {
+    "message": {}
+  }
+},
+
+"dateLabel": "📅 {date}",
+"@dateLabel": {
+  "placeholders": {
+    "date": {}
+  }
+},
 
 "proofAcceptedButton": "Důkaz přijat",
 "settings": "⚙️ Nastavení",

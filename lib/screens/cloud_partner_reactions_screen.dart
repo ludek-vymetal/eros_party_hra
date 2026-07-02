@@ -101,7 +101,9 @@ class CloudPartnerReactionsScreen
                   ),
 
                   title: Text(
-                    '🏷️ ${reaction.scenarioName}',
+                    l10n.scenarioLabel(
+                      reaction.scenarioName,
+                    ),
                   ),
 
                   subtitle: Column(
@@ -116,32 +118,31 @@ class CloudPartnerReactionsScreen
                       ),
 
                       Text(
-                        '📅 ${reaction.datumFormatted}',
+                        l10n.dateLabel(
+                          reaction.datumFormatted,
+                        ),
                       ),
 
                       if (reaction.proofAccepted)
                         Text(
                           isCompleter
-                              ? '✅ Partner potvrdil důkaz'
-                              : '✅ Důkaz potvrzen',
+                              ? l10n.proofConfirmedByPartner
+                              : l10n.proofConfirmed,
                         )
                       else if (reaction.proofSent)
                         Text(
                           isCompleter
-                              ? '📷 Důkaz odeslán'
-                              : '📷 Čeká na potvrzení důkazu',
-                        )
-                      else
-                        Text(
-                          isCompleter
-                              ? '⏳ Čeká na odeslání důkazu'
-                              : '⏳ Čeká na důkaz',
+                              ? l10n.proofSent
+                              : l10n.waitingProofConfirmation,
                         ),
 
                       if (reaction.message
                           .isNotEmpty)
                         Text(
-                          '💬 ${reaction.message}',
+                          l10n.messageLabel(
+                            reaction.message,
+                          ),
+                        
                           maxLines: 1,
                           overflow:
                               TextOverflow

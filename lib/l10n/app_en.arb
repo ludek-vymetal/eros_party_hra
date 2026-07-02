@@ -205,9 +205,9 @@
 "favoriteScenarios": "⭐ Favorite Scenarios",
 "favoriteScenariosEmpty": "You don't have any favorite scenarios yet.",
 "favorite": "Favorite",
-"favoriteScenarios": "⭐ Favorite Scenarios",
-"favoriteScenariosEmpty": "You don't have any favorite scenarios yet.",
-"favorite": "Favorite",
+
+
+
 "relationshipJournal": "❤️ Relationship Journal",
 "relationshipJournalEmpty": "You don't have any shared memories yet.",
 "saveToRelationshipJournal": "Save to relationship journal",
@@ -216,6 +216,36 @@
 "ourThoughts": "Our thoughts",
 "sharedMemory": "Shared memory",
 "relationshipStory": "Our Story",
+"skip": "Skip",
+"write": "Write",
+"proofConfirmedByPartner": "✅ Partner confirmed the proof",
+"proofConfirmed": "✅ Proof confirmed",
+"proofSent": "📷 Proof sent",
+"waitingProofConfirmation": "📷 Waiting for proof confirmation",
+"waitingProofUpload": "⏳ Waiting to send proof",
+"waitingProof": "⏳ Waiting for proof",
+"relationshipStorySubtitle": "Every shared memory becomes another page of your story.",
+
+
+
+"scenarioLabel": "🏷️ {name}",
+"@scenarioLabel": {
+  "placeholders": {
+    "name": {}
+  }
+},
+"messageLabel": "💬 {message}",
+"@messageLabel": {
+  "placeholders": {
+    "message": {}
+  }
+},
+"dateLabel": "📅 {date}",
+"@dateLabel": {
+  "placeholders": {
+    "date": {}
+  }
+},
 
 "proofAcceptedButton": "Proof Accepted",
 "settings": "⚙️ Settings",

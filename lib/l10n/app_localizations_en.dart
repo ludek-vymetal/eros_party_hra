@@ -646,6 +646,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get relationshipStory => 'Our Story';
 
   @override
+  String get skip => 'Skip';
+
+  @override
+  String get write => 'Write';
+
+  @override
+  String get proofConfirmedByPartner => '✅ Partner confirmed the proof';
+
+  @override
+  String get proofConfirmed => '✅ Proof confirmed';
+
+  @override
+  String get proofSent => '📷 Proof sent';
+
+  @override
+  String get waitingProofConfirmation => '📷 Waiting for proof confirmation';
+
+  @override
+  String get waitingProofUpload => '⏳ Waiting to send proof';
+
+  @override
+  String get waitingProof => '⏳ Waiting for proof';
+
+  @override
+  String get relationshipStorySubtitle =>
+      'Every shared memory becomes another page of your story.';
+
+  @override
+  String scenarioLabel(Object name) {
+    return '🏷️ $name';
+  }
+
+  @override
+  String messageLabel(Object message) {
+    return '💬 $message';
+  }
+
+  @override
+  String dateLabel(Object date) {
+    return '📅 $date';
+  }
+
+  @override
   String get proofAcceptedButton => 'Proof Accepted';
 
   @override

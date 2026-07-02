@@ -645,6 +645,49 @@ class AppLocalizationsCs extends AppLocalizations {
   String get relationshipStory => 'Náš příběh';
 
   @override
+  String get skip => 'Přeskočit';
+
+  @override
+  String get write => 'Napsat';
+
+  @override
+  String get proofConfirmedByPartner => '✅ Partner potvrdil důkaz';
+
+  @override
+  String get proofConfirmed => '✅ Důkaz potvrzen';
+
+  @override
+  String get proofSent => '📷 Důkaz odeslán';
+
+  @override
+  String get waitingProofConfirmation => '📷 Čeká na potvrzení důkazu';
+
+  @override
+  String get waitingProofUpload => '⏳ Čeká na odeslání důkazu';
+
+  @override
+  String get waitingProof => '⏳ Čeká na důkaz';
+
+  @override
+  String get relationshipStorySubtitle =>
+      'Každá společná vzpomínka tvoří další stránku vašeho příběhu.';
+
+  @override
+  String scenarioLabel(Object name) {
+    return '🏷️ $name';
+  }
+
+  @override
+  String messageLabel(Object message) {
+    return '💬 $message';
+  }
+
+  @override
+  String dateLabel(Object date) {
+    return '📅 $date';
+  }
+
+  @override
   String get proofAcceptedButton => 'Důkaz přijat';
 
   @override

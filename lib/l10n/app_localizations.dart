@@ -1352,6 +1352,78 @@ abstract class AppLocalizations {
   /// **'Our Story'**
   String get relationshipStory;
 
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @write.
+  ///
+  /// In en, this message translates to:
+  /// **'Write'**
+  String get write;
+
+  /// No description provided for @proofConfirmedByPartner.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Partner confirmed the proof'**
+  String get proofConfirmedByPartner;
+
+  /// No description provided for @proofConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Proof confirmed'**
+  String get proofConfirmed;
+
+  /// No description provided for @proofSent.
+  ///
+  /// In en, this message translates to:
+  /// **'📷 Proof sent'**
+  String get proofSent;
+
+  /// No description provided for @waitingProofConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'📷 Waiting for proof confirmation'**
+  String get waitingProofConfirmation;
+
+  /// No description provided for @waitingProofUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Waiting to send proof'**
+  String get waitingProofUpload;
+
+  /// No description provided for @waitingProof.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Waiting for proof'**
+  String get waitingProof;
+
+  /// No description provided for @relationshipStorySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Every shared memory becomes another page of your story.'**
+  String get relationshipStorySubtitle;
+
+  /// No description provided for @scenarioLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'🏷️ {name}'**
+  String scenarioLabel(Object name);
+
+  /// No description provided for @messageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'💬 {message}'**
+  String messageLabel(Object message);
+
+  /// No description provided for @dateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'📅 {date}'**
+  String dateLabel(Object date);
+
   /// No description provided for @proofAcceptedButton.
   ///
   /// In en, this message translates to:

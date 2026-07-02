@@ -90,8 +90,10 @@ class _PartnerMenuScreenState
       ),
 
       body: SafeArea(
-        child: Center(
-          child: Column(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: Center(
+            child: Column(
             mainAxisAlignment:
                 MainAxisAlignment
                     .center,
@@ -245,8 +247,9 @@ class _PartnerMenuScreenState
                     linked
                         ? Colors.green
                         : accent,
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 
+import '../services/relationship_journal_storage.dart';
 import '../../l10n/app_localizations.dart';
 import '../models/cloud_partner_scenario.dart';
 import '../models/reaction.dart';
@@ -128,11 +129,11 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               DropdownButtonFormField<String>(
-                  initialValue: selectedStatus,
-                  decoration: InputDecoration(
-                    labelText: l10n.reactionDecision,
-                  ),
-                  items: [
+                value: selectedStatus,
+                decoration: InputDecoration(
+                  labelText: l10n.reactionDecision,
+                ),
+                items: [
                   DropdownMenuItem(value: 'completed', child: Text(l10n.reactionComplete)),
                   DropdownMenuItem(value: 'postponed', child: Text(l10n.reactionPostpone)),
                   DropdownMenuItem(value: 'rejected', child: Text(l10n.reactionReject)),
@@ -169,7 +170,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
 
     try {
       debugPrint("DEBUG: Starting reaction flow for scenario: ${scenario.id}");
-      
+
       final partnerUid = await PartnerLinkService.getPartnerUid();
       if (partnerUid == null) {
         debugPrint("DEBUG: Partner UID is NULL");
@@ -184,16 +185,6 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
         completed: status == 'completed',
       );
 
-      debugPrint("SCENARIO.ID = ${scenario.id}");
-      debugPrint("PARENT.ID = ${scenario.parentScenarioId}");
-
-      await CloudPartnerScenarioService.updateScenarioStatus(
-        scenario.id,
-        status,
-      );
-
-      debugPrint("STATUS UPDATED");
-
       await CloudPartnerScenarioService.updateScenarioStatus(scenario.id, status);
       debugPrint("DEBUG: Scenario status updated to $status");
 
@@ -205,37 +196,145 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
         cil: '',
         text: scenario.text,
         hranice: '',
-        emoce: [],
+        emoce: const [],
       );
 
-      await ScenarioRecordStorage.add(
-        ScenarioRecord(
-          id: scenario.id,
-          parentScenarioId: scenario.parentScenarioId,
-          scenar: localScenar,
-        ),
+      final record = ScenarioRecord(
+        id: scenario.id,
+        parentScenarioId: scenario.parentScenarioId,
+        scenar: localScenar,
+        reactions: [
+          Reaction(
+            scenarioId: scenario.parentScenarioId,
+            nazev: scenario.nazev,
+            stav: status,
+            vzkaz: message.trim(),
+            datum: DateTime.now(),
+          ),
+        ],
       );
 
-      await ScenarioRecordStorage.addReaction(
-        scenario.parentScenarioId,
-        Reaction(
-          scenarioId: scenario.parentScenarioId,
-          nazev: scenario.nazev,
-          stav: status,
-          vzkaz: message.trim(),
-          datum: DateTime.now(),
-        ),
-      );
+      await ScenarioRecordStorage.add(record);
       debugPrint("DEBUG: Local storage updated");
 
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.reactionSent)));
+
+      final saveToJournal = await showDialog<bool>(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(l10n.saveToRelationshipJournal),
+          content: Text(l10n.saveToRelationshipJournalQuestion),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(MaterialLocalizations.of(context).okButtonLabel),
+            ),
+          ],
+        ),
+      ) ?? false;
+
+      if (saveToJournal) {
+        final chapterController = TextEditingController();
+        final chapterTitle = await showDialog<String>(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text(l10n.chapterTitle),
+            content: TextField(
+              controller: chapterController,
+              decoration: InputDecoration(hintText: l10n.chapterTitle),
+              autofocus: true,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(context, chapterController.text.trim()),
+                child: Text(MaterialLocalizations.of(context).okButtonLabel),
+              ),
+            ],
+          ),
+        );
+
+        if (chapterTitle != null && chapterTitle.isNotEmpty) {
+          String introduction = '';
+          final writeIntroduction = await showDialog<bool>(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: Text(l10n.sharedMemory),
+              content: Text(l10n.saveToRelationshipJournalQuestion),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text(l10n.skip),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(l10n.write),
+                ),
+              ],
+            ),
+          ) ?? false;
+
+          if (writeIntroduction) {
+            final introController = TextEditingController();
+            final intro = await showDialog<String>(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: Text(l10n.ourThoughts),
+                content: SizedBox(
+                  width: 400,
+                  child: TextField(
+                    controller: introController,
+                    maxLines: 8,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: l10n.relationshipStory,
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+                  ),
+                  FilledButton(
+                    onPressed: () => Navigator.pop(context, introController.text.trim()),
+                    child: Text(MaterialLocalizations.of(context).okButtonLabel),
+                  ),
+                ],
+              ),
+            );
+            introduction = intro ?? '';
+          }
+
+          await RelationshipJournalStorage.createChapter(
+            record: record,
+            chapterTitle: chapterTitle,
+            introduction: introduction,
+          );
+        }
+      } // Konec if (saveToJournal)
+
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.reactionSent)),
+      );
+
       Navigator.pop(context);
-      
     } catch (e) {
       developer.log("ERROR: Handle reaction failed", error: e, name: 'CloudPartnerScenario');
+
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Chyba: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Chyba: $e")),
+      );
     }
   }
 }

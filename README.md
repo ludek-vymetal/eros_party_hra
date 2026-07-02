@@ -1,16 +1,59 @@
-# eros_party_hra
+# ❤️ EROS
 
-A new Flutter project.
+EROS je aplikace pro páry zaměřená na vytváření, sdílení a uchovávání společných zážitků.
 
-## Getting Started
+Nejde pouze o scénáře.
 
-This project is a starting point for a Flutter application.
+Hlavní myšlenkou projektu je vytvořit digitální kroniku vztahu, která bude pár provázet mnoho let.
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Technologie
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter
+- Firebase Authentication
+- Cloud Firestore
+- Shared Preferences (postupně nahrazováno Firestore)
+- Git
+
+---
+
+## Dokumentace
+
+Kompletní dokumentace projektu je ve složce:
+
+docs/
+
+Nejdůležitější dokumenty:
+
+- eros_vision.md
+- architecture.md
+- database.md
+- relationship_book.md
+- project_roadmap.md
+
+---
+
+## Platformy
+
+- ✅ Android
+- ✅ Windows
+
+Plánováno:
+
+- iOS
+- Web
+
+---
+
+## Vývoj
+
+Po každé větší změně:
+
+flutter analyze
+
+musí být bez chyb.
+
+Po dokončení větší funkce:
+
+Git Commit
