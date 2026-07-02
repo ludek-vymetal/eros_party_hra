@@ -47,3 +47,14 @@ MemoryMedia
 ↓
 
 Jen média
+2026-07-02
+
+Dnes jsme změnili způsob vývoje.
+
+Přestali jsme navrhovat obrazovky.
+
+Začali jsme navrhovat architekturu.
+
+Relationship Book bude samostatný modul.
+
+Vývoj bude probíhat po malých stabilních krocích.
