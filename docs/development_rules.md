@@ -1,99 +1,107 @@
-# Pravidla
+# Development Rules
+#  Pravidla vyvoje
+## Pravidlo 1 – Čistá analýza
 
 Po každé větší změně:
 
-flutter analyze
+- flutter analyze
 
-musí být bez chyb.
+Musí být bez chyb.
 
-Po každé dokončené funkci:
+---
 
-Git commit.
+## Pravidlo 2 – Git
 
-Nikdy neměnit datový model bez důvodu.
+Po každém dokončeném sprintu:
 
-Každou velkou funkci rozdělit na malé kroky.
+- git add .
+- git commit
+- git push
 
-Po každém kroku testovat.
+---
+
+## Pravidlo 3 – Malé kroky
+
+Každou velkou funkci rozdělit na malé sprinty.
+
+Po každém sprintu:
+
+- analyza
+- test
+- commit
+
+---
+
+## Pravidlo 4 – Datový model
+
+Nikdy neměnit datový model bez opravdu dobrého důvodu.
+
+---
+
+## Pravidlo 5 – Kompatibilita
 
 Nové funkce musí být kompatibilní se starými daty.
 
+---
+
+## Pravidlo 6 – Architektura
+
 Architekturu navrhovat minimálně na 10 let dopředu.
-# Pravidlo 11 – Projekt nesmí záviset na paměti
+
+---
+
+## Pravidlo 7 – Dokumentace
 
 Každé důležité rozhodnutí musí být zapsáno.
 
-Nikdy nespoléhat na to, že si ho bude pamatovat vývojář ani ChatGPT.
+Nikdy nespoléhat na paměť.
 
-Před začátkem nové větší funkce:
+---
 
-- zkontrolovat dokumentaci
-- aktualizovat dokumentaci
-- teprve potom psát kód
+## Pravidlo 8 – Nový chat
 
 Každý nový chat musí být schopen pokračovat pouze podle dokumentace projektu.
-MemoryScenario
 
-↓
+---
 
-Jen scénář
-MemoryParticipant
+## Pravidlo 9 – Nové funkce
 
-↓
+Nejdříve návrh.
 
-Jen partner
-MemoryMedia
+Potom implementace.
 
-↓
+---
 
-Jen média
-2026-07-02
+## Pravidlo 10 – Oddělení modulů
 
-Dnes jsme změnili způsob vývoje.
+Veškerý nový vývoj Relationship Book probíhá pouze ve složce:
 
-Přestali jsme navrhovat obrazovky.
+lib/relationship_book
 
-Začali jsme navrhovat architekturu.
+---
 
-Relationship Book bude samostatný modul.
+## Pravidlo 11 – Stabilita
 
-Vývoj bude probíhat po malých stabilních krocích.
-📍 Kde jsme
+Po každém dokončeném sprintu musí být projekt:
 
-Máme:
+- funkční
+- analyza čistá
+- připravený na Git commit
 
-✅ Dokumentace
+flutter analyze
 
-✅ Architektura
+Git
 
-✅ Roadmap
+malé sprinty
 
-✅ Firestore návrh
+architektura
 
-✅ RelationshipMemory
+kompatibilita
 
-✅ MemoryParticipant
+projekt nesmí záviset na paměti
 
-✅ MemoryScenario
+l10n
 
-✅ Repository
+dokumentace
 
-✅ CloudService
-
-✅ Firestore kolekc
-## 2026-07-02
-
-### Architektura Relationship Book
-
-- Dokončeny základní modely:
-  - MemoryParticipant
-  - MemoryScenario
-  - ChapterStatus
-
-- Bylo rozhodnuto, že:
-  - jedna kapitola = jeden Firestore dokument
-  - kapitola má vlastní životní cyklus nezávislý na scénáři
-  - nový vývoj probíhá pouze ve složce lib/relationship_book
-
-- Bylo rozhodnuto odložit implementaci RelationshipMemory,
-  dokud nebude definitivně schválen datový model Firestore.
+10 let dopředu

@@ -1,6 +1,8 @@
 import '../models/relationship_memory.dart';
-import 'cloud_relationship_book_service.dart';
+
 import 'relationship_book_repository.dart';
+import '../services/cloud_relationship_book_service.dart';
+
 class FirestoreRelationshipBookRepository
     implements RelationshipBookRepository {
 
@@ -8,7 +10,9 @@ class FirestoreRelationshipBookRepository
   Future<void> saveMemory(
     RelationshipMemory memory,
   ) async {
-    throw UnimplementedError();
+    await CloudRelationshipBookService.saveMemory(
+      memory.toJson(),
+    );
   }
 
   @override
