@@ -20,9 +20,19 @@ class CloudRelationshipBookService {
   ) async {
     return await _collection.doc(documentId).get();
   }
+  static Future<void> updateMemory(
+    String documentId,
+    Map<String, dynamic> data,
+  ) async {
+    await _collection.doc(documentId).update(data);
+  }
   static Future<QuerySnapshot<Map<String, dynamic>>>
       getAllMemories() async {
     return await _collection.get();
   }
-  
+  static Future<void> deleteMemory(
+    String documentId,
+  ) async {
+    await _collection.doc(documentId).delete();
+  }
 }

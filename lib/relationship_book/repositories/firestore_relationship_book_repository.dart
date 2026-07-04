@@ -21,17 +21,42 @@ class FirestoreRelationshipBookRepository
   }
 
   @override
-  Future<List<RelationshipMemory>> getAllMemories() {
-    throw UnimplementedError();
+  Future<List<RelationshipMemory>> getAllMemories() async {
+    final snapshot =
+        await CloudRelationshipBookService.getAllMemories();
+
+    return snapshot.docs
+        .map(
+          (doc) => RelationshipMemory.fromJson(
+            doc.data(),
+          ),
+        )
+        .toList();
   }
 
   @override
-  Future<RelationshipMemory?> getMemory(String id) {
-    throw UnimplementedError();
+  Future<RelationshipMemory?> getMemory(
+    String id,
+  ) async {
+    final document =
+        await CloudRelationshipBookService.getMemory(id);
+
+    final data = document.data();
+
+    if (data == null) {
+      return null;
+    }
+
+    return RelationshipMemory.fromJson(data);
   }
 
   @override
-  Future<void> updateMemory(RelationshipMemory memory) {
-    throw UnimplementedError();
+  Future<void> updateMemory(
+    RelationshipMemory memory,
+  ) async {
+    await CloudRelationshipBookService.updateMemory(
+      memory.id,
+      memory.toJson(),
+    );
   }
 }
