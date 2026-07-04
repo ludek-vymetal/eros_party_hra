@@ -619,7 +619,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get favorite => 'Oblíbené';
 
   @override
-  String get relationshipJournal => '❤️ Deník vztahu';
+  String get relationshipJournal => '❤️ Kniha vztahu';
 
   @override
   String get relationshipJournalEmpty =>

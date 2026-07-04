@@ -10,11 +10,11 @@ import 'statistics_screen.dart';
 import 'cloud_partner_inbox_screen.dart';
 import 'favorite_scenarios_screen.dart';
 import 'community_scenarios_screen.dart';
-import 'relationship_journal_screen.dart';
+
 import '../services/partner_link_service.dart';
 
 import 'cloud_partner_reactions_screen.dart';
-
+import '../relationship_book/screens/relationship_book_screen.dart';
 class PartnerMenuScreen
     extends StatefulWidget {
   const PartnerMenuScreen({
@@ -204,7 +204,7 @@ class _PartnerMenuScreenState
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const RelationshipJournalScreen(),
+                    builder: (_) => const RelationshipBookScreen(),
                   ),
                 ),
               ),
