@@ -1,17 +1,17 @@
-import '../models/relationship_memory.dart';
+import '../models/relationship_chapter.dart';
 
 /// Repository pro Relationship Book.
 ///
 /// Obrazovky nikdy nekomunikují přímo s Firestore.
 /// Veškerá práce s daty probíhá přes tuto vrstvu.
 abstract class RelationshipBookRepository {
-  Future<List<RelationshipMemory>> getAllMemories();
+  Future<List<RelationshipChapter>> getAllMemories();
 
-  Future<RelationshipMemory?> getMemory(String id);
+  Future<RelationshipChapter?> getMemory(String id);
 
-  Future<void> saveMemory(RelationshipMemory memory);
+  Future<void> saveMemory(RelationshipChapter memory);
 
-  Future<void> updateMemory(RelationshipMemory memory);
+  Future<void> updateMemory(RelationshipChapter memory);
 
   Future<void> deleteMemory(String id);
 }

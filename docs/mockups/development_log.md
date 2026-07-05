@@ -36,7 +36,7 @@
 - Relationship Book je samostatný modul.
 - Repository je odděleno od Service.
 - Jedna kapitola představuje jeden Firestore dokument.
-RelationshipMemory
+RelationshipChapter
 
 MemoryParticipant
 
@@ -56,9 +56,9 @@ Firestore kolekce
 
 ### Dokončeno
 
-- Dokončen model `RelationshipMemory`.
+- Dokončen model `RelationshipChapter`.
 - Přidán `ChapterStatus` do datového modelu.
-- Přidána serializace `toJson()` pro `RelationshipMemory`.
+- Přidána serializace `toJson()` pro `RelationshipChapter`.
 - Ověřena serializace modelů:
   - `MemoryParticipant`
   - `MemoryScenario`
@@ -83,7 +83,7 @@ Hotovo:
 - Implementace `getAllMemories()`
 - Implementace `updateMemory()`
 - Implementace `deleteMemory()`
-- Přidání `fromJson()` do `RelationshipMemory`
+- Přidání `fromJson()` do `RelationshipChapter`
 - První načtení dat z Firestore
 # Historie vývoje
 
@@ -118,7 +118,7 @@ Dokončit doménové modely.
 - MemoryParticipant
 - MemoryScenario
 - ChapterStatus
-- RelationshipMemory
+- RelationshipChapter
 - toJson()
 
 ### Test
@@ -170,10 +170,10 @@ Rozšířit CloudRelationshipBookService o čtecí operace.
 ### Git
 
 (doplníme po commitu)
-factory RelationshipMemory.fromJson(
+factory RelationshipChapter.fromJson(
   Map<String, dynamic> json,
 ) {
-  return RelationshipMemory(
+  return RelationshipChapter(
     id: json['id'] as String,
     participants: (json['participants'] as List<dynamic>)
         .map(
@@ -214,11 +214,11 @@ Datum: 2026-07-04
 
 ### Cíl
 
-Dokončit serializaci RelationshipMemory a připravit Relationship Book pro Firestore.
+Dokončit serializaci RelationshipChapter a připravit Relationship Book pro Firestore.
 
 ### Dokončeno
 
-- přidán ChapterStatus do RelationshipMemory
+- přidán ChapterStatus do RelationshipChapter
 - implementováno toJson()
 - implementováno fromJson()
 - dokončen MemoryParticipant
@@ -296,4 +296,66 @@ Integrovat Relationship Book do aplikace a ověřit kompletní komunikaci s Fire
 
 ### Git
 
-(doplnit hash po commitu)
+76d449c "RB-008 Integrate Relationship Book into application"
+## Architektonické rozhodnutí
+
+Během návrhu Relationship Book byla změněna filozofie vytváření kapitol.
+
+Původní návrh:
+
+- uživatel vytváří kapitolu ručně.
+
+Nový návrh:
+
+- kapitola vzniká automaticky jako důsledek společné aktivity partnerů.
+
+Díky tomu Kniha vztahu představuje skutečnou kroniku vztahu místo ručně vytvářených poznámek.
+## Architektonická změna
+
+Byla změněna filozofie modulu Relationship Book.
+
+Původní návrh:
+
+- ruční vytváření kapitol.
+
+Nový návrh:
+
+- automatické vytváření kapitol na základě společných událostí partnerů.
+
+Vývoj RB-009 byl upraven podle tohoto rozhodnutí.
+## Základní pravidlo
+
+Kapitola nikdy není uzavřená.
+
+Partner může kdykoliv:
+
+- znovu splnit scénář,
+- přidat nové fotografie,
+- přidat nové video,
+- přidat další poznámku,
+- přidat nové pocity,
+- přidat vzpomínku po letech.
+
+Každá kapitola se během života vztahu přirozeně rozrůstá.
+## RB-010 – Doménový refaktoring Relationship Book
+
+### Dokončeno
+
+- RelationshipMemory → RelationshipChapter
+- MemoryParticipant → RelationshipParticipant
+- MemoryScenario → RelationshipScenario
+- Přidán nový model RelationshipMoment
+- Aktualizovány importy a serializace
+- flutter analyze bez chyb
+
+### Výsledek
+
+Relationship Book přešel na novou doménovou architekturu založenou na:
+
+RelationshipBook
+└── RelationshipChapter
+    ├── RelationshipScenario
+    ├── RelationshipParticipant
+    └── RelationshipMoment
+
+Tím byly položeny základy pro dlouhodobě rozšiřitelnou digitální kroniku vztahu.

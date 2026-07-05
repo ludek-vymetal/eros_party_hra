@@ -2,6 +2,22 @@
 
 ## 1. Vize projektu
 
+# Filosofie vývoje
+
+Vývoj probíhá po malých stabilních sprintech.
+
+Každý sprint je ukončen pouze pokud:
+
+- ✅ funkce dokončena
+- ✅ flutter analyze
+- ✅ otestováno
+- ✅ Git commit
+- ✅ Git push
+- ✅ development_log.md
+- ✅ next_session.md
+
+Teprve potom začíná další sprint.
+
 EROS není jen hra.
 
 EROS není jen aplikace pro páry.
@@ -107,20 +123,16 @@ Idea.
 - AI doporučení
 ## Relationship Book
 
-- ✅ RB-001 Architektura
-- ✅ RB-002 Doménové modely
-- 🔄 RB-003 Firestore CRUD
-- ⏳ RB-004 Repository Load
-- ⏳ RB-005 Relationship Book Screen
-        ✅ Kód dokončen
-        ✅ flutter analyze
-        ✅ Otestováno
-        ✅ development_log.md
-        ✅ Git commit
-        ✅ Git push
-        ✅ Commit: 5e98cc7
-    🎯 RB-006	Repository
-    ⏳ RB-007	Relationship Book Screen
-    ⏳ RB-008	Přidání nové kapitoly
-    ⏳ RB-009	Editace kapitoly
-    ⏳ RB-010	Synchronizace partnerů
+✅ RB-001 Architektura
+✅ RB-002 Doménové modely
+✅ RB-003 Firestore Service
+✅ RB-004 Firestore READ
+✅ RB-005 Serializace
+✅ RB-006 Repository
+✅ RB-007 Relationship Book Screen
+✅ RB-008 Integrace do aplikace
+    RB-009 Automatické vytvoření první kapitoly
+⏳ RB-010 Detail kapitoly
+⏳ RB-011 Život kapitoly
+⏳ RB-012 Schvalovaná editace
+⏳ RB-013 Ochrana soukromí

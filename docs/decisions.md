@@ -91,7 +91,7 @@ EROS pomáhá vytvářet a uchovávat společné vzpomínky.
 Nové funkce nesmí odvádět pozornost od tohoto cíle.
 ## 2026-07-03
 
-### RelationshipMemory → RelationshipChapter
+### RelationshipChapter → RelationshipChapter
 
 Bylo rozhodnuto, že dlouhodobě bude hlavní entita Relationship Book reprezentována jako RelationshipChapter.
 
@@ -109,6 +109,45 @@ Uživatelský název modulu "Relationship Book" bude v české lokalizaci:
 Nejde o klasický deník.
 
 Modul představuje společnou knihu vztahu, která uchovává kapitoly, vzpomínky a významné události obou partnerů.
+
+### Stav
+
+Rozhodnuto.
+## 2026-07-05
+
+### Rozhodnutí
+
+Kapitoly Knihy vztahu nevytváří uživatel ručně.
+
+Vznikají automaticky jako výsledek společné interakce partnerů.
+
+### Důvod
+
+Kniha vztahu není poznámkový blok.
+
+Představuje skutečné společné vzpomínky.
+
+Každá kapitola vzniká přirozeně během života vztahu.
+
+Příklady:
+
+- odeslaný scénář
+- reakce partnera
+- splněný scénář
+- fotografie
+- video
+- společné pocity
+
+### Stav
+
+Rozhodnuto.
+## 2026-07-05
+
+### Rozhodnutí
+
+Kniha vztahu nebude obsahovat tlačítko "Nová kapitola".
+
+Kapitoly vznikají automaticky jako výsledek společné interakce partnerů.
 
 ### Stav
 

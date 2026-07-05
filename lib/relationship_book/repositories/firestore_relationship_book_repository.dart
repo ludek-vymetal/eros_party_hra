@@ -1,4 +1,4 @@
-import '../models/relationship_memory.dart';
+import '../models/relationship_chapter.dart';
 
 import 'relationship_book_repository.dart';
 import '../services/cloud_relationship_book_service.dart';
@@ -8,7 +8,7 @@ class FirestoreRelationshipBookRepository
 
   @override
   Future<void> saveMemory(
-    RelationshipMemory memory,
+    RelationshipChapter memory,
   ) async {
     await CloudRelationshipBookService.saveMemory(
       memory.toJson(),
@@ -21,13 +21,13 @@ class FirestoreRelationshipBookRepository
   }
 
   @override
-  Future<List<RelationshipMemory>> getAllMemories() async {
+  Future<List<RelationshipChapter>> getAllMemories() async {
     final snapshot =
         await CloudRelationshipBookService.getAllMemories();
 
     return snapshot.docs
         .map(
-          (doc) => RelationshipMemory.fromJson(
+          (doc) => RelationshipChapter.fromJson(
             doc.data(),
           ),
         )
@@ -35,7 +35,7 @@ class FirestoreRelationshipBookRepository
   }
 
   @override
-  Future<RelationshipMemory?> getMemory(
+  Future<RelationshipChapter?> getMemory(
     String id,
   ) async {
     final document =
@@ -47,12 +47,12 @@ class FirestoreRelationshipBookRepository
       return null;
     }
 
-    return RelationshipMemory.fromJson(data);
+    return RelationshipChapter.fromJson(data);
   }
 
   @override
   Future<void> updateMemory(
-    RelationshipMemory memory,
+    RelationshipChapter memory,
   ) async {
     await CloudRelationshipBookService.updateMemory(
       memory.id,

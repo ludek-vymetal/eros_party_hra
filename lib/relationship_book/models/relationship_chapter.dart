@@ -1,6 +1,5 @@
-import 'memory_participant.dart';
-
-import 'memory_scenario.dart';
+import 'relationship_participant.dart';
+import 'relationship_scenario.dart';
 import 'chapter_status.dart';
 
 
@@ -8,12 +7,12 @@ import 'chapter_status.dart';
 ///
 /// Obsahuje scénář, účastníky a společné informace
 /// o jedné vzpomínce.
-class RelationshipMemory {
+class RelationshipChapter {
   final String id;
 
-  final List<MemoryParticipant> participants;
+  final List<RelationshipParticipant> participants;
 
-  final MemoryScenario scenario;
+  final RelationshipScenario scenario;
 
   final String chapterTitle;
 
@@ -27,7 +26,7 @@ class RelationshipMemory {
 
   final ChapterStatus status;
 
-  const RelationshipMemory({
+  const RelationshipChapter({
     required this.id,
     required this.participants,
     required this.scenario,
@@ -54,19 +53,19 @@ class RelationshipMemory {
       'updatedAt': updatedAt.toIso8601String(),
     };
   }
-  factory RelationshipMemory.fromJson(
+  factory RelationshipChapter.fromJson(
     Map<String, dynamic> json,
   ) {
-    return RelationshipMemory(
+    return RelationshipChapter(
       id: json['id'] as String,
       participants: (json['participants'] as List<dynamic>)
           .map(
-            (participant) => MemoryParticipant.fromJson(
+            (participant) => RelationshipParticipant.fromJson(
               participant as Map<String, dynamic>,
             ),
           )
           .toList(),
-      scenario: MemoryScenario.fromJson(
+      scenario: RelationshipScenario.fromJson(
         json['scenario'] as Map<String, dynamic>,
       ),
       chapterTitle: json['chapterTitle'] as String,

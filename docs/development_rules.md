@@ -92,6 +92,8 @@ flutter analyze
 
 Git
 
+ulozit i s cislem a nazvem 
+
 malé sprinty
 
 architektura
@@ -105,3 +107,16 @@ l10n
 dokumentace
 
 10 let dopředu
+
+RB-006 – Repository Implementation
+
+Dokončit:
+
+getMemory()
+getAllMemories()
+updateMemory()
+deleteMemory()
+
+v FirestoreRelationshipBookRepository.
+
+Na konci sprintu bude Repository plně funkční.

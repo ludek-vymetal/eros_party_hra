@@ -1,5 +1,5 @@
 /// Informace o scénáři, který vytvořil tuto vzpomínku.
-class MemoryScenario {
+class RelationshipScenario {
   final String scenarioId;
 
   final String parentScenarioId;
@@ -12,7 +12,7 @@ class MemoryScenario {
 
   final DateTime createdAt;
 
-  const MemoryScenario({
+  const RelationshipScenario({
     required this.scenarioId,
     required this.parentScenarioId,
     required this.title,
@@ -32,10 +32,10 @@ class MemoryScenario {
     };
   }
 
-  factory MemoryScenario.fromJson(
+  factory RelationshipScenario.fromJson(
     Map<String, dynamic> json,
   ) {
-    return MemoryScenario(
+    return RelationshipScenario(
       scenarioId: json['scenarioId'],
       parentScenarioId: json['parentScenarioId'],
       title: json['title'],

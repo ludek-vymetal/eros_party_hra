@@ -5,7 +5,7 @@
 ///
 /// Díky tomu zůstává historie zachována,
 /// i když si uživatel později změní profil.
-class MemoryParticipant {
+class RelationshipParticipant {
   final String participantUid;
   final String nickname;
   final String feeling;
@@ -13,7 +13,7 @@ class MemoryParticipant {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  const MemoryParticipant({
+  const RelationshipParticipant({
     required this.participantUid,
     required this.nickname,
     required this.feeling,
@@ -33,10 +33,10 @@ class MemoryParticipant {
     };
   }
 
-  factory MemoryParticipant.fromJson(
+  factory RelationshipParticipant.fromJson(
     Map<String, dynamic> json,
   ) {
-    return MemoryParticipant(
+    return RelationshipParticipant(
       participantUid: json['participantUid'],
       nickname: json['nickname'],
       feeling: json['feeling'],
