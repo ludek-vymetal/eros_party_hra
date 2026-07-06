@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/relationship_chapter.dart';
+
 class CloudRelationshipBookService {
   static final FirebaseFirestore _firestore =
       FirebaseFirestore.instance;
@@ -8,29 +10,36 @@ class CloudRelationshipBookService {
       get _collection =>
           _firestore.collection('relationship_book');
 
-  static Future<void> saveMemory(
-    Map<String, dynamic> data,
+  static Future<void> createChapter(
+    RelationshipChapter chapter,
   ) async {
-    await _collection.add(data);
+    await _collection.add(
+      chapter.toJson(),
+    );
   }
 
   static Future<DocumentSnapshot<Map<String, dynamic>>>
-      getMemory(
+      getChapter(
     String documentId,
   ) async {
     return await _collection.doc(documentId).get();
   }
-  static Future<void> updateMemory(
+
+  static Future<void> updateChapter(
     String documentId,
-    Map<String, dynamic> data,
+    RelationshipChapter chapter,
   ) async {
-    await _collection.doc(documentId).update(data);
+    await _collection.doc(documentId).update(
+      chapter.toJson(),
+    );
   }
+
   static Future<QuerySnapshot<Map<String, dynamic>>>
-      getAllMemories() async {
+      getAllChapters() async {
     return await _collection.get();
   }
-  static Future<void> deleteMemory(
+
+  static Future<void> deleteChapter(
     String documentId,
   ) async {
     await _collection.doc(documentId).delete();

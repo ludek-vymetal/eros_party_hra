@@ -359,3 +359,5 @@ RelationshipBook
     └── RelationshipMoment
 
 Tím byly položeny základy pro dlouhodobě rozšiřitelnou digitální kroniku vztahu.
+
+git 9e00bb7  "RB-010 Domain refactor: RelationshipChapter architecture"

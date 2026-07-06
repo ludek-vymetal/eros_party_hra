@@ -1,29 +1,31 @@
 import '../models/relationship_chapter.dart';
-
-import 'relationship_book_repository.dart';
 import '../services/cloud_relationship_book_service.dart';
+import 'relationship_book_repository.dart';
 
 class FirestoreRelationshipBookRepository
     implements RelationshipBookRepository {
-
   @override
   Future<void> saveMemory(
-    RelationshipChapter memory,
+    RelationshipChapter chapter,
   ) async {
-    await CloudRelationshipBookService.saveMemory(
-      memory.toJson(),
+    await CloudRelationshipBookService.createChapter(
+      chapter,
     );
   }
 
   @override
-  Future<void> deleteMemory(String id) {
-    throw UnimplementedError();
+  Future<void> deleteMemory(
+    String id,
+  ) async {
+    await CloudRelationshipBookService.deleteChapter(
+      id,
+    );
   }
 
   @override
   Future<List<RelationshipChapter>> getAllMemories() async {
     final snapshot =
-        await CloudRelationshipBookService.getAllMemories();
+        await CloudRelationshipBookService.getAllChapters();
 
     return snapshot.docs
         .map(
@@ -39,7 +41,9 @@ class FirestoreRelationshipBookRepository
     String id,
   ) async {
     final document =
-        await CloudRelationshipBookService.getMemory(id);
+        await CloudRelationshipBookService.getChapter(
+      id,
+    );
 
     final data = document.data();
 
@@ -52,11 +56,11 @@ class FirestoreRelationshipBookRepository
 
   @override
   Future<void> updateMemory(
-    RelationshipChapter memory,
+    RelationshipChapter chapter,
   ) async {
-    await CloudRelationshipBookService.updateMemory(
-      memory.id,
-      memory.toJson(),
+    await CloudRelationshipBookService.updateChapter(
+      chapter.id,
+      chapter,
     );
   }
 }
