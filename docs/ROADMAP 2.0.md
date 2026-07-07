@@ -131,8 +131,11 @@ Idea.
 ✅ RB-006 Repository
 ✅ RB-007 Relationship Book Screen
 ✅ RB-008 Integrace do aplikace
-    RB-009 Automatické vytvoření první kapitoly
-⏳ RB-010 Detail kapitoly
-⏳ RB-011 Život kapitoly
-⏳ RB-012 Schvalovaná editace
-⏳ RB-013 Ochrana soukromí
+✅ RB-009 Automatické vytvoření první kapitoly
+✅ RB-010 Detail kapitoly
+✅ RB-011 Engine Architecture
+✅ RB-012 Moment System
+✅ RB-013 Stabilizace architektury
+✅ RB-014 – Chapter Creation Engine
+✅ RB-015 – Relationship Book Domain Architecture
+❤️ RB-016 – Living Chapter

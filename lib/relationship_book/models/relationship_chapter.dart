@@ -1,7 +1,7 @@
 import 'relationship_participant.dart';
 import 'relationship_scenario.dart';
 import 'chapter_status.dart';
-
+import 'relationship_event.dart';
 
 /// Jedna společná kapitola Relationship Book.
 ///
@@ -26,6 +26,8 @@ class RelationshipChapter {
 
   final ChapterStatus status;
 
+  final ChapterStatus status;
+
   const RelationshipChapter({
     required this.id,
     required this.participants,
@@ -36,6 +38,7 @@ class RelationshipChapter {
     required this.createdAt,
     required this.updatedAt,
     required this.status,
+    required this.events,
   });
 
   Map<String, dynamic> toJson() {
@@ -44,6 +47,9 @@ class RelationshipChapter {
       'participants': participants
           .map((participant) => participant.toJson())
           .toList(),
+      'events': events
+          .map((event) => event.toJson())
+          .toList(),    
       'scenario': scenario.toJson(),
       'chapterTitle': chapterTitle,
       'introduction': introduction,
@@ -80,6 +86,13 @@ class RelationshipChapter {
       status: ChapterStatus.values.firstWhere(
         (value) => value.name == json['status'],
       ),
+      events: (json['events'] as List<dynamic>)
+          .map(
+            (event) => RelationshipEvent.fromJson(
+              event as Map<String, dynamic>,
+            ),
+          )
+          .toList(),
     );
   }
   
