@@ -1,3 +1,6 @@
+// TODO(RB-013):
+// Tento storage bude odstraněn po kompletní migraci
+// Relationship Book na Firestore Repository.
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -88,11 +91,12 @@ class RelationshipJournalStorage {
       chapterTitle: chapterTitle,
       introduction: introduction,
       imagePath: imagePath,
+      
     );
 
     await addChapter(chapter);
-
   }
+  
   static Future<void> updateChapter(
     RelationshipChapter chapter,
   ) async {
@@ -110,4 +114,4 @@ class RelationshipJournalStorage {
 
     await saveAll(chapters);
   }  
-}
+  }

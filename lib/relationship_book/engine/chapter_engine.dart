@@ -7,4 +7,12 @@ class ChapterEngine {
   const ChapterEngine({
     required this.repository,
   });
+
+  Future<void> createChapter(
+    RelationshipChapter chapter,
+  ) async {
+    await repository.saveMemory(
+      chapter,
+    );
+  }
 }

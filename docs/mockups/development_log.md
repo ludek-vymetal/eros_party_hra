@@ -347,6 +347,7 @@ Každá kapitola se během života vztahu přirozeně rozrůstá.
 - Přidán nový model RelationshipMoment
 - Aktualizovány importy a serializace
 - flutter analyze bez chyb
+git 9e00bb7  "RB-010 Domain refactor: RelationshipChapter architecture"
 
 ### Výsledek
 
@@ -360,4 +361,5 @@ RelationshipBook
 
 Tím byly položeny základy pro dlouhodobě rozšiřitelnou digitální kroniku vztahu.
 
-git 9e00bb7  "RB-010 Domain refactor: RelationshipChapter architecture"
+ 
+git  f0eb35c commit -m "RB-011 Relationship Book engine architecture"
