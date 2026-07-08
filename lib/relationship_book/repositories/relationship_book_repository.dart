@@ -6,6 +6,10 @@ import '../models/relationship_chapter.dart';
 /// Veškerá práce s daty probíhá přes tuto vrstvu.
 abstract class RelationshipBookRepository {
   Future<List<RelationshipChapter>> getAllMemories();
+  
+  Future<RelationshipChapter?> findByScenarioId(
+    String scenarioId,
+  );
 
   Future<RelationshipChapter?> getMemory(String id);
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../repositories/firestore_relationship_book_repository.dart';
+
 import '../models/relationship_chapter.dart';
+import '../repositories/firestore_relationship_book_repository.dart';
+import 'relationship_chapter_screen.dart';
 
 class RelationshipBookScreen extends StatefulWidget {
   const RelationshipBookScreen({
@@ -36,7 +38,7 @@ class _RelationshipBookScreenState
       body: FutureBuilder<List<RelationshipChapter>>(
         future: memories,
         builder: (context, snapshot) {
-if (snapshot.connectionState ==
+          if (snapshot.connectionState ==
               ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -72,7 +74,24 @@ if (snapshot.connectionState ==
                 ),
                 subtitle: Text(
                   chapter.introduction,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
+                trailing: const Icon(
+                  Icons.chevron_right,
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          RelationshipChapterScreen(
+                        chapter: chapter,
+                        chapterNumber: index + 1,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
@@ -80,4 +99,4 @@ if (snapshot.connectionState ==
       ),
     );
   }
-}   
+}

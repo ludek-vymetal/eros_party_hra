@@ -26,8 +26,8 @@ class RelationshipChapter {
 
   final ChapterStatus status;
 
-  final ChapterStatus status;
-
+  final List<RelationshipEvent> events;
+ 
   const RelationshipChapter({
     required this.id,
     required this.participants,

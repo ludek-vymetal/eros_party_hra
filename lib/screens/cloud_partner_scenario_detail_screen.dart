@@ -13,13 +13,21 @@ import '../services/cloud_partner_scenario_service.dart';
 import '../services/partner_link_service.dart';
 import '../services/scenario_record_storage.dart';
 
+import '../relationship_book/engine/chapter_engine.dart';
+import '../relationship_book/repositories/firestore_relationship_book_repository.dart';
+import '../relationship_book/models/relationship_scenario.dart';
+
 class CloudPartnerScenarioDetailScreen extends StatelessWidget {
   final CloudPartnerScenario scenario;
 
-  const CloudPartnerScenarioDetailScreen({
+  CloudPartnerScenarioDetailScreen({
     super.key,
     required this.scenario,
   });
+  final ChapterEngine _chapterEngine =
+      ChapterEngine(
+        repository: FirestoreRelationshipBookRepository(),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -216,6 +224,17 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
 
       await ScenarioRecordStorage.add(record);
       debugPrint("DEBUG: Local storage updated");
+
+      await _chapterEngine.createChapterFromScenario(
+        scenario: RelationshipScenario(
+          scenarioId: scenario.id,
+          parentScenarioId: scenario.parentScenarioId,
+          title: scenario.nazev,
+          description: scenario.text,
+          status: status,
+          createdAt: DateTime.now(),
+        ),
+      );
 
       if (!context.mounted) return;
 

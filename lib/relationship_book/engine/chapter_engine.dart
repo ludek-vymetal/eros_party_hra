@@ -4,6 +4,7 @@ import '../models/chapter_status.dart';
 import '../models/relationship_chapter.dart';
 import '../models/relationship_scenario.dart';
 import '../repositories/relationship_book_repository.dart';
+import '../models/relationship_event.dart';
 
 class ChapterEngine {
   final RelationshipBookRepository repository;
@@ -29,6 +30,15 @@ class ChapterEngine {
       createdAt: now,
       updatedAt: now,
       status: ChapterStatus.draft,
+      events: [
+        RelationshipEvent(
+          id: const Uuid().v4(),
+          type: RelationshipEventType.chapterCreated,
+          createdAt: now,
+          authorUid: '',
+          description: 'Kapitola byla vytvořena.',
+        ),
+      ],
     );
 
     await repository.saveMemory(chapter);
@@ -49,4 +59,61 @@ class ChapterEngine {
   Future<List<RelationshipChapter>> getAllChapters() {
     return repository.getAllMemories();
   }
-}
+  
+  Future<RelationshipChapter?> findChapterByScenario(
+    String scenarioId,
+  ) {
+    return repository.findByScenarioId(
+      scenarioId,
+    );
+  }
+
+    Future<void> createChapterFromScenario({
+      required RelationshipScenario scenario,
+    }) async {
+      final existing = await repository.findByScenarioId(
+        scenario.scenarioId,
+      );
+
+      if (existing != null) {
+        return;
+      }
+
+      await createChapter(
+        scenario: scenario,
+        chapterTitle: scenario.title,
+        introduction: '',
+      );
+    }
+
+    Future<void> addEvent({
+      required String scenarioId,
+      required RelationshipEvent event,
+    }) async {
+      final chapter = await repository.findByScenarioId(
+        scenarioId,
+      );
+
+      if (chapter == null) {
+        return;
+      }
+
+      final updated = RelationshipChapter(
+        id: chapter.id,
+        participants: chapter.participants,
+        scenario: chapter.scenario,
+        chapterTitle: chapter.chapterTitle,
+        introduction: chapter.introduction,
+        favorite: chapter.favorite,
+        createdAt: chapter.createdAt,
+        updatedAt: DateTime.now(),
+        status: chapter.status,
+        events: [
+          ...chapter.events,
+          event,
+        ],
+      );
+
+      await repository.updateMemory(updated);
+    }
+  }

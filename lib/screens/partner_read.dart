@@ -14,6 +14,8 @@ import '../services/crypto_service.dart';
 import '../services/scenario_record_storage.dart';
 
 import 'partner_reaction_detail.dart';
+import '../relationship_book/engine/chapter_engine.dart';
+import '../relationship_book/repositories/firestore_relationship_book_repository.dart';
 
 class PartnerReadScreen
     extends StatefulWidget {
@@ -38,8 +40,16 @@ class _PartnerReadScreenState
       _vzkazCtrl =
       TextEditingController();
 
+
+
   final ImagePicker _picker =
       ImagePicker();
+
+  final ChapterEngine _chapterEngine =
+      ChapterEngine(
+        repository:
+            FirestoreRelationshipBookRepository(),
+      );    
 
   File? _photo;
 
@@ -97,7 +107,16 @@ class _PartnerReadScreenState
               .getById(
         decoded.id,
       );
+      final chapter = await _chapterEngine.findChapterByScenario(
+        record!.id,
+      );
 
+      debugPrint(
+        'Relationship Chapter: ${chapter?.chapterTitle}',
+      );
+      // TODO(RB-017):
+      // Pokud partner scénář přijme,
+      // automaticky vytvořit RelationshipChapter.
       setState(() {
         scenar = decoded;
 
@@ -172,6 +191,15 @@ class _PartnerReadScreenState
       record!.id,
       reaction,
     );
+    // ======================================================
+    // RB-018
+    // Synchronizace s Relationship Book
+    // ======================================================
+
+    // TODO:
+    // 1. Najít kapitolu podle scenarioId.
+    // 2. Pokud neexistuje, vytvořit ji.
+    // 3. Pokud existuje, přidat RelationshipEvent.
 
     if (!mounted) return;
 

@@ -63,4 +63,18 @@ class FirestoreRelationshipBookRepository
       chapter,
     );
   }
+  @override
+  Future<RelationshipChapter?> findByScenarioId(
+    String scenarioId,
+  ) async {
+    final chapters = await getAllMemories();
+
+    try {
+      return chapters.firstWhere(
+        (chapter) => chapter.scenario.scenarioId == scenarioId,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
 }
