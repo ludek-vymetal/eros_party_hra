@@ -379,3 +379,79 @@ git  f0eb35c commit -m "RB-011 Relationship Book engine architecture"
 ✅ Build
 ✅ Připraveno na další vývoj
 git ee1d149  "RB-013 Stabilize Relationship Book architecture"
+# RB-015 – Relationship Book Domain Architecture
+
+## Dokončeno
+
+- vytvořen ChapterEngine
+- vytvořen RelationshipEvent
+- dokončen RelationshipChapter
+- dokončen ChapterStatus
+- připravena doménová architektura
+- opraveny konflikty mezi starým a novým modulem
+- obnovena čistá flutter analyze
+
+## Stav
+
+✅ Analyze
+✅ Build
+✅ Git  42ee249  "RB-015 Relationship Book domain architecture"
+📖 RB-016 – Relationship Book Event Engine
+
+Datum: 08.07.2026
+
+Cíl
+
+Rozšířit Relationship Book o plnohodnotnou správu událostí (Relationship Events) a připravit základ pro automatickou časovou osu společných vzpomínek.
+
+Dokončeno
+Architektura
+dokončen ChapterEngine
+přidána metoda findChapterByScenario()
+přidána metoda createChapterFromScenario()
+přidána metoda addEvent()
+připravena aktualizace kapitoly přes Repository
+Modely
+dokončen RelationshipEvent
+rozšířen RelationshipEventType
+připravena kolekce events v RelationshipChapter
+UI
+vytvořen nový RelationshipBookScreen
+vytvořen nový RelationshipChapterScreen
+vytvořen widget EventTile
+připravena vizualizace timeline událostí
+oddělen nový Relationship Book od původního modulu
+Refaktoring
+sjednocena struktura nového modulu relationship_book
+odstraněna závislost na starém RelationshipChapterScreen
+připravena migrace ze starého Relationship Journal
+Stav projektu
+Relationship Book
+
+✔ Repository
+✔ Engine
+✔ Models
+✔ Event System
+✔ Timeline UI
+✔ Chapter Screen
+✔ Book Screen
+Připraveno pro RB-017
+
+Následující sprint bude zaměřen na automatické zapisování skutečných událostí:
+
+přijetí scénáře
+odmítnutí scénáře
+splnění scénáře
+přidání fotografie
+přidání hlasové zprávy
+přidání poznámky
+
+Tyto akce se budou automaticky zapisovat do časové osy Relationship Book.
+
+Stav
+✅ flutter analyze
+✅ Build
+✅ Git
+✅ Připraveno na další vývojgit add .
+
+git b0fd9a6 "RB-016 Relationship Book timeline foundation"

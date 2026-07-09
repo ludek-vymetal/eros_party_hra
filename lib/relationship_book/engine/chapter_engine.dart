@@ -116,4 +116,32 @@ class ChapterEngine {
 
       await repository.updateMemory(updated);
     }
+    Future<void> updateIntroduction({
+      required String scenarioId,
+      required String chapterTitle,
+      required String introduction,
+    }) async {
+      final chapter = await repository.findByScenarioId(
+        scenarioId,
+      );
+
+      if (chapter == null) {
+        return;
+      }
+
+      final updated = RelationshipChapter(
+        id: chapter.id,
+        participants: chapter.participants,
+        scenario: chapter.scenario,
+        chapterTitle: chapterTitle,
+        introduction: introduction,
+        favorite: chapter.favorite,
+        createdAt: chapter.createdAt,
+        updatedAt: DateTime.now(),
+        status: chapter.status,
+        events: chapter.events,
+      );
+
+      await repository.updateMemory(updated);
+    }  
   }

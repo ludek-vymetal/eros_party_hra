@@ -138,4 +138,5 @@ Idea.
 ✅ RB-013 Stabilizace architektury
 ✅ RB-014 – Chapter Creation Engine
 ✅ RB-015 – Relationship Book Domain Architecture
-❤️ RB-016 – Living Chapter
+✅ RB-016 – Automatic Chapter History
+    RB-017 – První živá timeline

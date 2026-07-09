@@ -2,7 +2,6 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 
-import '../services/relationship_journal_storage.dart';
 import '../../l10n/app_localizations.dart';
 import '../models/cloud_partner_scenario.dart';
 import '../models/reaction.dart';
@@ -12,10 +11,12 @@ import '../services/cloud_partner_reaction_service.dart';
 import '../services/cloud_partner_scenario_service.dart';
 import '../services/partner_link_service.dart';
 import '../services/scenario_record_storage.dart';
+import '../relationship_book/models/relationship_event.dart';
 
 import '../relationship_book/engine/chapter_engine.dart';
 import '../relationship_book/repositories/firestore_relationship_book_repository.dart';
 import '../relationship_book/models/relationship_scenario.dart';
+import 'package:uuid/uuid.dart';
 
 class CloudPartnerScenarioDetailScreen extends StatelessWidget {
   final CloudPartnerScenario scenario;
@@ -333,12 +334,22 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
             introduction = intro ?? '';
           }
 
-          await RelationshipJournalStorage.createChapter(
-            record: record,
+          await _chapterEngine.updateIntroduction(
+            scenarioId: scenario.id,
             chapterTitle: chapterTitle,
             introduction: introduction,
           );
         }
+          await _chapterEngine.addEvent(
+            scenarioId: scenario.id,
+            event: RelationshipEvent(
+              id: const Uuid().v4(),
+              type: RelationshipEventType.noteAdded,
+              createdAt: DateTime.now(),
+              authorUid: '',
+              description: 'Autor přidal úvod kapitoly.',
+            ),
+          );
       } // Konec if (saveToJournal)
 
       if (!context.mounted) return;
