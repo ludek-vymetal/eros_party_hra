@@ -32,6 +32,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
   );
 
   RelationshipReflection? _myReflection;
+  RelationshipReflection? _partnerReflection;
 
   @override
   void initState() {
@@ -44,12 +45,16 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
       widget.chapter.id,
     );
 
-    if (reflections.isEmpty) {
-      return;
-    }
-
     setState(() {
-      _myReflection = reflections.first;
+      _myReflection = reflections.cast<RelationshipReflection?>().firstWhere(
+            (item) => item?.authorId == 'me',
+            orElse: () => null,
+          );
+
+      _partnerReflection = reflections.cast<RelationshipReflection?>().firstWhere(
+            (item) => item?.authorId == 'partner',
+            orElse: () => null,
+          );
     });
   }
 
@@ -171,7 +176,9 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                             context,
                             MaterialPageRoute(
                              builder: (_) => EditRelationshipReflectionScreen(
-                                chapterId: widget.chapter.id,
+                                          chapterId: widget.chapter.id,
+                                          authorId: 'me',
+
                               ),
                             ),
                           );
@@ -190,7 +197,32 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                       ReflectionCard(
                         icon: Icons.favorite,
                         author: l10n.partner,
-                        text: l10n.relationshipReflectionPlaceholderPartner,
+                        text: _partnerReflection?.text ??
+                            l10n.relationshipReflectionPlaceholderPartner,
+                        editable: true,
+                        onTap: () async {
+                          final reflection =
+                              await Navigator.push<RelationshipReflection>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EditRelationshipReflectionScreen(
+                                chapterId: widget.chapter.id,
+                                authorId: 'partner',
+                                reflection: _partnerReflection,
+                              ),
+                            ),
+                          );
+
+                          if (reflection == null) {
+                            return;
+                          }
+
+                          await _reflectionService.saveReflection(
+                            reflection,
+                          );
+
+                          await _loadReflection();
+                        },
                       ),
                     ],
                   ),

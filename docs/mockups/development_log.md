@@ -545,3 +545,14 @@ RB-024.6 – Reflection Editor Navigation
 - Připraven základ pro ukládání Reflection.
 
 git  792c131   "RB-024.6 Reflection editor navigation and service integration"
+
+RB-024.7 – Reflection persistence
+
+- RelationshipChapterScreen převeden na StatefulWidget.
+- Přidáno načítání Reflection přes RelationshipReflectionService.
+- ReflectionCard zobrazuje uložený text.
+- EditRelationshipReflectionScreen přijímá chapterId.
+- Reflection se ukládá a ihned načítá zpět.
+- Dokončen první kompletní CRUD tok Reflection.
+
+git 3433099  "RB-024.7 Complete reflection persistence"
