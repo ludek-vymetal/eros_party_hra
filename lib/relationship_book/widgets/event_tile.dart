@@ -83,7 +83,11 @@ class EventTile extends StatelessWidget {
         ),
         title: Text(event.description),
         subtitle: Text(
-          event.createdAt.toLocal().toString(),
+          '${event.createdAt.day}. '
+          '${event.createdAt.month}. '
+          '${event.createdAt.year} • '
+          '${event.createdAt.hour.toString().padLeft(2, '0')}:'
+          '${event.createdAt.minute.toString().padLeft(2, '0')}',
         ),
       ),
     );

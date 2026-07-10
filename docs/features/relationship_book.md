@@ -92,3 +92,54 @@ Výročí
         ▼
 Po letech lze přidat další společnou poznámku
         ▼
+# RB-011 – RelationshipBook Engine
+
+## Cíl
+
+Oddělit obchodní logiku Relationship Book od Repository a Firestore.
+
+---
+
+## Dokončeno
+
+- vytvořen RelationshipBookEngine
+- vytvořen ChapterEngine
+- oddělena doménová logika od Repository
+- připravena architektura pro další enginy
+- zachována čistá architektura vrstev
+
+---
+
+## Architektura
+
+Screen
+
+↓
+
+RelationshipBookEngine
+
+↓
+
+ChapterEngine
+
+↓
+
+Repository
+
+↓
+
+CloudRelationshipBookService
+
+↓
+
+Firestore
+
+---
+
+## Stav
+
+✅ flutter analyze
+
+✅ Otestováno
+
+✅ Připraveno pro RB-012

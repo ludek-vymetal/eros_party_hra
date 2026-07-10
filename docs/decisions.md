@@ -152,3 +152,27 @@ Kapitoly vznikají automaticky jako výsledek společné interakce partnerů.
 ### Stav
 
 Rozhodnuto.
+## RB-011
+
+### Rozhodnutí
+
+Relationship Book bude používat samostatné Engine vrstvy.
+
+RelationshipBookEngine bude pouze koordinátor.
+
+Obchodní logika bude rozdělena do samostatných engine:
+
+- ChapterEngine
+- MomentEngine
+- TimelineEngine
+- PermissionEngine
+
+### Důvod
+
+Jedna třída nebude časem obsahovat tisíce řádků.
+
+Každý engine bude mít jedinou odpovědnost.
+
+### Stav
+
+Schváleno.

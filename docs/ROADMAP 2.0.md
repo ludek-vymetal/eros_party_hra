@@ -139,4 +139,12 @@ Idea.
 ✅ RB-014 – Chapter Creation Engine
 ✅ RB-015 – Relationship Book Domain Architecture
 ✅ RB-016 – Automatic Chapter History
-    RB-017 – První živá timeline
+✅ RB-017 – Automatic Relationship Events
+    RB-018 – Skutečná timeline
+
+    RB-020 – Timeline UI
+RB-021 – Fotografie
+RB-022 – Hlasové zprávy
+RB-023 – Důkazy splnění
+RB-024 – Sdílené poznámky
+RB-025 – První veřejná beta Relationship Book

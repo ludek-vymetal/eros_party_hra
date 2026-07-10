@@ -455,3 +455,25 @@ Stav
 ✅ Připraveno na další vývojgit add .
 
 git b0fd9a6 "RB-016 Relationship Book timeline foundation"
+RB-017 – Automatic Relationship Events
+
+Datum: 09.07.2026
+
+Cíl
+
+Napojit Relationship Book na skutečné akce v aplikaci tak, aby se kapitoly začaly automaticky aktualizovat bez použití původního RelationshipJournalStorage.
+
+Dokončeno
+přidána metoda updateIntroduction()
+odstraněna první závislost na RelationshipJournalStorage
+ukládání názvu kapitoly a úvodu přes ChapterEngine
+přidána první automatická událost (noteAdded)
+propojení CloudPartnerScenarioDetailScreen s novým Event Engine
+import RelationshipEvent
+zachována čistá architektura Repository → Engine → UI
+Stav
+✅ flutter analyze
+✅ Build
+✅ Automatické zapisování událostí funguje
+✅ Další krok připraven
+git 20ecc65 "RB-017 Relationship Book automatic events"
