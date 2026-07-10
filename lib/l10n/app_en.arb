@@ -225,6 +225,24 @@
 "waitingProofUpload": "⏳ Waiting to send proof",
 "waitingProof": "⏳ Waiting for proof",
 "relationshipStorySubtitle": "Every shared memory becomes another page of your story.",
+"relationshipBook": "Relationship Book",
+"chapter": "Chapter",
+"relationshipReflections": "Our reflections",
+"relationshipChallenge": "The challenge that started it all",
+"relationshipAboutChapter": "About this chapter",
+"relationshipReflectionPlaceholderMine": "Your reflection will appear here.",
+"relationshipReflectionPlaceholderPartner": "Your partner's reflection will appear here.",
+"chapterDraft": "✍️ Writing",
+"chapterWaitingForPartner": "💛 Waiting for partner",
+"chapterCompleted": "💚 Completed",
+"chapterArchived": "📚 Archived",
+"timeline": "Timeline",
+"me": "Me",
+"partner": "Partner",
+"status": "Status",
+"created": "Created",
+"noEventsYet": "No events yet",
+
 
 
 

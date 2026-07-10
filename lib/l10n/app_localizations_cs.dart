@@ -673,6 +673,59 @@ class AppLocalizationsCs extends AppLocalizations {
       'Každá společná vzpomínka tvoří další stránku vašeho příběhu.';
 
   @override
+  String get relationshipBook => 'Naše kniha';
+
+  @override
+  String get chapter => 'Kapitola';
+
+  @override
+  String get relationshipReflections => 'Naše pohledy';
+
+  @override
+  String get relationshipChallenge => 'Výzva, která to všechno začala';
+
+  @override
+  String get relationshipAboutChapter => 'O této kapitole';
+
+  @override
+  String get relationshipReflectionPlaceholderMine =>
+      'Tady bude moje vzpomínka na tento okamžik.';
+
+  @override
+  String get relationshipReflectionPlaceholderPartner =>
+      'Tady bude partnerova vzpomínka.';
+
+  @override
+  String get chapterDraft => '✍️ Píšeme ji';
+
+  @override
+  String get chapterWaitingForPartner => '💛 Čeká na partnera';
+
+  @override
+  String get chapterCompleted => '💚 Dokončeno';
+
+  @override
+  String get chapterArchived => '📚 Archivováno';
+
+  @override
+  String get timeline => 'Časová osa';
+
+  @override
+  String get me => 'Já';
+
+  @override
+  String get partner => 'Partner';
+
+  @override
+  String get status => 'Stav';
+
+  @override
+  String get created => 'Vytvořeno';
+
+  @override
+  String get noEventsYet => 'Zatím žádné události';
+
+  @override
   String scenarioLabel(Object name) {
     return '🏷️ $name';
   }

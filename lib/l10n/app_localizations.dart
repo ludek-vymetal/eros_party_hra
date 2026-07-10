@@ -1406,6 +1406,108 @@ abstract class AppLocalizations {
   /// **'Every shared memory becomes another page of your story.'**
   String get relationshipStorySubtitle;
 
+  /// No description provided for @relationshipBook.
+  ///
+  /// In en, this message translates to:
+  /// **'Relationship Book'**
+  String get relationshipBook;
+
+  /// No description provided for @chapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter'**
+  String get chapter;
+
+  /// No description provided for @relationshipReflections.
+  ///
+  /// In en, this message translates to:
+  /// **'Our reflections'**
+  String get relationshipReflections;
+
+  /// No description provided for @relationshipChallenge.
+  ///
+  /// In en, this message translates to:
+  /// **'The challenge that started it all'**
+  String get relationshipChallenge;
+
+  /// No description provided for @relationshipAboutChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'About this chapter'**
+  String get relationshipAboutChapter;
+
+  /// No description provided for @relationshipReflectionPlaceholderMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reflection will appear here.'**
+  String get relationshipReflectionPlaceholderMine;
+
+  /// No description provided for @relationshipReflectionPlaceholderPartner.
+  ///
+  /// In en, this message translates to:
+  /// **'Your partner\'s reflection will appear here.'**
+  String get relationshipReflectionPlaceholderPartner;
+
+  /// No description provided for @chapterDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'✍️ Writing'**
+  String get chapterDraft;
+
+  /// No description provided for @chapterWaitingForPartner.
+  ///
+  /// In en, this message translates to:
+  /// **'💛 Waiting for partner'**
+  String get chapterWaitingForPartner;
+
+  /// No description provided for @chapterCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'💚 Completed'**
+  String get chapterCompleted;
+
+  /// No description provided for @chapterArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'📚 Archived'**
+  String get chapterArchived;
+
+  /// No description provided for @timeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get timeline;
+
+  /// No description provided for @me.
+  ///
+  /// In en, this message translates to:
+  /// **'Me'**
+  String get me;
+
+  /// No description provided for @partner.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner'**
+  String get partner;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @created.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get created;
+
+  /// No description provided for @noEventsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No events yet'**
+  String get noEventsYet;
+
   /// No description provided for @scenarioLabel.
   ///
   /// In en, this message translates to:

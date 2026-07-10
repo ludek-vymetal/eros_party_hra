@@ -674,6 +674,59 @@ class AppLocalizationsEn extends AppLocalizations {
       'Every shared memory becomes another page of your story.';
 
   @override
+  String get relationshipBook => 'Relationship Book';
+
+  @override
+  String get chapter => 'Chapter';
+
+  @override
+  String get relationshipReflections => 'Our reflections';
+
+  @override
+  String get relationshipChallenge => 'The challenge that started it all';
+
+  @override
+  String get relationshipAboutChapter => 'About this chapter';
+
+  @override
+  String get relationshipReflectionPlaceholderMine =>
+      'Your reflection will appear here.';
+
+  @override
+  String get relationshipReflectionPlaceholderPartner =>
+      'Your partner\'s reflection will appear here.';
+
+  @override
+  String get chapterDraft => '✍️ Writing';
+
+  @override
+  String get chapterWaitingForPartner => '💛 Waiting for partner';
+
+  @override
+  String get chapterCompleted => '💚 Completed';
+
+  @override
+  String get chapterArchived => '📚 Archived';
+
+  @override
+  String get timeline => 'Timeline';
+
+  @override
+  String get me => 'Me';
+
+  @override
+  String get partner => 'Partner';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get created => 'Created';
+
+  @override
+  String get noEventsYet => 'No events yet';
+
+  @override
   String scenarioLabel(Object name) {
     return '🏷️ $name';
   }

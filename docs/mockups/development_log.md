@@ -477,3 +477,27 @@ Stav
 ✅ Automatické zapisování událostí funguje
 ✅ Další krok připraven
 git 20ecc65 "RB-017 Relationship Book automatic events"
+📖 RB-023 – Relationship Book Story UI
+Dokončeno
+vytvořen widget StorySection
+vytvořen widget ReflectionCard
+Relationship Chapter přestavěna do podoby stránky knihy
+přidána sekce Náš příběh
+přidána sekce Výzva, která to všechno začala
+přidána sekce Naše pohledy
+přidána sekce O této kapitole
+zachována Timeline jako základ budoucí kroniky
+sjednocen vizuální styl všech sekcí
+odstraněny duplicitní widgety a chyby analyzátoru
+připravena architektura pro budoucí Reflection model
+Stav projektu
+
+✅ Relationship Book UI stabilní
+
+✅ flutter analyze bez chyb
+
+✅ Build OK
+
+✅ Připraveno pro RB-024 (Reflection Domain)
+
+git a0966dd "RB-023 Relationship Book story page redesign"
