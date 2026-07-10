@@ -4,9 +4,11 @@ import 'package:uuid/uuid.dart';
 
 class EditRelationshipReflectionScreen extends StatefulWidget {
   final RelationshipReflection? reflection;
+  final String chapterId;
 
   const EditRelationshipReflectionScreen({
     super.key,
+    required this.chapterId,
     this.reflection,
   });
 
@@ -39,7 +41,8 @@ class _EditRelationshipReflectionScreenState
       id: widget.reflection?.id ??
           const Uuid().v4(),
       chapterId:
-          widget.reflection?.chapterId ?? '',
+          widget.reflection?.chapterId ??
+          widget.chapterId,
       authorId:
           widget.reflection?.authorId ?? '',
       text: _controller.text.trim(),

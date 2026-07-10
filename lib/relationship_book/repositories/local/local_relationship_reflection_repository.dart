@@ -4,7 +4,7 @@ import '../../models/relationship_reflection.dart';
 class LocalRelationshipReflectionRepository
     implements RelationshipReflectionRepository {
 
-  final List<RelationshipReflection> _reflections = [];
+  static final List<RelationshipReflection> _reflections = [];
 
   @override
   Future<List<RelationshipReflection>> getReflections(

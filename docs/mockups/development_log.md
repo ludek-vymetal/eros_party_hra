@@ -533,3 +533,15 @@ RB-024 – Reflection Domain
 - propojení ReflectionCard s reálnými daty
 
 git 86a239d    "RB-023.1 Polish Relationship Chapter Screen"
+
+RB-024.6 – Reflection Editor Navigation
+
+- ReflectionCard je nyní klikací.
+- Přidán EditRelationshipReflectionScreen.
+- Editor vrací RelationshipReflection přes Navigator.pop().
+- RelationshipChapterScreen přijímá výsledek.
+- Přidán RelationshipReflectionService.
+- Přidán LocalRelationshipReflectionRepository.
+- Připraven základ pro ukládání Reflection.
+
+git  792c131   "RB-024.6 Reflection editor navigation and service integration"

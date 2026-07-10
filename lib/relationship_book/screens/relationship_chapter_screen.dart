@@ -10,20 +10,48 @@ import 'edit_relationship_reflection_screen.dart';
 import '../services/relationship_reflection_service.dart';
 import '../repositories/local/local_relationship_reflection_repository.dart';
 
-class RelationshipChapterScreen extends StatelessWidget {
+class RelationshipChapterScreen extends StatefulWidget {
   final RelationshipChapter chapter;
   final int chapterNumber;
 
-  final RelationshipReflectionService _reflectionService =
-    RelationshipReflectionService(
-      repository: LocalRelationshipReflectionRepository(),
-    );
-
-  RelationshipChapterScreen({
+  const RelationshipChapterScreen({
     super.key,
     required this.chapter,
     required this.chapterNumber,
   });
+
+  @override
+  State<RelationshipChapterScreen> createState() =>
+      _RelationshipChapterScreenState();
+}
+
+class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
+  final RelationshipReflectionService _reflectionService =
+      RelationshipReflectionService(
+    repository: LocalRelationshipReflectionRepository(),
+  );
+
+  RelationshipReflection? _myReflection;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadReflection();
+  }
+
+  Future<void> _loadReflection() async {
+    final reflections = await _reflectionService.getReflections(
+      widget.chapter.id,
+    );
+
+    if (reflections.isEmpty) {
+      return;
+    }
+
+    setState(() {
+      _myReflection = reflections.first;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +102,7 @@ class RelationshipChapterScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        '${l10n.chapter.toUpperCase()} ${chapterNumber.toString().padLeft(2, '0')}',
+                        '${l10n.chapter.toUpperCase()} ${widget.chapterNumber.toString().padLeft(2, '0')}',
                         style: TextStyle(
                           color: Colors.brown.shade600,
                           letterSpacing: 4,
@@ -90,7 +118,7 @@ class RelationshipChapterScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 14),
                       Text(
-                        chapter.chapterTitle,
+                        widget.chapter.chapterTitle,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 34,
@@ -100,7 +128,7 @@ class RelationshipChapterScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        chapter.scenario.title,
+                        widget.chapter.scenario.title,
                         style: TextStyle(
                           color: Colors.brown.shade500,
                           fontStyle: FontStyle.italic,
@@ -110,15 +138,13 @@ class RelationshipChapterScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                
                 const SizedBox(height: 30),
-                
-                if (chapter.introduction.isNotEmpty)
+                if (widget.chapter.introduction.isNotEmpty)
                   StorySection(
                     icon: Icons.auto_stories,
                     title: l10n.relationshipStory,
                     child: Text(
-                      chapter.introduction,
+                      widget.chapter.introduction,
                       style: TextStyle(
                         fontSize: 18,
                         height: 1.8,
@@ -127,9 +153,7 @@ class RelationshipChapterScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                
                 const SizedBox(height: 24),
-                
                 StorySection(
                   icon: Icons.chat_bubble_outline,
                   title: l10n.relationshipReflections,
@@ -138,15 +162,17 @@ class RelationshipChapterScreen extends StatelessWidget {
                       ReflectionCard(
                         icon: Icons.person,
                         author: l10n.me,
-                        text: l10n.relationshipReflectionPlaceholderMine,
+                        text: _myReflection?.text ??
+                            l10n.relationshipReflectionPlaceholderMine,
                         editable: true,
                         onTap: () async {
                           final reflection =
                               await Navigator.push<RelationshipReflection>(
                             context,
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  const EditRelationshipReflectionScreen(),
+                             builder: (_) => EditRelationshipReflectionScreen(
+                                chapterId: widget.chapter.id,
+                              ),
                             ),
                           );
 
@@ -157,9 +183,10 @@ class RelationshipChapterScreen extends StatelessWidget {
                           await _reflectionService.saveReflection(
                             reflection,
                           );
-                          
+
+                          await _loadReflection();
                         },
-                      ),  
+                      ),
                       ReflectionCard(
                         icon: Icons.favorite,
                         author: l10n.partner,
@@ -168,9 +195,7 @@ class RelationshipChapterScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 24),
-
                 StorySection(
                   icon: Icons.emoji_events_rounded,
                   title: l10n.relationshipChallenge,
@@ -178,7 +203,7 @@ class RelationshipChapterScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        chapter.scenario.title,
+                        widget.chapter.scenario.title,
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -187,7 +212,7 @@ class RelationshipChapterScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        chapter.scenario.description,
+                        widget.chapter.scenario.description,
                         style: TextStyle(
                           fontSize: 17,
                           height: 1.8,
@@ -197,9 +222,7 @@ class RelationshipChapterScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 20),
-                
                 StorySection(
                   icon: Icons.favorite_rounded,
                   title: l10n.relationshipAboutChapter,
@@ -208,34 +231,32 @@ class RelationshipChapterScreen extends StatelessWidget {
                       _infoRow(
                         Icons.calendar_today,
                         l10n.created,
-                        _formatDate(chapter.createdAt),
+                        _formatDate(widget.chapter.createdAt),
                       ),
                       const SizedBox(height: 18),
                       _infoRow(
                         Icons.favorite,
                         l10n.favorite,
-                        chapter.favorite ? l10n.yes : l10n.no,
+                        widget.chapter.favorite ? l10n.yes : l10n.no,
                       ),
                       const SizedBox(height: 18),
                       _infoRow(
                         Icons.flag,
                         l10n.status,
-                        _statusText(context, chapter.status),
+                        _statusText(context, widget.chapter.status),
                       ),
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 30),
-
                 StorySection(
                   icon: Icons.history_rounded,
                   title: l10n.timeline,
-                  child: chapter.events.isEmpty
+                  child: widget.chapter.events.isEmpty
                       ? Text(l10n.noEventsYet)
                       : Column(
                           children: [
-                            ...chapter.events.map(
+                            ...widget.chapter.events.map(
                               (event) => EventTile(
                                 event: event,
                               ),
