@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 import '../models/relationship_chapter.dart';
+import '../models/relationship_reflection.dart';
 import '../widgets/event_tile.dart';
 import '../widgets/story_section.dart';
 import '../models/chapter_status.dart';
 import '../widgets/reflection_card.dart';
+import 'edit_relationship_reflection_screen.dart';
+import '../services/relationship_reflection_service.dart';
+import '../repositories/local/local_relationship_reflection_repository.dart';
 
 class RelationshipChapterScreen extends StatelessWidget {
   final RelationshipChapter chapter;
   final int chapterNumber;
 
-  const RelationshipChapterScreen({
+  final RelationshipReflectionService _reflectionService =
+    RelationshipReflectionService(
+      repository: LocalRelationshipReflectionRepository(),
+    );
+
+  RelationshipChapterScreen({
     super.key,
     required this.chapter,
     required this.chapterNumber,
@@ -130,7 +139,27 @@ class RelationshipChapterScreen extends StatelessWidget {
                         icon: Icons.person,
                         author: l10n.me,
                         text: l10n.relationshipReflectionPlaceholderMine,
-                      ),
+                        editable: true,
+                        onTap: () async {
+                          final reflection =
+                              await Navigator.push<RelationshipReflection>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const EditRelationshipReflectionScreen(),
+                            ),
+                          );
+
+                          if (reflection == null) {
+                            return;
+                          }
+
+                          await _reflectionService.saveReflection(
+                            reflection,
+                          );
+                          
+                        },
+                      ),  
                       ReflectionCard(
                         icon: Icons.favorite,
                         author: l10n.partner,

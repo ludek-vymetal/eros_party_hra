@@ -501,3 +501,35 @@ Stav projektu
 ✅ Připraveno pro RB-024 (Reflection Domain)
 
 git a0966dd "RB-023 Relationship Book story page redesign"
+# RB-023.1 – Relationship Chapter Screen Polish
+
+Datum: 10. 7. 2026
+
+## Dokončeno
+
+- kompletně přepracována obrazovka RelationshipChapterScreen
+- odstraněny duplicitní sekce a nadpisy
+- sjednocen vzhled pomocí StorySection
+- přidána sekce „Náš příběh“
+- přidána sekce „Naše pohledy“
+- přidána sekce „Výzva, která to všechno začala“
+- přidána sekce „O této kapitole“
+- Timeline převedena do StorySection
+- přidán prázdný stav Timeline (noEventsYet)
+- kompletní převod všech textů na AppLocalizations (l10n)
+- přidány pomocné metody _statusText() a _formatDate()
+- odstraněny hardcoded texty
+
+## Výsledek
+
+Relationship Book už nepůsobí jako seznam dat, ale jako stránka knihy se samostatnými kapitolami.
+
+## Další krok
+
+RB-024 – Reflection Domain
+- model vzpomínek partnerů
+- ukládání Reflection
+- načítání Reflection
+- propojení ReflectionCard s reálnými daty
+
+git 86a239d    "RB-023.1 Polish Relationship Chapter Screen"

@@ -4,21 +4,29 @@ class ReflectionCard extends StatelessWidget {
   final IconData icon;
   final String author;
   final String text;
+  final VoidCallback? onTap;
+  final bool editable;
 
   const ReflectionCard({
     super.key,
     required this.icon,
     required this.author,
     required this.text,
+    this.onTap,
+    this.editable = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
       width: double.infinity,
       margin: const EdgeInsets.only(
         bottom: 18,
       ),
+      
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white.withValues(
@@ -30,8 +38,7 @@ class ReflectionCard extends StatelessWidget {
         ),
       ),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
           Row(
@@ -66,7 +73,22 @@ class ReflectionCard extends StatelessWidget {
               fontStyle: FontStyle.italic,
             ),
           ),
+
+          if (editable) ...[
+            const SizedBox(height: 16),
+
+            Align(
+              alignment: Alignment.centerRight,
+              child: Icon(
+                Icons.edit_outlined,
+                color: Colors.brown.shade500,
+                size: 20,
+              ),
+            ),
+          ],
         ],
+      ),
+         
       ),
     );
   }

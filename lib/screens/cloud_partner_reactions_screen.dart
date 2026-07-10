@@ -76,14 +76,7 @@ class CloudPartnerReactionsScreen
               final isCompleter = reaction.senderUid == myUid;
               final isAuthor = reaction.receiverUid == myUid;   
               assert(isCompleter || isAuthor); 
-              print("MY UID: $myUid");
-              print("SENDER: ${reaction.senderUid}");
-              print("RECEIVER: ${reaction.receiverUid}");
-              print("IS COMPLETER: $isCompleter");
-              print("IS AUTHOR: $isAuthor");
-              print("proofSent: ${reaction.proofSent}");
-              print("proofAccepted: ${reaction.proofAccepted}");
-
+             
               return Card(
                 margin:
                     const EdgeInsets.all(
