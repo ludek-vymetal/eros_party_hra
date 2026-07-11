@@ -1508,6 +1508,18 @@ abstract class AppLocalizations {
   /// **'No events yet'**
   String get noEventsYet;
 
+  /// No description provided for @relationshipPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Photos'**
+  String get relationshipPhotos;
+
+  /// No description provided for @relationshipNoPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no photos yet.'**
+  String get relationshipNoPhotos;
+
   /// No description provided for @scenarioLabel.
   ///
   /// In en, this message translates to:

@@ -726,6 +726,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get noEventsYet => 'Zatím žádné události';
 
   @override
+  String get relationshipPhotos => 'Naše fotografie';
+
+  @override
+  String get relationshipNoPhotos => 'Zatím zde nejsou žádné fotografie.';
+
+  @override
   String scenarioLabel(Object name) {
     return '🏷️ $name';
   }

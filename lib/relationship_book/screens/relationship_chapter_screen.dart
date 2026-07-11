@@ -9,6 +9,9 @@ import '../widgets/reflection_card.dart';
 import 'edit_relationship_reflection_screen.dart';
 import '../services/relationship_reflection_service.dart';
 import '../repositories/local/local_relationship_reflection_repository.dart';
+import '../models/relationship_photo.dart';
+import '../services/relationship_photo_service.dart';
+import '../repositories/local/local_relationship_photo_repository.dart';
 
 class RelationshipChapterScreen extends StatefulWidget {
   final RelationshipChapter chapter;
@@ -33,11 +36,19 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
 
   RelationshipReflection? _myReflection;
   RelationshipReflection? _partnerReflection;
+  
+  final RelationshipPhotoService _photoService =
+    RelationshipPhotoService(
+      repository: LocalRelationshipPhotoRepository(),
+    );
+
+  List<RelationshipPhoto> _photos = [];
 
   @override
   void initState() {
     super.initState();
     _loadReflection();
+    _loadPhotos();
   }
 
   Future<void> _loadReflection() async {
@@ -58,9 +69,28 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
     });
   }
 
+  Future<void> _loadPhotos() async {
+    final photos = await _photoService.getPhotos(
+      widget.chapter.id,
+    );
+
+    setState(() {
+      _photos = photos;
+    });
+  }
+
+  String _pluralize(int count, String one, String few, String other) {
+    if (count == 1) return "$count $one";
+    if (count >= 2 && count <= 4) return "$count $few";
+    return "$count $other";
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    
+    final reflectionCount = (_myReflection != null ? 1 : 0) + (_partnerReflection != null ? 1 : 0);
+    final challengeCount = 1;
 
     return Scaffold(
       backgroundColor: const Color(0xFF12080C),
@@ -95,7 +125,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
-                    vertical: 20,
+                    vertical: 32,
                   ),
                   decoration: BoxDecoration(
                     border: Border(
@@ -131,13 +161,15 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                           color: Colors.brown.shade900,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 24),
+                      const ChapterWhisper(text: "Tak co... čím ho nebo ji překvapíš příště?"),
+                      const SizedBox(height: 24),
                       Text(
-                        widget.chapter.scenario.title,
+                        "${_pluralize(reflectionCount, "pohled", "pohledy", "pohledů")} · ${_pluralize(_photos.length, "fotografie", "fotografie", "fotografií")} · ${_pluralize(challengeCount, "výzva", "výzvy", "výzev")}",
                         style: TextStyle(
                           color: Colors.brown.shade500,
-                          fontStyle: FontStyle.italic,
-                          fontSize: 16,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -147,7 +179,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                 if (widget.chapter.introduction.isNotEmpty)
                   StorySection(
                     icon: Icons.auto_stories,
-                    title: l10n.relationshipStory,
+                    title: "Jak to začalo",
                     child: Text(
                       widget.chapter.introduction,
                       style: TextStyle(
@@ -161,7 +193,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                 const SizedBox(height: 24),
                 StorySection(
                   icon: Icons.chat_bubble_outline,
-                  title: l10n.relationshipReflections,
+                  title: "Jak jsme to prožili",
                   child: Column(
                     children: [
                       ReflectionCard(
@@ -175,10 +207,9 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                               await Navigator.push<RelationshipReflection>(
                             context,
                             MaterialPageRoute(
-                             builder: (_) => EditRelationshipReflectionScreen(
-                                          chapterId: widget.chapter.id,
-                                          authorId: 'me',
-
+                              builder: (_) => EditRelationshipReflectionScreen(
+                                chapterId: widget.chapter.id,
+                                authorId: 'me',
                               ),
                             ),
                           );
@@ -230,7 +261,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                 const SizedBox(height: 24),
                 StorySection(
                   icon: Icons.emoji_events_rounded,
-                  title: l10n.relationshipChallenge,
+                  title: "Naše výzva",
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -254,10 +285,44 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 24),
+                StorySection(
+                  icon: Icons.photo_library_rounded,
+                  title: "Zachycené okamžiky",
+                  child: Column(
+                    children: [
+                      if (_photos.isEmpty)
+                        Column(
+                          children: [
+                            Text(
+                              "Každá fotografie uchovává okamžik, ke kterému se jednou rádi vrátíte.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.brown.shade700,
+                              ),
+                            ),
+                            const SizedBox(height: 18),
+                            const Text(
+                              "Tato kapitola zatím čeká na svou první vzpomínku.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 20),
+                            FilledButton.icon(
+                              onPressed: () {},
+                              icon: const Icon(Icons.add_a_photo),
+                              label: const Text("Zachytit první okamžik"),
+                            )
+                          ],
+                        ),
+                    ],
+                  ),
+                ),  
                 const SizedBox(height: 20),
                 StorySection(
                   icon: Icons.favorite_rounded,
-                  title: l10n.relationshipAboutChapter,
+                  title: "O této kapitole",
                   child: Column(
                     children: [
                       _infoRow(
@@ -283,7 +348,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                 const SizedBox(height: 30),
                 StorySection(
                   icon: Icons.history_rounded,
-                  title: l10n.timeline,
+                  title: "Náš příběh v čase",
                   child: widget.chapter.events.isEmpty
                       ? Text(l10n.noEventsYet)
                       : Column(
@@ -354,5 +419,25 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
 
   String _formatDate(DateTime date) {
     return '${date.day}. ${date.month}. ${date.year}';
+  }
+}
+
+class ChapterWhisper extends StatelessWidget {
+  final String text;
+  const ChapterWhisper({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '„$text“',
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 17,
+        fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.w400,
+        height: 1.5,
+        color: Colors.brown.shade600,
+      ),
+    );
   }
 }

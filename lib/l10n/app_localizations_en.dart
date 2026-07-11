@@ -727,6 +727,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noEventsYet => 'No events yet';
 
   @override
+  String get relationshipPhotos => 'Our Photos';
+
+  @override
+  String get relationshipNoPhotos => 'There are no photos yet.';
+
+  @override
   String scenarioLabel(Object name) {
     return '🏷️ $name';
   }

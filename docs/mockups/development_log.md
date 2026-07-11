@@ -556,3 +556,13 @@ RB-024.7 – Reflection persistence
 - Dokončen první kompletní CRUD tok Reflection.
 
 git 3433099  "RB-024.7 Complete reflection persistence"
+
+RB-025 – Dual Reflection System
+
+- Přidán authorId do Reflection editoru.
+- Reflection jsou nyní rozděleny na "me" a "partner".
+- RelationshipChapterScreen načítá obě Reflection.
+- Obě ReflectionCard jsou editovatelné.
+- Každá Reflection se ukládá samostatně.
+- Připraveno pro budoucí synchronizaci přes Firebase.
+git 8d02d63  "RB-025 Dual reflection system"
