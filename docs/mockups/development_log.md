@@ -566,3 +566,163 @@ RB-025 – Dual Reflection System
 - Každá Reflection se ukládá samostatně.
 - Připraveno pro budoucí synchronizaci přes Firebase.
 git 8d02d63  "RB-025 Dual reflection system"
+📖 Vývojový deník EROS
+Datum
+
+11. 7. 2026
+
+Relationship Book – Kapitola
+Dokončeno
+
+Kompletně přepracována obrazovka detailu kapitoly v Relationship Book.
+
+Změny UI
+Hero sekce
+zvětšen horní hero blok
+odstraněn duplicitní název scénáře
+přidán prostor pro budoucí dynamické "Eros Voice"
+vytvořen widget ChapterWhisper
+přidána souhrnná informační lišta
+počet pohledů
+počet fotografií
+počet výzev
+Nové pořadí sekcí
+
+Původní:
+
+Příběh
+Fotografie
+Pohledy
+Výzva
+
+Nové:
+
+Jak to začalo
+
+Jak jsme to prožili
+
+Naše výzva
+
+Zachycené okamžiky
+
+O této kapitole
+
+Náš příběh v čase
+
+Cílem bylo vytvořit dojem skutečné knihy vzpomínek namísto technického seznamu.
+
+Fotografie
+
+Kompletně přepracován prázdný stav.
+
+Původní text:
+
+Nejsou žádné fotografie.
+
+Nový koncept:
+
+Každá fotografie uchovává okamžik, ke kterému se jednou rádi vrátíte.
+
+Tato kapitola zatím čeká na svou první vzpomínku.
+
+Tlačítko změněno na:
+
+Zachytit první okamžik
+
+(později zvážit změnu na „Zachytit první vzpomínku“)
+
+Terminologie
+
+Přejmenovány sekce:
+
+Příběh → Jak to začalo
+Pohledy → Jak jsme to prožili
+Výzva → Naše výzva
+Fotografie → Zachycené okamžiky
+Timeline → Náš příběh v čase
+
+Cílem bylo odstranit technické názvy a vytvořit jazyk odpovídající deníku vztahu.
+
+Hero statistiky
+
+Přidána informační řádka:
+
+❤️ Pohledy
+📷 Fotografie
+🏆 Výzvy
+
+Vytvořena pomocná metoda pro správné české skloňování.
+
+Filozofie projektu
+
+Během návrhu byla definována nová hlavní myšlenka EROSu.
+
+EROS není erotická hra.
+
+EROS je vztahový deník, který pomocí překvapení, společných výzev a intimních zážitků pomáhá partnerům vytvářet nové společné vzpomínky.
+
+Erotické scénáře nejsou cílem aplikace.
+
+Jsou jedním z prostředků, jak podporovat blízkost partnerů.
+
+Nový koncept
+
+Vznikla myšlenka:
+
+Eros Voice
+
+Aplikace nebude používat obyčejné motivační citáty.
+
+Místo nich bude mít vlastní hlas.
+
+Krátké věty mají:
+
+vyvolávat zvědavost,
+očekávání,
+odvahu,
+chuť partnera překvapit.
+
+Nikdy nesmí působit jako motivační klišé.
+
+Příklady:
+
+Tak co... čím ho nebo ji překvapíš příště?
+
+Největší dobrodružství začínají jediným odvážným nápadem.
+
+Nechte dnešek rozhodnout, na co budete jednou vzpomínat.
+
+Architektura (schválená)
+
+Budou vytvořeny nové soubory:
+
+relationship_book/
+data/
+    eros_voice_cs.dart
+    eros_voice_en.dart
+
+services/
+    eros_voice_service.dart
+
+widgets/
+    chapter_whisper.dart
+
+Citáty nebudou součástí ARB.
+
+ARB bude obsahovat pouze texty uživatelského rozhraní.
+
+Stav projektu
+
+✅ Nové UI dokončeno
+
+✅ Terminologie sjednocena
+
+✅ Směr projektu potvrzen
+
+⏳ Další etapa:
+
+Implementace systému Eros Voice a dynamického zobrazování vět podle kontextu kapitoly.
+git dca1428 "Refactor Relationship Book chapter UI and improve emotional storytelling"
+
+
+
