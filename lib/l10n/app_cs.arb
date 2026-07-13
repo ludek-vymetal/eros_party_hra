@@ -245,6 +245,8 @@
 "noEventsYet": "Zatím žádné události",
 "relationshipPhotos": "Naše fotografie",
 "relationshipNoPhotos": "Zatím zde nejsou žádné fotografie.",
+"relationshipPhotos": "Naše fotografie",
+"relationshipNoPhotos": "Zatím zde nejsou žádné fotografie.",
 
 "scenarioLabel": "🏷️ {name}",
 "@scenarioLabel": {

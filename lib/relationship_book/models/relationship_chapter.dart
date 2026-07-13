@@ -27,6 +27,10 @@ class RelationshipChapter {
   final ChapterStatus status;
 
   final List<RelationshipEvent> events;
+
+  final int? erosVoiceId;
+
+  final String? customMotto;
  
   const RelationshipChapter({
     required this.id,
@@ -39,6 +43,8 @@ class RelationshipChapter {
     required this.updatedAt,
     required this.status,
     required this.events,
+    this.erosVoiceId,
+    this.customMotto,
   });
 
   Map<String, dynamic> toJson() {
@@ -57,6 +63,8 @@ class RelationshipChapter {
       'favorite': favorite,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+      'erosVoiceId': erosVoiceId,
+      'customMotto': customMotto,
     };
   }
   factory RelationshipChapter.fromJson(
@@ -77,6 +85,8 @@ class RelationshipChapter {
       chapterTitle: json['chapterTitle'] as String,
       introduction: json['introduction'] as String,
       favorite: json['favorite'] as bool,
+      erosVoiceId: json['erosVoiceId'] as int?,
+      customMotto: json['customMotto'] as String?,
       createdAt: DateTime.parse(
         json['createdAt'] as String,
       ),
@@ -93,6 +103,36 @@ class RelationshipChapter {
             ),
           )
           .toList(),
+    );
+    
+  }
+  RelationshipChapter copyWith({
+    String? id,
+    List<RelationshipParticipant>? participants,
+    RelationshipScenario? scenario,
+    String? chapterTitle,
+    String? introduction,
+    bool? favorite,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    ChapterStatus? status,
+    List<RelationshipEvent>? events,
+    int? erosVoiceId,
+    String? customMotto,
+  }) {
+    return RelationshipChapter(
+      id: id ?? this.id,
+      participants: participants ?? this.participants,
+      scenario: scenario ?? this.scenario,
+      chapterTitle: chapterTitle ?? this.chapterTitle,
+      introduction: introduction ?? this.introduction,
+      favorite: favorite ?? this.favorite,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      status: status ?? this.status,
+      events: events ?? this.events,
+      erosVoiceId: erosVoiceId ?? this.erosVoiceId,
+      customMotto: customMotto ?? this.customMotto,
     );
   }
   

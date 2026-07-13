@@ -725,4 +725,7 @@ Implementace systému Eros Voice a dynamického zobrazování vět podle kontext
 git dca1428 "Refactor Relationship Book chapter UI and improve emotional storytelling"
 
 
+git 07d3185  "Add Eros Voice architecture"
+
+
 

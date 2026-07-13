@@ -13,7 +13,7 @@ class CloudRelationshipBookService {
   static Future<void> createChapter(
     RelationshipChapter chapter,
   ) async {
-    await _collection.add(
+    await _collection.doc(chapter.id).set(
       chapter.toJson(),
     );
   }

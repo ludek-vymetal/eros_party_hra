@@ -143,5 +143,25 @@ class ChapterEngine {
       );
 
       await repository.updateMemory(updated);
-    }  
+    } 
+    Future<void> updateMotto({
+      required String chapterId,
+      int? erosVoiceId,
+      String? customMotto,
+    }) async {
+      final chapter = await repository.getMemory(chapterId);
+
+      if (chapter == null) {
+        return;
+      }
+
+      final updated = chapter.copyWith(
+        erosVoiceId: erosVoiceId,
+        customMotto: customMotto,
+        updatedAt: DateTime.now(),
+      );
+
+      await repository.updateMemory(updated);
+    }
+
   }

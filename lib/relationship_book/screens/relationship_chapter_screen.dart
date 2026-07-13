@@ -8,14 +8,18 @@ import '../models/chapter_status.dart';
 import '../widgets/reflection_card.dart';
 import 'edit_relationship_reflection_screen.dart';
 import '../services/relationship_reflection_service.dart';
-import '../repositories/local/local_relationship_reflection_repository.dart';
+import '../repositories/cloud/cloud_relationship_reflection_repository.dart';
 import '../models/relationship_photo.dart';
 import '../services/relationship_photo_service.dart';
 import '../repositories/local/local_relationship_photo_repository.dart';
+import '../widgets/chapter_motto_dialog.dart';
+import '../engine/chapter_engine.dart';
+import '../repositories/firestore_relationship_book_repository.dart';
 
 class RelationshipChapterScreen extends StatefulWidget {
   final RelationshipChapter chapter;
   final int chapterNumber;
+  
 
   const RelationshipChapterScreen({
     super.key,
@@ -26,31 +30,47 @@ class RelationshipChapterScreen extends StatefulWidget {
   @override
   State<RelationshipChapterScreen> createState() =>
       _RelationshipChapterScreenState();
+      
 }
 
 class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
   final RelationshipReflectionService _reflectionService =
-      RelationshipReflectionService(
-    repository: LocalRelationshipReflectionRepository(),
-  );
+    RelationshipReflectionService(
+      repository: CloudRelationshipReflectionRepository(),
+    );
 
   RelationshipReflection? _myReflection;
   RelationshipReflection? _partnerReflection;
-  
+
   final RelationshipPhotoService _photoService =
-    RelationshipPhotoService(
-      repository: LocalRelationshipPhotoRepository(),
-    );
+      RelationshipPhotoService(
+    repository: LocalRelationshipPhotoRepository(),
+  );
 
   List<RelationshipPhoto> _photos = [];
+  String? _chapterMotto;
+
+  final ChapterEngine _chapterEngine = ChapterEngine(
+    repository: FirestoreRelationshipBookRepository(),
+  );
 
   @override
-  void initState() {
+    void initState() {
     super.initState();
     _loadReflection();
     _loadPhotos();
+    _loadChapterMotto();
   }
+  void _loadChapterMotto() {
+    if (widget.chapter.customMotto != null &&
+        widget.chapter.customMotto!.trim().isNotEmpty) {
+      _chapterMotto = widget.chapter.customMotto;
+      return;
+    }
 
+  // Zatím použijeme výchozí motto.
+  _chapterMotto = "Tak co... čím ho nebo ji překvapíš příště?";
+}
   Future<void> _loadReflection() async {
     final reflections = await _reflectionService.getReflections(
       widget.chapter.id,
@@ -99,6 +119,50 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
         title: Text(
           l10n.relationshipBook,
         ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              if (value == 'motto') {
+                final motto = await showDialog<String>(
+                  context: context,
+                  builder: (_) => const ChapterMottoDialog(),
+                );
+
+                if (motto == null) {
+                  return;
+                }
+
+                await _chapterEngine.updateMotto(
+                  chapterId: widget.chapter.id,
+                  customMotto: motto,
+                );
+
+                if (!mounted) {
+                  return;
+                }
+
+                setState(() {
+                  _chapterMotto = motto;
+                });
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'motto',
+                child: Text('✨ Přidat motto'),
+              ),
+              const PopupMenuDivider(),
+              const PopupMenuItem(
+                value: 'favorite',
+                child: Text('❤️ Oblíbená'),
+              ),
+              const PopupMenuItem(
+                value: 'archive',
+                child: Text('📦 Archivovat'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -162,7 +226,10 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      const ChapterWhisper(text: "Tak co... čím ho nebo ji překvapíš příště?"),
+                      if (_chapterMotto != null) ...[
+                        const SizedBox(height: 24),
+                        ChapterWhisper(text: _chapterMotto!),
+],
                       const SizedBox(height: 24),
                       Text(
                         "${_pluralize(reflectionCount, "pohled", "pohledy", "pohledů")} · ${_pluralize(_photos.length, "fotografie", "fotografie", "fotografií")} · ${_pluralize(challengeCount, "výzva", "výzvy", "výzev")}",
