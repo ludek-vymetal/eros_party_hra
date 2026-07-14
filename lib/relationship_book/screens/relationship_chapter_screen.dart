@@ -11,10 +11,11 @@ import '../services/relationship_reflection_service.dart';
 import '../repositories/cloud/cloud_relationship_reflection_repository.dart';
 import '../models/relationship_photo.dart';
 import '../services/relationship_photo_service.dart';
-import '../repositories/local/local_relationship_photo_repository.dart';
+import '../repositories/cloud/cloud_relationship_photo_repository.dart';
 import '../widgets/chapter_motto_dialog.dart';
 import '../engine/chapter_engine.dart';
 import '../repositories/firestore_relationship_book_repository.dart';
+import '../../screens/add_relationship_photo_screen.dart';
 
 class RelationshipChapterScreen extends StatefulWidget {
   final RelationshipChapter chapter;
@@ -44,7 +45,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
 
   final RelationshipPhotoService _photoService =
       RelationshipPhotoService(
-    repository: LocalRelationshipPhotoRepository(),
+    repository: CloudRelationshipPhotoRepository(),
   );
 
   List<RelationshipPhoto> _photos = [];
@@ -373,19 +374,36 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                             const Text(
                               "Tato kapitola zatím čeká na svou první vzpomínku.",
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             const SizedBox(height: 20),
+
                             FilledButton.icon(
-                              onPressed: () {},
-                              icon: const Icon(Icons.add_a_photo),
-                              label: const Text("Zachytit první okamžik"),
-                            )
+                              onPressed: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        const AddRelationshipPhotoScreen(),
+                                  ),
+                                );
+
+                                await _loadPhotos();
+                              },
+                              icon: const Icon(
+                                Icons.add_a_photo,
+                              ),
+                              label: const Text(
+                                "Zachytit první okamžik",
+                              ),
+                            ),
                           ],
                         ),
                     ],
                   ),
-                ),  
+                ),
                 const SizedBox(height: 20),
                 StorySection(
                   icon: Icons.favorite_rounded,
