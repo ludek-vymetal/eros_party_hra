@@ -727,5 +727,73 @@ git dca1428 "Refactor Relationship Book chapter UI and improve emotional storyte
 
 git 07d3185  "Add Eros Voice architecture"
 
+# Development Log
 
+## Date
+2026-07-13
 
+## Sprint
+RB-026 – Relationship Chapter Persistence
+
+## Completed
+
+- Created CloudRelationshipReflectionRepository
+- Connected Relationship Reflections to Cloud Firestore
+- Implemented saveReflection()
+- Implemented getReflections()
+- Replaced Local Repository with Cloud Repository
+- Connected Reflection editor with Firestore persistence
+- Fixed Firestore security rules for Relationship Book subcollections
+- Unified architecture to use existing relationship_book collection
+- Successfully tested reading and writing Reflection data
+- Reflection is now persisted in Cloud Firestore
+
+## Result
+
+Relationship Reflections are now fully stored in Firebase.
+
+Database structure:
+
+relationship_book
+ └── chapterId
+      └── reflections
+           ├── me
+           └── partner
+
+Relationship Book now has persistent cloud storage for reflections.
+
+## Status
+
+RB-026 completed.
+
+git daa6f53  "RB-026 Complete Firestore persistence for Relationship Reflections"
+
+Návrh zápisu do deníku
+📅 Datum
+2026
+📖 Kniha vztahu
+✅ Přidána galerie fotografií kapitol
+možnost přidat fotografii ke kapitole
+lokální ukládání fotografií
+fotografie se po restartu aplikace zachovají
+ukládání do složky aplikace
+metadata ukládána pomocí SharedPreferences
+fotografie jsou organizovány po jednotlivých kapitolách
+✅ Architektura
+vytvořen LocalRelationshipPhotoRepository
+oddělena repository a service vrstva
+připraven základ pro budoucí cloudovou synchronizaci
+✅ PartnerService
+vytvořen PartnerService
+odstraněna závislost na natvrdo zadaných identifikátorech uživatelů
+připravena architektura pro budoucí propojení partnerů přes Firebase Auth
+💡 Rozhodnutí
+aplikace bude fungovat plnohodnotně offline
+cloud bude sloužit pouze pro synchronizaci
+fotografie patří ke konkrétní kapitole
+každé datum bude mít svého autora
+📌 Další úkol
+zavést PartnerService do celého projektu
+opravit autorství (já × partner)
+zabránit úpravě cizích reflexí a fotografií
+git 8a4cf11 "feat(relationship-book): local photo storage and PartnerService architecture"

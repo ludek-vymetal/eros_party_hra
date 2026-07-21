@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/relationship_reflection.dart';
 import 'package:uuid/uuid.dart';
+
+import '../models/relationship_reflection.dart';
+import '../services/permission_service.dart';
 
 class EditRelationshipReflectionScreen extends StatefulWidget {
   final RelationshipReflection? reflection;
@@ -29,11 +31,11 @@ class _EditRelationshipReflectionScreenState
   void initState() {
     super.initState();
 
-
     if (widget.reflection != null) {
       _controller.text = widget.reflection!.text;
     }
-  }  
+  }
+
   Future<void> _save() async {
     if (_controller.text.trim().isEmpty) {
       return;
@@ -59,7 +61,7 @@ class _EditRelationshipReflectionScreenState
       context,
       reflection,
     );
-  }  
+  }
 
   @override
   void dispose() {
@@ -69,6 +71,13 @@ class _EditRelationshipReflectionScreenState
 
   @override
   Widget build(BuildContext context) {
+
+    final canEdit =
+        widget.reflection == null ||
+        PermissionService.canEditReflection(
+          widget.reflection!,
+        );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -80,9 +89,21 @@ class _EditRelationshipReflectionScreenState
         child: Column(
           children: [
 
+            if (!canEdit)
+              const Padding(
+                padding: EdgeInsets.only(
+                  bottom: 16,
+                ),
+                child: Text(
+                  '❤️ Tuto reflexi napsal váš partner. Je pouze ke čtení.',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+
             Expanded(
               child: TextField(
                 controller: _controller,
+                enabled: canEdit,
                 maxLines: null,
                 expands: true,
                 decoration: const InputDecoration(
@@ -93,15 +114,17 @@ class _EditRelationshipReflectionScreenState
               ),
             ),
 
-            const SizedBox(height: 20),
-
-            FilledButton(
-              onPressed: _save,
-              child: const Text(
-                'Save',
-              ),
-          
+            const SizedBox(
+              height: 20,
             ),
+
+            if (canEdit)
+              FilledButton(
+                onPressed: _save,
+                child: const Text(
+                  'Save',
+                ),
+              ),
           ],
         ),
       ),

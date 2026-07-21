@@ -17,6 +17,7 @@ import '../engine/chapter_engine.dart';
 import '../repositories/firestore_relationship_book_repository.dart';
 import '../../screens/add_relationship_photo_screen.dart';
 import 'dart:io';
+import '../services/partner_service.dart';
 
 
 class RelationshipChapterScreen extends StatefulWidget {
@@ -83,12 +84,15 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
 
     setState(() {
       _myReflection = reflections.cast<RelationshipReflection?>().firstWhere(
-            (item) => item?.authorId == 'me',
+            (item) => PartnerService.isMine(item!.authorId),
             orElse: () => null,
           );
 
-      _partnerReflection = reflections.cast<RelationshipReflection?>().firstWhere(
-            (item) => item?.authorId == 'partner',
+      _partnerReflection =
+          reflections.cast<RelationshipReflection?>().firstWhere(
+            (item) =>
+                item != null &&
+                !PartnerService.isMine(item.authorId),
             orElse: () => null,
           );
     });
@@ -283,7 +287,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                             MaterialPageRoute(
                               builder: (_) => EditRelationshipReflectionScreen(
                                 chapterId: widget.chapter.id,
-                                authorId: 'me',
+                                authorId: PartnerService.currentUid!,
                               ),
                             ),
                           );
@@ -306,24 +310,19 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                             l10n.relationshipReflectionPlaceholderPartner,
                         editable: true,
                         onTap: () async {
-                          final reflection =
-                              await Navigator.push<RelationshipReflection>(
+                          if (_partnerReflection == null) {
+                            return;
+                          }
+
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) => EditRelationshipReflectionScreen(
                                 chapterId: widget.chapter.id,
-                                authorId: 'partner',
+                                authorId: _partnerReflection!.authorId,
                                 reflection: _partnerReflection,
                               ),
                             ),
-                          );
-
-                          if (reflection == null) {
-                            return;
-                          }
-
-                          await _reflectionService.saveReflection(
-                            reflection,
                           );
 
                           await _loadReflection();
@@ -399,7 +398,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                                     builder: (_) =>
                                         AddRelationshipPhotoScreen(
                                       chapterId: widget.chapter.id,
-                                      authorId: 'me',
+                                      authorId: PartnerService.currentUid!,
                                     ),
                                   ),
                                 );
@@ -458,7 +457,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                                     builder: (_) =>
                                         AddRelationshipPhotoScreen(
                                       chapterId: widget.chapter.id,
-                                      authorId: 'me',
+                                      authorId: PartnerService.currentUid!,
                                     ),
                                   ),
                                 );
