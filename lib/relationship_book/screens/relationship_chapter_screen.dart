@@ -11,11 +11,13 @@ import '../services/relationship_reflection_service.dart';
 import '../repositories/cloud/cloud_relationship_reflection_repository.dart';
 import '../models/relationship_photo.dart';
 import '../services/relationship_photo_service.dart';
-import '../repositories/cloud/cloud_relationship_photo_repository.dart';
+import '../repositories/local/local_relationship_photo_repository.dart';
 import '../widgets/chapter_motto_dialog.dart';
 import '../engine/chapter_engine.dart';
 import '../repositories/firestore_relationship_book_repository.dart';
 import '../../screens/add_relationship_photo_screen.dart';
+import 'dart:io';
+
 
 class RelationshipChapterScreen extends StatefulWidget {
   final RelationshipChapter chapter;
@@ -45,7 +47,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
 
   final RelationshipPhotoService _photoService =
       RelationshipPhotoService(
-    repository: CloudRelationshipPhotoRepository(),
+    repository: LocalRelationshipPhotoRepository(),
   );
 
   List<RelationshipPhoto> _photos = [];
@@ -77,6 +79,8 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
       widget.chapter.id,
     );
 
+    if (!mounted) return;
+
     setState(() {
       _myReflection = reflections.cast<RelationshipReflection?>().firstWhere(
             (item) => item?.authorId == 'me',
@@ -94,6 +98,8 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
     final photos = await _photoService.getPhotos(
       widget.chapter.id,
     );
+
+    if (!mounted) return;
 
     setState(() {
       _photos = photos;
@@ -230,7 +236,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                       if (_chapterMotto != null) ...[
                         const SizedBox(height: 24),
                         ChapterWhisper(text: _chapterMotto!),
-],
+                      ],
                       const SizedBox(height: 24),
                       Text(
                         "${_pluralize(reflectionCount, "pohled", "pohledy", "pohledů")} · ${_pluralize(_photos.length, "fotografie", "fotografie", "fotografií")} · ${_pluralize(challengeCount, "výzva", "výzvy", "výzev")}",
@@ -354,6 +360,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
+
                 StorySection(
                   icon: Icons.photo_library_rounded,
                   title: "Zachycené okamžiky",
@@ -370,7 +377,9 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                                 color: Colors.brown.shade700,
                               ),
                             ),
-                            const SizedBox(height: 18),
+                            const SizedBox(
+                              height: 18,
+                            ),
                             const Text(
                               "Tato kapitola zatím čeká na svou první vzpomínku.",
                               textAlign: TextAlign.center,
@@ -378,19 +387,26 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 20),
-
+                            const SizedBox(
+                              height: 20,
+                            ),
                             FilledButton.icon(
                               onPressed: () async {
-                                await Navigator.push(
+                                final saved =
+                                    await Navigator.push<bool>(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) =>
-                                        const AddRelationshipPhotoScreen(),
+                                        AddRelationshipPhotoScreen(
+                                      chapterId: widget.chapter.id,
+                                      authorId: 'me',
+                                    ),
                                   ),
                                 );
 
-                                await _loadPhotos();
+                                if (saved == true) {
+                                  await _loadPhotos();
+                                }
                               },
                               icon: const Icon(
                                 Icons.add_a_photo,
@@ -401,10 +417,73 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                             ),
                           ],
                         ),
+
+                      if (_photos.isNotEmpty)
+                        Column(
+                          children: [
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _photos.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 1,
+                              ),
+                              itemBuilder: (context, index) {
+                                final photo = _photos[index];
+
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.file(
+                                    File(photo.storagePath),
+                                    fit: BoxFit.cover,
+                                  ),
+                                );
+                              },
+                            ),
+
+                            const SizedBox(
+                              height: 20,
+                            ),
+
+                            FilledButton.icon(
+                              onPressed: () async {
+                                final saved =
+                                    await Navigator.push<bool>(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        AddRelationshipPhotoScreen(
+                                      chapterId: widget.chapter.id,
+                                      authorId: 'me',
+                                    ),
+                                  ),
+                                );
+
+                                if (saved == true) {
+                                  await _loadPhotos();
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.add_a_photo,
+                              ),
+                              label: const Text(
+                                "Přidat další fotografii",
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
                 StorySection(
                   icon: Icons.favorite_rounded,
                   title: "O této kapitole",
@@ -413,29 +492,46 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                       _infoRow(
                         Icons.calendar_today,
                         l10n.created,
-                        _formatDate(widget.chapter.createdAt),
+                        _formatDate(
+                          widget.chapter.createdAt,
+                        ),
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(
+                        height: 18,
+                      ),
                       _infoRow(
                         Icons.favorite,
                         l10n.favorite,
-                        widget.chapter.favorite ? l10n.yes : l10n.no,
+                        widget.chapter.favorite
+                            ? l10n.yes
+                            : l10n.no,
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(
+                        height: 18,
+                      ),
                       _infoRow(
                         Icons.flag,
                         l10n.status,
-                        _statusText(context, widget.chapter.status),
+                        _statusText(
+                          context,
+                          widget.chapter.status,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
+
+                const SizedBox(
+                  height: 30,
+                ),
+
                 StorySection(
                   icon: Icons.history_rounded,
                   title: "Náš příběh v čase",
                   child: widget.chapter.events.isEmpty
-                      ? Text(l10n.noEventsYet)
+                      ? Text(
+                          l10n.noEventsYet,
+                        )
                       : Column(
                           children: [
                             ...widget.chapter.events.map(

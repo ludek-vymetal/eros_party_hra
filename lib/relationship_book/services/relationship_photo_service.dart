@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../models/relationship_photo.dart';
 import '../repositories/relationship_photo_repository.dart';
 
@@ -18,9 +20,11 @@ class RelationshipPhotoService {
 
   Future<void> savePhoto(
     RelationshipPhoto photo,
+    File imageFile,
   ) {
     return repository.savePhoto(
       photo,
+      imageFile,
     );
   }
 

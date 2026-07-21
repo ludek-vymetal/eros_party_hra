@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 enum PhotoStorageType {
   local,
   cloud,
+  both,
 }
 
-class PhotoStorageDialog
-    extends StatefulWidget {
+class PhotoStorageDialog extends StatefulWidget {
   const PhotoStorageDialog({
     super.key,
   });
@@ -19,7 +19,7 @@ class PhotoStorageDialog
 class _PhotoStorageDialogState
     extends State<PhotoStorageDialog> {
   PhotoStorageType _selected =
-      PhotoStorageType.cloud;
+      PhotoStorageType.both;
 
   bool _remember = true;
 
@@ -32,8 +32,7 @@ class _PhotoStorageDialogState
         'Ukládání fotografií',
       ),
       content: Column(
-        mainAxisSize:
-            MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
             'Vyberte způsob ukládání fotografií.',
@@ -41,35 +40,46 @@ class _PhotoStorageDialogState
 
           const SizedBox(height: 20),
 
-          RadioListTile(
-            value:
-                PhotoStorageType.cloud,
-            groupValue:
-                _selected,
+          RadioListTile<PhotoStorageType>(
+            value: PhotoStorageType.both,
+            groupValue: _selected,
             onChanged: (value) {
               setState(() {
                 _selected = value!;
               });
             },
             title: const Text(
-              'Synchronizovat do cloudu',
+              'Lokálně + Cloud (doporučeno)',
             ),
           ),
 
-          RadioListTile(
-            value:
-                PhotoStorageType.local,
-            groupValue:
-                _selected,
+          RadioListTile<PhotoStorageType>(
+            value: PhotoStorageType.cloud,
+            groupValue: _selected,
             onChanged: (value) {
               setState(() {
                 _selected = value!;
               });
             },
             title: const Text(
-              'Pouze v tomto zařízení',
+              'Pouze Cloud',
             ),
           ),
+
+          RadioListTile<PhotoStorageType>(
+            value: PhotoStorageType.local,
+            groupValue: _selected,
+            onChanged: (value) {
+              setState(() {
+                _selected = value!;
+              });
+            },
+            title: const Text(
+              'Pouze toto zařízení',
+            ),
+          ),
+
+          const SizedBox(height: 10),
 
           CheckboxListTile(
             value: _remember,
@@ -81,10 +91,20 @@ class _PhotoStorageDialogState
             title: const Text(
               'Zapamatovat volbu',
             ),
+            controlAffinity:
+                ListTileControlAffinity.leading,
           ),
         ],
       ),
       actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text(
+            'Zrušit',
+          ),
+        ),
         FilledButton(
           onPressed: () {
             Navigator.pop(

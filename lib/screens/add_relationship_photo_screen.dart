@@ -5,10 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 import '../relationship_book/models/relationship_photo.dart';
+import '../relationship_book/repositories/local/local_relationship_photo_repository.dart';
+import '../relationship_book/services/relationship_photo_service.dart';
 
-class AddRelationshipPhotoScreen
-    extends StatefulWidget {
-
+class AddRelationshipPhotoScreen extends StatefulWidget {
   final String chapterId;
   final String authorId;
 
@@ -25,18 +25,20 @@ class AddRelationshipPhotoScreen
 
 class _AddRelationshipPhotoScreenState
     extends State<AddRelationshipPhotoScreen> {
-  final ImagePicker _picker =
-      ImagePicker();
+  final ImagePicker _picker = ImagePicker();
 
-  final TextEditingController
-      _descriptionController =
-          TextEditingController();
+  final TextEditingController _descriptionController =
+      TextEditingController();
+
+  final RelationshipPhotoService _photoService =
+      RelationshipPhotoService(
+    repository: LocalRelationshipPhotoRepository(),
+  );
 
   File? _image;
 
   Future<void> _pickImage() async {
-    final file =
-        await _picker.pickImage(
+    final file = await _picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 90,
     );
@@ -49,7 +51,10 @@ class _AddRelationshipPhotoScreenState
       _image = File(file.path);
     });
   }
-  void _save() {
+
+  Future<void> _save() async {
+    debugPrint("SAVE START");
+
     if (_image == null) {
       return;
     }
@@ -60,14 +65,29 @@ class _AddRelationshipPhotoScreenState
       authorId: widget.authorId,
       storagePath: _image!.path,
       downloadUrl: '',
+      description: _descriptionController.text.trim(),
       createdAt: DateTime.now(),
     );
 
+    debugPrint("CALL SERVICE");
+
+    await _photoService.savePhoto(
+      photo,
+      _image!,
+    );
+
+    debugPrint("SERVICE DONE");
+
+    if (!mounted) {
+      return;
+    }
+
     Navigator.pop(
       context,
-      photo,
+      true,
     );
-}
+  }
+
   @override
   void dispose() {
     _descriptionController.dispose();
@@ -105,11 +125,9 @@ class _AddRelationshipPhotoScreenState
                       ),
                     ),
             ),
-
             const SizedBox(
               height: 20,
             ),
-
             TextField(
               controller:
                   _descriptionController,
@@ -121,11 +139,9 @@ class _AddRelationshipPhotoScreenState
                     OutlineInputBorder(),
               ),
             ),
-
             const SizedBox(
               height: 20,
             ),
-
             FilledButton.icon(
               onPressed: _pickImage,
               icon: const Icon(
@@ -133,15 +149,15 @@ class _AddRelationshipPhotoScreenState
               ),
               label: const Text(
                 'Choose photo',
-                const SizedBox(height: 12),
-
-                FilledButton(
-                  onPressed: _save,
-                  child: const Text(
-                    'Save',
-                  ),
-                ),
-
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            FilledButton(
+              onPressed: _save,
+              child: const Text(
+                'Save',
               ),
             ),
           ],

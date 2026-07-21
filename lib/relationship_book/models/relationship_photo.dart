@@ -4,6 +4,7 @@ class RelationshipPhoto {
   final String authorId;
   final String storagePath;
   final String downloadUrl;
+  final String description;
   final DateTime createdAt;
 
   const RelationshipPhoto({
@@ -12,6 +13,7 @@ class RelationshipPhoto {
     required this.authorId,
     required this.storagePath,
     required this.downloadUrl,
+    required this.description,
     required this.createdAt,
   });
 
@@ -21,6 +23,7 @@ class RelationshipPhoto {
     String? authorId,
     String? storagePath,
     String? downloadUrl,
+    String? description,
     DateTime? createdAt,
   }) {
     return RelationshipPhoto(
@@ -29,6 +32,7 @@ class RelationshipPhoto {
       authorId: authorId ?? this.authorId,
       storagePath: storagePath ?? this.storagePath,
       downloadUrl: downloadUrl ?? this.downloadUrl,
+      description: description ?? this.description,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -40,6 +44,7 @@ class RelationshipPhoto {
       'authorId': authorId,
       'storagePath': storagePath,
       'downloadUrl': downloadUrl,
+      'description': description,
       'createdAt': createdAt.toIso8601String(),
     };
   }
@@ -53,6 +58,7 @@ class RelationshipPhoto {
       authorId: json['authorId'] as String,
       storagePath: json['storagePath'] as String,
       downloadUrl: json['downloadUrl'] as String,
+      description: json['description'] as String? ?? '',
       createdAt: DateTime.parse(
         json['createdAt'] as String,
       ),

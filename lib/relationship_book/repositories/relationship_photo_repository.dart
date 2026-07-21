@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../models/relationship_photo.dart';
 
 abstract class RelationshipPhotoRepository {
@@ -7,6 +9,7 @@ abstract class RelationshipPhotoRepository {
 
   Future<void> savePhoto(
     RelationshipPhoto photo,
+    File imageFile,
   );
 
   Future<void> deletePhoto(
