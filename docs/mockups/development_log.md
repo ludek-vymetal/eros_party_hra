@@ -797,3 +797,69 @@ zavést PartnerService do celého projektu
 opravit autorství (já × partner)
 zabránit úpravě cizích reflexí a fotografií
 git 8a4cf11 "feat(relationship-book): local photo storage and PartnerService architecture"
+
+
+📖 Vývojový deník – EROS PARTY GAME
+
+Datum: 21. 7. 2026
+
+Kniha vztahu – Partner Identity System
+✅ Novinky
+Přidán PartnerService jako centrální služba pro identitu partnerů.
+PartnerService je nově inicializován po přihlášení uživatele (AuthWrapper).
+PartnerService načítá:
+aktuální Firebase UID uživatele,
+UID propojeného partnera z PartnerLinkService.
+Přidán clear() při odhlášení uživatele.
+Zachována zpětná kompatibilita pomocí myId / partnerId pro postupnou migraci.
+Opravy Knihy vztahu
+Reflexe
+Autorství již využívá PartnerService.isMine().
+Partnerova reflexe je otevřena pouze pro čtení.
+Uživatel již nemůže vytvářet ani upravovat partnerovu reflexi.
+PermissionService sjednocuje kontrolu oprávnění.
+Fotografie
+Lokální ukládání fotografií je plně funkční.
+Fotografie zůstávají zachované po restartu aplikace.
+Připravena architektura pro řízení oprávnění podle autora fotografie.
+Architektura
+
+Nově existuje jednotný systém identity:
+
+Firebase Auth
+      │
+      ▼
+PartnerService
+      │
+      ├── currentUid
+      ├── partnerUid
+      ├── isMine()
+      └── isPartner()
+
+Veškeré nové funkce Knihy vztahu budou používat tento systém.
+
+Stav projektu
+
+✅ flutter analyze bez chyb
+
+Projekt je stabilní.
+
+git  de37be3 feat(relationship-book): introduce PartnerService identity system
+
+- initialize PartnerService after login
+- load currentUid and partnerUid
+- add centralized permission handling
+- lock partner reflections as read-only
+- prepare migration from me/partner to Firebase UID
+- stabilize relationship book architecture
+- keep local photos persistent after restart
+
+1. 📝 Zápis do Development Diary
+
+Zapíšeme:
+
+proč jsme přešli z hard delete na soft delete,
+proč vznikl Koš,
+jak funguje obnova,
+že cloud fotky jsme odložili až na pozdější fázi,
+jaká je nová roadmapa.

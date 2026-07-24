@@ -108,10 +108,13 @@ class ChapterMottoDialog extends StatelessWidget {
               width: double.infinity,
               child: FilledButton.icon(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(
+                    context,
+                    "Tak co... čím ho nebo ji překvapíš příště?",
+                  );
                 },
                 icon: const Icon(Icons.favorite),
-                label: const Text("Použít motto"),
+                label: const Text("Použít"),
               ),
             ),
 

@@ -17,7 +17,13 @@ class RelationshipPhotoService {
       chapterId,
     );
   }
-
+  Future<void> deletePhotosForChapter(
+    String chapterId,
+  ) {
+    return repository.deletePhotosForChapter(
+      chapterId,
+    );
+  }
   Future<void> savePhoto(
     RelationshipPhoto photo,
     File imageFile,

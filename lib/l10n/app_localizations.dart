@@ -98,77 +98,11 @@ abstract class AppLocalizations {
     Locale('en')
   ];
 
-  /// No description provided for @appTitle.
+  /// No description provided for @account.
   ///
   /// In en, this message translates to:
-  /// **'EROS'**
-  String get appTitle;
-
-  /// No description provided for @newPartyGame.
-  ///
-  /// In en, this message translates to:
-  /// **'🎉 New Party Game'**
-  String get newPartyGame;
-
-  /// No description provided for @continuePartyGame.
-  ///
-  /// In en, this message translates to:
-  /// **'▶️ Continue Party Game'**
-  String get continuePartyGame;
-
-  /// No description provided for @taskManager.
-  ///
-  /// In en, this message translates to:
-  /// **'🛠 Task Manager'**
-  String get taskManager;
-
-  /// No description provided for @partnerMode.
-  ///
-  /// In en, this message translates to:
-  /// **'❤️ Partner Mode'**
-  String get partnerMode;
-
-  /// No description provided for @language.
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get language;
-
-  /// No description provided for @czech.
-  ///
-  /// In en, this message translates to:
-  /// **'🇨🇿 Czech'**
-  String get czech;
-
-  /// No description provided for @english.
-  ///
-  /// In en, this message translates to:
-  /// **'🇺🇸 English'**
-  String get english;
-
-  /// No description provided for @newPartyGamePlayers.
-  ///
-  /// In en, this message translates to:
-  /// **'New Party Game – Players'**
-  String get newPartyGamePlayers;
-
-  /// No description provided for @playerName.
-  ///
-  /// In en, this message translates to:
-  /// **'Player Name'**
-  String get playerName;
-
-  /// No description provided for @male.
-  ///
-  /// In en, this message translates to:
-  /// **'Male'**
-  String get male;
-
-  /// No description provided for @female.
-  ///
-  /// In en, this message translates to:
-  /// **'Female'**
-  String get female;
+  /// **'👤 Account'**
+  String get account;
 
   /// No description provided for @addPlayer.
   ///
@@ -176,35 +110,11 @@ abstract class AppLocalizations {
   /// **'Add Player'**
   String get addPlayer;
 
-  /// No description provided for @continueText.
+  /// No description provided for @addTask.
   ///
   /// In en, this message translates to:
-  /// **'Continue'**
-  String get continueText;
-
-  /// No description provided for @enterPlayerName.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter player name'**
-  String get enterPlayerName;
-
-  /// No description provided for @playerNotParticipating.
-  ///
-  /// In en, this message translates to:
-  /// **'is not participating'**
-  String get playerNotParticipating;
-
-  /// No description provided for @partyConsentTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Game Consent'**
-  String get partyConsentTitle;
-
-  /// No description provided for @partyConsentText.
-  ///
-  /// In en, this message translates to:
-  /// **'this party game is intimate, voluntary and may contain erotic elements, undressing and physical closeness.\n\nYou can say NO at any time.\nDo you agree to participate?'**
-  String get partyConsentText;
+  /// **'➕ Add Task'**
+  String get addTask;
 
   /// No description provided for @agree.
   ///
@@ -212,89 +122,35 @@ abstract class AppLocalizations {
   /// **'Agree'**
   String get agree;
 
-  /// No description provided for @disagree.
+  /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Disagree'**
-  String get disagree;
+  /// **'EROS'**
+  String get appTitle;
 
-  /// No description provided for @shareToCommunity.
+  /// No description provided for @author.
   ///
   /// In en, this message translates to:
-  /// **'Share with community'**
-  String get shareToCommunity;
+  /// **'Author'**
+  String get author;
 
-  /// No description provided for @shareAnonymously.
+  /// No description provided for @boundaries.
   ///
   /// In en, this message translates to:
-  /// **'Share anonymously'**
-  String get shareAnonymously;
+  /// **'Boundaries'**
+  String get boundaries;
 
-  /// No description provided for @communityScenarios.
+  /// No description provided for @boxers.
   ///
   /// In en, this message translates to:
-  /// **'🌍 Community Scenarios'**
-  String get communityScenarios;
+  /// **'Boxers'**
+  String get boxers;
 
-  /// No description provided for @latestScenarios.
+  /// No description provided for @bra.
   ///
   /// In en, this message translates to:
-  /// **'Latest Scenarios'**
-  String get latestScenarios;
-
-  /// No description provided for @topScenarios.
-  ///
-  /// In en, this message translates to:
-  /// **'Top Rated Scenarios'**
-  String get topScenarios;
-
-  /// No description provided for @scenarioImported.
-  ///
-  /// In en, this message translates to:
-  /// **'Scenario imported'**
-  String get scenarioImported;
-
-  /// No description provided for @scenarioAlreadyImported.
-  ///
-  /// In en, this message translates to:
-  /// **'Scenario already imported'**
-  String get scenarioAlreadyImported;
-
-  /// No description provided for @reportScenario.
-  ///
-  /// In en, this message translates to:
-  /// **'Report Scenario'**
-  String get reportScenario;
-
-  /// No description provided for @reportScenarioQuestion.
-  ///
-  /// In en, this message translates to:
-  /// **'Do you really want to report this scenario?'**
-  String get reportScenarioQuestion;
-
-  /// No description provided for @scenarioReported.
-  ///
-  /// In en, this message translates to:
-  /// **'Scenario reported'**
-  String get scenarioReported;
-
-  /// No description provided for @sendReactionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Send Reaction'**
-  String get sendReactionTitle;
-
-  /// No description provided for @reactionMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Write a reaction'**
-  String get reactionMessage;
-
-  /// No description provided for @send.
-  ///
-  /// In en, this message translates to:
-  /// **'Send'**
-  String get send;
+  /// **'Bra'**
+  String get bra;
 
   /// No description provided for @cancel.
   ///
@@ -302,47 +158,47 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
-  /// No description provided for @reactionSent.
+  /// No description provided for @chapter.
   ///
   /// In en, this message translates to:
-  /// **'Reaction sent'**
-  String get reactionSent;
+  /// **'Chapter'**
+  String get chapter;
 
-  /// No description provided for @importScenario.
+  /// No description provided for @chapterArchived.
   ///
   /// In en, this message translates to:
-  /// **'Import Scenario'**
-  String get importScenario;
+  /// **'📚 Archived'**
+  String get chapterArchived;
 
-  /// No description provided for @cloudInbox.
+  /// No description provided for @chapterCompleted.
   ///
   /// In en, this message translates to:
-  /// **'📥 Inbox'**
-  String get cloudInbox;
+  /// **'💚 Completed'**
+  String get chapterCompleted;
 
-  /// No description provided for @noCloudScenarios.
+  /// No description provided for @chapterDraft.
   ///
   /// In en, this message translates to:
-  /// **'No scenarios from your partner yet'**
-  String get noCloudScenarios;
+  /// **'✍️ Writing'**
+  String get chapterDraft;
 
-  /// No description provided for @scenarioDetail.
+  /// No description provided for @chapterTitle.
   ///
   /// In en, this message translates to:
-  /// **'Scenario Detail'**
-  String get scenarioDetail;
+  /// **'Chapter title'**
+  String get chapterTitle;
 
-  /// No description provided for @incomingReactions.
+  /// No description provided for @chapterWaitingForPartner.
   ///
   /// In en, this message translates to:
-  /// **'💬 Received Reactions'**
-  String get incomingReactions;
+  /// **'💛 Waiting for partner'**
+  String get chapterWaitingForPartner;
 
-  /// No description provided for @sentAt.
+  /// No description provided for @chooseClothing.
   ///
   /// In en, this message translates to:
-  /// **'Sent'**
-  String get sentAt;
+  /// **'Choose clothing'**
+  String get chooseClothing;
 
   /// No description provided for @close.
   ///
@@ -350,29 +206,29 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get close;
 
-  /// No description provided for @reactToScenario.
+  /// No description provided for @cloudInbox.
   ///
   /// In en, this message translates to:
-  /// **'💬 React'**
-  String get reactToScenario;
+  /// **'📥 Inbox'**
+  String get cloudInbox;
+
+  /// No description provided for @communityLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load community tasks'**
+  String get communityLoadError;
+
+  /// No description provided for @communityScenarioAlreadyImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario already imported'**
+  String get communityScenarioAlreadyImported;
 
   /// No description provided for @communityScenarioAuthor.
   ///
   /// In en, this message translates to:
   /// **'Author'**
   String get communityScenarioAuthor;
-
-  /// No description provided for @communityScenarioFor.
-  ///
-  /// In en, this message translates to:
-  /// **'For'**
-  String get communityScenarioFor;
-
-  /// No description provided for @communityScenarioGoal.
-  ///
-  /// In en, this message translates to:
-  /// **'Goal'**
-  String get communityScenarioGoal;
 
   /// No description provided for @communityScenarioBoundaries.
   ///
@@ -386,6 +242,18 @@ abstract class AppLocalizations {
   /// **'Emotions'**
   String get communityScenarioEmotions;
 
+  /// No description provided for @communityScenarioFor.
+  ///
+  /// In en, this message translates to:
+  /// **'For'**
+  String get communityScenarioFor;
+
+  /// No description provided for @communityScenarioGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get communityScenarioGoal;
+
   /// No description provided for @communityScenarioImport.
   ///
   /// In en, this message translates to:
@@ -398,17 +266,17 @@ abstract class AppLocalizations {
   /// **'Scenario imported'**
   String get communityScenarioImported;
 
-  /// No description provided for @communityScenarioAlreadyImported.
-  ///
-  /// In en, this message translates to:
-  /// **'Scenario already imported'**
-  String get communityScenarioAlreadyImported;
-
   /// No description provided for @communityScenarioLike.
   ///
   /// In en, this message translates to:
   /// **'Like'**
   String get communityScenarioLike;
+
+  /// No description provided for @communityScenarioLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load community scenarios'**
+  String get communityScenarioLoadError;
 
   /// No description provided for @communityScenarioReport.
   ///
@@ -422,59 +290,17 @@ abstract class AppLocalizations {
   /// **'Do you really want to report this scenario?'**
   String get communityScenarioReportQuestion;
 
-  /// No description provided for @noCommunityScenarios.
+  /// No description provided for @communityScenarios.
   ///
   /// In en, this message translates to:
-  /// **'No community scenarios yet'**
-  String get noCommunityScenarios;
+  /// **'🌍 Community Scenarios'**
+  String get communityScenarios;
 
-  /// No description provided for @communityScenarioLoadError.
+  /// No description provided for @communityTasks.
   ///
   /// In en, this message translates to:
-  /// **'Failed to load community scenarios'**
-  String get communityScenarioLoadError;
-
-  /// No description provided for @latestTasks.
-  ///
-  /// In en, this message translates to:
-  /// **'Latest'**
-  String get latestTasks;
-
-  /// No description provided for @topTasks.
-  ///
-  /// In en, this message translates to:
-  /// **'Top Rated'**
-  String get topTasks;
-
-  /// No description provided for @noIncomingReactions.
-  ///
-  /// In en, this message translates to:
-  /// **'You don\'t have any reactions yet'**
-  String get noIncomingReactions;
-
-  /// No description provided for @partyGame.
-  ///
-  /// In en, this message translates to:
-  /// **'Party Game'**
-  String get partyGame;
-
-  /// No description provided for @currentTurn.
-  ///
-  /// In en, this message translates to:
-  /// **'Current Turn'**
-  String get currentTurn;
-
-  /// No description provided for @naked.
-  ///
-  /// In en, this message translates to:
-  /// **'naked'**
-  String get naked;
-
-  /// No description provided for @youRemove.
-  ///
-  /// In en, this message translates to:
-  /// **'You remove:'**
-  String get youRemove;
+  /// **'Community Tasks'**
+  String get communityTasks;
 
   /// No description provided for @complete.
   ///
@@ -482,23 +308,875 @@ abstract class AppLocalizations {
   /// **'Complete'**
   String get complete;
 
-  /// No description provided for @refuse.
+  /// No description provided for @completed.
   ///
   /// In en, this message translates to:
-  /// **'Refuse'**
-  String get refuse;
+  /// **'✅ Completed'**
+  String get completed;
 
-  /// No description provided for @saveAndExit.
+  /// No description provided for @confirmation.
   ///
   /// In en, this message translates to:
-  /// **'Save and Exit'**
-  String get saveAndExit;
+  /// **'Confirmation'**
+  String get confirmation;
+
+  /// No description provided for @connected.
+  ///
+  /// In en, this message translates to:
+  /// **'🔐 Connected'**
+  String get connected;
+
+  /// No description provided for @continuePartyGame.
+  ///
+  /// In en, this message translates to:
+  /// **'▶️ Continue Party Game'**
+  String get continuePartyGame;
+
+  /// No description provided for @continueText.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueText;
+
+  /// No description provided for @created.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get created;
+
+  /// No description provided for @currentTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Turn'**
+  String get currentTurn;
+
+  /// No description provided for @czech.
+  ///
+  /// In en, this message translates to:
+  /// **'🇨🇿 Czech'**
+  String get czech;
+
+  /// No description provided for @dateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'📅 {date}'**
+  String dateLabel(Object date);
+
+  /// No description provided for @difficultyEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'1 – Gentle'**
+  String get difficultyEasy;
+
+  /// No description provided for @difficultyHard.
+  ///
+  /// In en, this message translates to:
+  /// **'3 – No Limits'**
+  String get difficultyHard;
+
+  /// No description provided for @difficultyMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'2 – Bold'**
+  String get difficultyMedium;
+
+  /// No description provided for @disagree.
+  ///
+  /// In en, this message translates to:
+  /// **'Disagree'**
+  String get disagree;
+
+  /// No description provided for @editScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'✏️ Edit Scenario'**
+  String get editScenario;
+
+  /// No description provided for @emailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'📧 Email'**
+  String get emailAddress;
+
+  /// No description provided for @emotionCalm.
+  ///
+  /// In en, this message translates to:
+  /// **'😊 Calm'**
+  String get emotionCalm;
+
+  /// No description provided for @emotionCuriosity.
+  ///
+  /// In en, this message translates to:
+  /// **'Curiosity'**
+  String get emotionCuriosity;
+
+  /// No description provided for @emotionDominance.
+  ///
+  /// In en, this message translates to:
+  /// **'Dominance'**
+  String get emotionDominance;
+
+  /// No description provided for @emotionExcited.
+  ///
+  /// In en, this message translates to:
+  /// **'❤️ Excited'**
+  String get emotionExcited;
+
+  /// No description provided for @emotionExcitement.
+  ///
+  /// In en, this message translates to:
+  /// **'Excitement'**
+  String get emotionExcitement;
+
+  /// No description provided for @emotionNervous.
+  ///
+  /// In en, this message translates to:
+  /// **'😳 Nervous'**
+  String get emotionNervous;
+
+  /// No description provided for @emotionPlayfulness.
+  ///
+  /// In en, this message translates to:
+  /// **'Playfulness'**
+  String get emotionPlayfulness;
+
+  /// No description provided for @emotionRomance.
+  ///
+  /// In en, this message translates to:
+  /// **'Romance'**
+  String get emotionRomance;
+
+  /// No description provided for @emotionSubmission.
+  ///
+  /// In en, this message translates to:
+  /// **'Submission'**
+  String get emotionSubmission;
+
+  /// No description provided for @emotionTenderness.
+  ///
+  /// In en, this message translates to:
+  /// **'Tenderness'**
+  String get emotionTenderness;
+
+  /// No description provided for @emotionThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'💭 Thinking'**
+  String get emotionThinking;
+
+  /// No description provided for @emotionTrust.
+  ///
+  /// In en, this message translates to:
+  /// **'Trust'**
+  String get emotionTrust;
+
+  /// No description provided for @emotionTurnedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'🔥 Turned On'**
+  String get emotionTurnedOn;
+
+  /// No description provided for @emotionUnsure.
+  ///
+  /// In en, this message translates to:
+  /// **'🤔 Unsure'**
+  String get emotionUnsure;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'🇺🇸 English'**
+  String get english;
+
+  /// No description provided for @enterPartnerCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter partner code:'**
+  String get enterPartnerCode;
+
+  /// No description provided for @enterPlayerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter player name'**
+  String get enterPlayerName;
+
+  /// No description provided for @exportQr.
+  ///
+  /// In en, this message translates to:
+  /// **'📤 Export to QR'**
+  String get exportQr;
+
+  /// No description provided for @favorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite'**
+  String get favorite;
+
+  /// No description provided for @favoriteScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'⭐ Favorite Scenarios'**
+  String get favoriteScenarios;
+
+  /// No description provided for @favoriteScenariosEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any favorite scenarios yet.'**
+  String get favoriteScenariosEmpty;
+
+  /// No description provided for @female.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get female;
+
+  /// No description provided for @fillRequiredFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in all required fields'**
+  String get fillRequiredFields;
+
+  /// No description provided for @forWho.
+  ///
+  /// In en, this message translates to:
+  /// **'For Who'**
+  String get forWho;
 
   /// No description provided for @fullyNakedPlayers.
   ///
   /// In en, this message translates to:
   /// **'🔥 Completely Naked Players'**
   String get fullyNakedPlayers;
+
+  /// No description provided for @gameDifficulty.
+  ///
+  /// In en, this message translates to:
+  /// **'Game Difficulty'**
+  String get gameDifficulty;
+
+  /// No description provided for @generateCode.
+  ///
+  /// In en, this message translates to:
+  /// **'🔐 Generate Code'**
+  String get generateCode;
+
+  /// No description provided for @givePhoneToPlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Give the phone to this player:'**
+  String get givePhoneToPlayer;
+
+  /// No description provided for @hoodie.
+  ///
+  /// In en, this message translates to:
+  /// **'Hoodie'**
+  String get hoodie;
+
+  /// No description provided for @howDoYouDecide.
+  ///
+  /// In en, this message translates to:
+  /// **'What is your decision?'**
+  String get howDoYouDecide;
+
+  /// No description provided for @howDoYouFeel.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you feel?'**
+  String get howDoYouFeel;
+
+  /// No description provided for @importScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Scenario'**
+  String get importScenario;
+
+  /// No description provided for @importTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Import task'**
+  String get importTask;
+
+  /// No description provided for @inboxCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Completed'**
+  String get inboxCompleted;
+
+  /// No description provided for @inboxPostponed.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Postponed'**
+  String get inboxPostponed;
+
+  /// No description provided for @inboxReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'📥 Received'**
+  String get inboxReceived;
+
+  /// No description provided for @inboxRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ Rejected'**
+  String get inboxRejected;
+
+  /// No description provided for @incomingReactions.
+  ///
+  /// In en, this message translates to:
+  /// **'💬 Received Reactions'**
+  String get incomingReactions;
+
+  /// No description provided for @invalidCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Code is invalid or corrupted'**
+  String get invalidCode;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @lastClothing.
+  ///
+  /// In en, this message translates to:
+  /// **'🔥 LAST CLOTHING 🔥'**
+  String get lastClothing;
+
+  /// No description provided for @latestScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest Scenarios'**
+  String get latestScenarios;
+
+  /// No description provided for @latestTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest'**
+  String get latestTasks;
+
+  /// No description provided for @likes.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes'**
+  String get likes;
+
+  /// No description provided for @link.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect'**
+  String get link;
+
+  /// No description provided for @linkedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ You are connected'**
+  String get linkedSuccess;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'🚪 Sign out'**
+  String get logout;
+
+  /// No description provided for @male.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get male;
+
+  /// No description provided for @me.
+  ///
+  /// In en, this message translates to:
+  /// **'Me'**
+  String get me;
+
+  /// No description provided for @message.
+  ///
+  /// In en, this message translates to:
+  /// **'Message:'**
+  String get message;
+
+  /// No description provided for @messageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'💬 {message}'**
+  String messageLabel(Object message);
+
+  /// No description provided for @naked.
+  ///
+  /// In en, this message translates to:
+  /// **'naked'**
+  String get naked;
+
+  /// No description provided for @newPartyGame.
+  ///
+  /// In en, this message translates to:
+  /// **'🎉 New Party Game'**
+  String get newPartyGame;
+
+  /// No description provided for @newPartyGamePlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'New Party Game – Players'**
+  String get newPartyGamePlayers;
+
+  /// No description provided for @newScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'✍️ New Scenario'**
+  String get newScenario;
+
+  /// No description provided for @noCloudScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'No scenarios from your partner yet'**
+  String get noCloudScenarios;
+
+  /// No description provided for @noCommunityScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'No community scenarios yet'**
+  String get noCommunityScenarios;
+
+  /// No description provided for @noCommunityTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No community tasks have been shared yet'**
+  String get noCommunityTasks;
+
+  /// No description provided for @noEventsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No events yet'**
+  String get noEventsYet;
+
+  /// No description provided for @noIncomingReactions.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any reactions yet'**
+  String get noIncomingReactions;
+
+  /// No description provided for @noScenariosYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No scenarios yet'**
+  String get noScenariosYet;
+
+  /// No description provided for @noTasksYet.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no tasks yet'**
+  String get noTasksYet;
+
+  /// No description provided for @notCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ Not completed'**
+  String get notCompleted;
+
+  /// No description provided for @notConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'🔐 Not Connected'**
+  String get notConnected;
+
+  /// No description provided for @nothingToHide.
+  ///
+  /// In en, this message translates to:
+  /// **'has nothing left to hide'**
+  String get nothingToHide;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @openScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Scenario'**
+  String get openScenario;
+
+  /// No description provided for @ourThoughts.
+  ///
+  /// In en, this message translates to:
+  /// **'Our thoughts'**
+  String get ourThoughts;
+
+  /// No description provided for @panties.
+  ///
+  /// In en, this message translates to:
+  /// **'Panties'**
+  String get panties;
+
+  /// No description provided for @pants.
+  ///
+  /// In en, this message translates to:
+  /// **'Pants'**
+  String get pants;
+
+  /// No description provided for @partner.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner'**
+  String get partner;
+
+  /// No description provided for @partnerLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner Connection'**
+  String get partnerLink;
+
+  /// No description provided for @partnerMode.
+  ///
+  /// In en, this message translates to:
+  /// **'❤️ Partner Mode'**
+  String get partnerMode;
+
+  /// No description provided for @partnerModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'❤️ PARTNER MODE ❤️'**
+  String get partnerModeTitle;
+
+  /// No description provided for @partyConsentScreenText.
+  ///
+  /// In en, this message translates to:
+  /// **'This party game is intimate, voluntary and may contain erotic elements, undressing and physical closeness.\n\nEvery player has the right to say NO at any time.\nRespect is more important than the game itself.\n\nContinue only if all participants agree.'**
+  String get partyConsentScreenText;
+
+  /// No description provided for @partyConsentText.
+  ///
+  /// In en, this message translates to:
+  /// **'this party game is intimate, voluntary and may contain erotic elements, undressing and physical closeness.\n\nYou can say NO at any time.\nDo you agree to participate?'**
+  String get partyConsentText;
+
+  /// No description provided for @partyConsentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Game Consent'**
+  String get partyConsentTitle;
+
+  /// No description provided for @partyGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Party Game'**
+  String get partyGame;
+
+  /// No description provided for @pasteFromClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'📋 Paste From Clipboard'**
+  String get pasteFromClipboard;
+
+  /// No description provided for @pasteScenarioCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste Scenario Code'**
+  String get pasteScenarioCode;
+
+  /// No description provided for @playerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Player Name'**
+  String get playerName;
+
+  /// No description provided for @playerNotParticipating.
+  ///
+  /// In en, this message translates to:
+  /// **'is not participating'**
+  String get playerNotParticipating;
+
+  /// No description provided for @postponedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Postponed'**
+  String get postponedStatus;
+
+  /// No description provided for @proofAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Proof Accepted'**
+  String get proofAccepted;
+
+  /// No description provided for @proofAcceptedButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Proof Accepted'**
+  String get proofAcceptedButton;
+
+  /// No description provided for @proofAcceptedSnackBar.
+  ///
+  /// In en, this message translates to:
+  /// **'Proof accepted'**
+  String get proofAcceptedSnackBar;
+
+  /// No description provided for @proofConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Proof confirmed'**
+  String get proofConfirmed;
+
+  /// No description provided for @proofConfirmedByPartner.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Partner confirmed the proof'**
+  String get proofConfirmedByPartner;
+
+  /// No description provided for @proofMarkedSent.
+  ///
+  /// In en, this message translates to:
+  /// **'📷 Proof marked as sent'**
+  String get proofMarkedSent;
+
+  /// No description provided for @proofSent.
+  ///
+  /// In en, this message translates to:
+  /// **'📷 Proof sent'**
+  String get proofSent;
+
+  /// No description provided for @proofSentButton.
+  ///
+  /// In en, this message translates to:
+  /// **'📷 I Sent Proof via WhatsApp'**
+  String get proofSentButton;
+
+  /// No description provided for @proofSentQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Did you really send proof to your partner via WhatsApp?'**
+  String get proofSentQuestion;
+
+  /// No description provided for @proofSentWhatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'📷 Proof Sent via WhatsApp'**
+  String get proofSentWhatsapp;
+
+  /// No description provided for @proofWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Waiting for Proof'**
+  String get proofWaiting;
+
+  /// No description provided for @reactToScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'💬 React'**
+  String get reactToScenario;
+
+  /// No description provided for @reactionComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ I will do it'**
+  String get reactionComplete;
+
+  /// No description provided for @reactionCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get reactionCompleted;
+
+  /// No description provided for @reactionDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date:'**
+  String get reactionDateLabel;
+
+  /// No description provided for @reactionDecision.
+  ///
+  /// In en, this message translates to:
+  /// **'Decision'**
+  String get reactionDecision;
+
+  /// No description provided for @reactionDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Reaction Detail'**
+  String get reactionDetail;
+
+  /// No description provided for @reactionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a reaction'**
+  String get reactionMessage;
+
+  /// No description provided for @reactionMessageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Message:'**
+  String get reactionMessageLabel;
+
+  /// No description provided for @reactionMessageRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'✍️ Please write a reason or reaction.'**
+  String get reactionMessageRequired;
+
+  /// No description provided for @reactionNotCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Completed'**
+  String get reactionNotCompleted;
+
+  /// No description provided for @reactionPostpone.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Postpone'**
+  String get reactionPostpone;
+
+  /// No description provided for @reactionReject.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ I refuse'**
+  String get reactionReject;
+
+  /// No description provided for @reactionSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Reaction sent'**
+  String get reactionSent;
+
+  /// No description provided for @reactions.
+  ///
+  /// In en, this message translates to:
+  /// **'reactions'**
+  String get reactions;
+
+  /// No description provided for @readScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'📖 Read Scenario'**
+  String get readScenario;
+
+  /// No description provided for @receivedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'📥 Received'**
+  String get receivedStatus;
+
+  /// No description provided for @reconsiderScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'❤️ Reconsider'**
+  String get reconsiderScenario;
+
+  /// No description provided for @refuse.
+  ///
+  /// In en, this message translates to:
+  /// **'Refuse'**
+  String get refuse;
+
+  /// No description provided for @rejectedScenarioInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ This scenario was rejected.\n\nWould you like to reconsider it?'**
+  String get rejectedScenarioInfo;
+
+  /// No description provided for @rejectedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ Rejected'**
+  String get rejectedStatus;
+
+  /// No description provided for @relationshipAboutChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'About this chapter'**
+  String get relationshipAboutChapter;
+
+  /// No description provided for @relationshipBook.
+  ///
+  /// In en, this message translates to:
+  /// **'Relationship Book'**
+  String get relationshipBook;
+
+  /// No description provided for @relationshipChallenge.
+  ///
+  /// In en, this message translates to:
+  /// **'The challenge that started it all'**
+  String get relationshipChallenge;
+
+  /// No description provided for @relationshipJournal.
+  ///
+  /// In en, this message translates to:
+  /// **'❤️ Relationship Journal'**
+  String get relationshipJournal;
+
+  /// No description provided for @relationshipJournalEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any shared memories yet.'**
+  String get relationshipJournalEmpty;
+
+  /// No description provided for @relationshipNoPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no photos yet.'**
+  String get relationshipNoPhotos;
+
+  /// No description provided for @relationshipPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Photos'**
+  String get relationshipPhotos;
+
+  /// No description provided for @relationshipReflectionPlaceholderMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reflection will appear here.'**
+  String get relationshipReflectionPlaceholderMine;
+
+  /// No description provided for @relationshipReflectionPlaceholderPartner.
+  ///
+  /// In en, this message translates to:
+  /// **'Your partner\'s reflection will appear here.'**
+  String get relationshipReflectionPlaceholderPartner;
+
+  /// No description provided for @relationshipReflections.
+  ///
+  /// In en, this message translates to:
+  /// **'Our reflections'**
+  String get relationshipReflections;
+
+  /// No description provided for @relationshipStory.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Story'**
+  String get relationshipStory;
+
+  /// No description provided for @relationshipStorySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Every shared memory becomes another page of your story.'**
+  String get relationshipStorySubtitle;
+
+  /// No description provided for @reportScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Scenario'**
+  String get reportScenario;
+
+  /// No description provided for @reportScenarioQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to report this scenario?'**
+  String get reportScenarioQuestion;
+
+  /// No description provided for @reportTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get reportTask;
+
+  /// No description provided for @reportTaskQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to report this task?'**
+  String get reportTaskQuestion;
 
   /// No description provided for @rescueApproved.
   ///
@@ -518,155 +1196,17 @@ abstract class AppLocalizations {
   /// **'Don\'t worry! There will be another vote in 5 rounds. Try to convince others next round!'**
   String get rescueDeniedText;
 
+  /// No description provided for @rescueQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to rescue the naked player?'**
+  String get rescueQuestion;
+
   /// No description provided for @rescueSelectFirst.
   ///
   /// In en, this message translates to:
   /// **'Rescue: Select 1st clothing'**
   String get rescueSelectFirst;
-
-  /// No description provided for @chooseClothing.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose clothing'**
-  String get chooseClothing;
-
-  /// No description provided for @selectClothing.
-  ///
-  /// In en, this message translates to:
-  /// **'Click clothing you want to wear:'**
-  String get selectClothing;
-
-  /// No description provided for @boxers.
-  ///
-  /// In en, this message translates to:
-  /// **'Boxers'**
-  String get boxers;
-
-  /// No description provided for @bra.
-  ///
-  /// In en, this message translates to:
-  /// **'Bra'**
-  String get bra;
-
-  /// No description provided for @pants.
-  ///
-  /// In en, this message translates to:
-  /// **'Pants'**
-  String get pants;
-
-  /// No description provided for @shoes.
-  ///
-  /// In en, this message translates to:
-  /// **'Shoes'**
-  String get shoes;
-
-  /// No description provided for @tshirt.
-  ///
-  /// In en, this message translates to:
-  /// **'T-Shirt'**
-  String get tshirt;
-
-  /// No description provided for @hoodie.
-  ///
-  /// In en, this message translates to:
-  /// **'Hoodie'**
-  String get hoodie;
-
-  /// No description provided for @socks.
-  ///
-  /// In en, this message translates to:
-  /// **'Socks'**
-  String get socks;
-
-  /// No description provided for @panties.
-  ///
-  /// In en, this message translates to:
-  /// **'Panties'**
-  String get panties;
-
-  /// No description provided for @sweater.
-  ///
-  /// In en, this message translates to:
-  /// **'Sweater'**
-  String get sweater;
-
-  /// No description provided for @ok.
-  ///
-  /// In en, this message translates to:
-  /// **'OK'**
-  String get ok;
-
-  /// No description provided for @gameDifficulty.
-  ///
-  /// In en, this message translates to:
-  /// **'Game Difficulty'**
-  String get gameDifficulty;
-
-  /// No description provided for @difficultyEasy.
-  ///
-  /// In en, this message translates to:
-  /// **'1 – Gentle'**
-  String get difficultyEasy;
-
-  /// No description provided for @difficultyMedium.
-  ///
-  /// In en, this message translates to:
-  /// **'2 – Bold'**
-  String get difficultyMedium;
-
-  /// No description provided for @difficultyHard.
-  ///
-  /// In en, this message translates to:
-  /// **'3 – No Limits'**
-  String get difficultyHard;
-
-  /// No description provided for @startGame.
-  ///
-  /// In en, this message translates to:
-  /// **'Start Game'**
-  String get startGame;
-
-  /// No description provided for @partyConsentScreenText.
-  ///
-  /// In en, this message translates to:
-  /// **'This party game is intimate, voluntary and may contain erotic elements, undressing and physical closeness.\n\nEvery player has the right to say NO at any time.\nRespect is more important than the game itself.\n\nContinue only if all participants agree.'**
-  String get partyConsentScreenText;
-
-  /// No description provided for @taskManagerTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'🛠️ Task Manager'**
-  String get taskManagerTitle;
-
-  /// No description provided for @noTasksYet.
-  ///
-  /// In en, this message translates to:
-  /// **'There are no tasks yet'**
-  String get noTasksYet;
-
-  /// No description provided for @addTask.
-  ///
-  /// In en, this message translates to:
-  /// **'➕ Add Task'**
-  String get addTask;
-
-  /// No description provided for @exportQr.
-  ///
-  /// In en, this message translates to:
-  /// **'📤 Export to QR'**
-  String get exportQr;
-
-  /// No description provided for @lastClothing.
-  ///
-  /// In en, this message translates to:
-  /// **'🔥 LAST CLOTHING 🔥'**
-  String get lastClothing;
-
-  /// No description provided for @nothingToHide.
-  ///
-  /// In en, this message translates to:
-  /// **'has nothing left to hide'**
-  String get nothingToHide;
 
   /// No description provided for @rescueTitle.
   ///
@@ -674,647 +1214,23 @@ abstract class AppLocalizations {
   /// **'🛟 RESCUE'**
   String get rescueTitle;
 
-  /// No description provided for @givePhoneToPlayer.
-  ///
-  /// In en, this message translates to:
-  /// **'Give the phone to this player:'**
-  String get givePhoneToPlayer;
-
-  /// No description provided for @rescueQuestion.
-  ///
-  /// In en, this message translates to:
-  /// **'Do you want to rescue the naked player?'**
-  String get rescueQuestion;
-
-  /// No description provided for @yes.
-  ///
-  /// In en, this message translates to:
-  /// **'YES'**
-  String get yes;
-
-  /// No description provided for @no.
-  ///
-  /// In en, this message translates to:
-  /// **'NO'**
-  String get no;
-
   /// No description provided for @rescuedPlayer.
   ///
   /// In en, this message translates to:
   /// **'Rescued player:'**
   String get rescuedPlayer;
 
-  /// No description provided for @votingPlayer.
+  /// No description provided for @saveAndExit.
   ///
   /// In en, this message translates to:
-  /// **'Voting player:'**
-  String get votingPlayer;
-
-  /// No description provided for @partnerModeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'❤️ PARTNER MODE ❤️'**
-  String get partnerModeTitle;
-
-  /// No description provided for @writeScenario.
-  ///
-  /// In en, this message translates to:
-  /// **'✍️ Write New Scenario'**
-  String get writeScenario;
-
-  /// No description provided for @readScenario.
-  ///
-  /// In en, this message translates to:
-  /// **'📖 Read Scenario'**
-  String get readScenario;
-
-  /// No description provided for @scenarioHistory.
-  ///
-  /// In en, this message translates to:
-  /// **'🕰️ Scenario History'**
-  String get scenarioHistory;
-
-  /// No description provided for @connected.
-  ///
-  /// In en, this message translates to:
-  /// **'🔐 Connected'**
-  String get connected;
-
-  /// No description provided for @notConnected.
-  ///
-  /// In en, this message translates to:
-  /// **'🔐 Not Connected'**
-  String get notConnected;
-
-  /// No description provided for @editScenario.
-  ///
-  /// In en, this message translates to:
-  /// **'✏️ Edit Scenario'**
-  String get editScenario;
-
-  /// No description provided for @newScenario.
-  ///
-  /// In en, this message translates to:
-  /// **'✍️ New Scenario'**
-  String get newScenario;
-
-  /// No description provided for @author.
-  ///
-  /// In en, this message translates to:
-  /// **'Author'**
-  String get author;
-
-  /// No description provided for @forWho.
-  ///
-  /// In en, this message translates to:
-  /// **'For Who'**
-  String get forWho;
-
-  /// No description provided for @scenarioTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Scenario Title'**
-  String get scenarioTitle;
-
-  /// No description provided for @boundaries.
-  ///
-  /// In en, this message translates to:
-  /// **'Boundaries'**
-  String get boundaries;
-
-  /// No description provided for @scenarioGoal.
-  ///
-  /// In en, this message translates to:
-  /// **'🎯 Scenario Goal'**
-  String get scenarioGoal;
-
-  /// No description provided for @scenarioEmotions.
-  ///
-  /// In en, this message translates to:
-  /// **'What emotions should the scenario evoke?'**
-  String get scenarioEmotions;
-
-  /// No description provided for @scenarioText.
-  ///
-  /// In en, this message translates to:
-  /// **'Scenario Text'**
-  String get scenarioText;
+  /// **'Save and Exit'**
+  String get saveAndExit;
 
   /// No description provided for @saveChanges.
   ///
   /// In en, this message translates to:
   /// **'💾 Save Changes'**
   String get saveChanges;
-
-  /// No description provided for @generateCode.
-  ///
-  /// In en, this message translates to:
-  /// **'🔐 Generate Code'**
-  String get generateCode;
-
-  /// No description provided for @copyCode.
-  ///
-  /// In en, this message translates to:
-  /// **'📋 Copy Code'**
-  String get copyCode;
-
-  /// No description provided for @fillRequiredFields.
-  ///
-  /// In en, this message translates to:
-  /// **'Fill in all required fields'**
-  String get fillRequiredFields;
-
-  /// No description provided for @emotionTenderness.
-  ///
-  /// In en, this message translates to:
-  /// **'Tenderness'**
-  String get emotionTenderness;
-
-  /// No description provided for @emotionTrust.
-  ///
-  /// In en, this message translates to:
-  /// **'Trust'**
-  String get emotionTrust;
-
-  /// No description provided for @emotionExcitement.
-  ///
-  /// In en, this message translates to:
-  /// **'Excitement'**
-  String get emotionExcitement;
-
-  /// No description provided for @emotionPlayfulness.
-  ///
-  /// In en, this message translates to:
-  /// **'Playfulness'**
-  String get emotionPlayfulness;
-
-  /// No description provided for @emotionDominance.
-  ///
-  /// In en, this message translates to:
-  /// **'Dominance'**
-  String get emotionDominance;
-
-  /// No description provided for @emotionSubmission.
-  ///
-  /// In en, this message translates to:
-  /// **'Submission'**
-  String get emotionSubmission;
-
-  /// No description provided for @emotionRomance.
-  ///
-  /// In en, this message translates to:
-  /// **'Romance'**
-  String get emotionRomance;
-
-  /// No description provided for @emotionCuriosity.
-  ///
-  /// In en, this message translates to:
-  /// **'Curiosity'**
-  String get emotionCuriosity;
-
-  /// No description provided for @openScenario.
-  ///
-  /// In en, this message translates to:
-  /// **'Open Scenario'**
-  String get openScenario;
-
-  /// No description provided for @pasteScenarioCode.
-  ///
-  /// In en, this message translates to:
-  /// **'Paste Scenario Code'**
-  String get pasteScenarioCode;
-
-  /// No description provided for @pasteFromClipboard.
-  ///
-  /// In en, this message translates to:
-  /// **'📋 Paste From Clipboard'**
-  String get pasteFromClipboard;
-
-  /// No description provided for @invalidCode.
-  ///
-  /// In en, this message translates to:
-  /// **'Code is invalid or corrupted'**
-  String get invalidCode;
-
-  /// No description provided for @howDoYouFeel.
-  ///
-  /// In en, this message translates to:
-  /// **'How do you feel?'**
-  String get howDoYouFeel;
-
-  /// No description provided for @howDoYouDecide.
-  ///
-  /// In en, this message translates to:
-  /// **'What is your decision?'**
-  String get howDoYouDecide;
-
-  /// No description provided for @message.
-  ///
-  /// In en, this message translates to:
-  /// **'Message:'**
-  String get message;
-
-  /// No description provided for @attachProof.
-  ///
-  /// In en, this message translates to:
-  /// **'Attach Proof'**
-  String get attachProof;
-
-  /// No description provided for @sendReaction.
-  ///
-  /// In en, this message translates to:
-  /// **'💌 Send Reaction'**
-  String get sendReaction;
-
-  /// No description provided for @emotionExcited.
-  ///
-  /// In en, this message translates to:
-  /// **'❤️ Excited'**
-  String get emotionExcited;
-
-  /// No description provided for @emotionCalm.
-  ///
-  /// In en, this message translates to:
-  /// **'😊 Calm'**
-  String get emotionCalm;
-
-  /// No description provided for @emotionTurnedOn.
-  ///
-  /// In en, this message translates to:
-  /// **'🔥 Turned On'**
-  String get emotionTurnedOn;
-
-  /// No description provided for @emotionNervous.
-  ///
-  /// In en, this message translates to:
-  /// **'😳 Nervous'**
-  String get emotionNervous;
-
-  /// No description provided for @emotionUnsure.
-  ///
-  /// In en, this message translates to:
-  /// **'🤔 Unsure'**
-  String get emotionUnsure;
-
-  /// No description provided for @emotionThinking.
-  ///
-  /// In en, this message translates to:
-  /// **'💭 Thinking'**
-  String get emotionThinking;
-
-  /// No description provided for @stateWillDo.
-  ///
-  /// In en, this message translates to:
-  /// **'I will do it'**
-  String get stateWillDo;
-
-  /// No description provided for @stateMaybeLater.
-  ///
-  /// In en, this message translates to:
-  /// **'maybe later'**
-  String get stateMaybeLater;
-
-  /// No description provided for @stateWillNotDo.
-  ///
-  /// In en, this message translates to:
-  /// **'I will not do it'**
-  String get stateWillNotDo;
-
-  /// No description provided for @noScenariosYet.
-  ///
-  /// In en, this message translates to:
-  /// **'No scenarios yet'**
-  String get noScenariosYet;
-
-  /// No description provided for @reactions.
-  ///
-  /// In en, this message translates to:
-  /// **'reactions'**
-  String get reactions;
-
-  /// No description provided for @partnerLink.
-  ///
-  /// In en, this message translates to:
-  /// **'Partner Connection'**
-  String get partnerLink;
-
-  /// No description provided for @linkedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ You are connected'**
-  String get linkedSuccess;
-
-  /// No description provided for @unlink.
-  ///
-  /// In en, this message translates to:
-  /// **'Disconnect'**
-  String get unlink;
-
-  /// No description provided for @yourCode.
-  ///
-  /// In en, this message translates to:
-  /// **'Your code:'**
-  String get yourCode;
-
-  /// No description provided for @enterPartnerCode.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter partner code:'**
-  String get enterPartnerCode;
-
-  /// No description provided for @link.
-  ///
-  /// In en, this message translates to:
-  /// **'Connect'**
-  String get link;
-
-  /// No description provided for @taskShared.
-  ///
-  /// In en, this message translates to:
-  /// **'Task shared with community'**
-  String get taskShared;
-
-  /// No description provided for @taskShareFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to share task'**
-  String get taskShareFailed;
-
-  /// No description provided for @communityTasks.
-  ///
-  /// In en, this message translates to:
-  /// **'Community Tasks'**
-  String get communityTasks;
-
-  /// No description provided for @noCommunityTasks.
-  ///
-  /// In en, this message translates to:
-  /// **'No community tasks have been shared yet'**
-  String get noCommunityTasks;
-
-  /// No description provided for @communityLoadError.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to load community tasks'**
-  String get communityLoadError;
-
-  /// No description provided for @likes.
-  ///
-  /// In en, this message translates to:
-  /// **'Likes'**
-  String get likes;
-
-  /// No description provided for @importTask.
-  ///
-  /// In en, this message translates to:
-  /// **'Import task'**
-  String get importTask;
-
-  /// No description provided for @taskImported.
-  ///
-  /// In en, this message translates to:
-  /// **'Task imported'**
-  String get taskImported;
-
-  /// No description provided for @reportTask.
-  ///
-  /// In en, this message translates to:
-  /// **'Report'**
-  String get reportTask;
-
-  /// No description provided for @taskReported.
-  ///
-  /// In en, this message translates to:
-  /// **'Task reported'**
-  String get taskReported;
-
-  /// No description provided for @reportTaskQuestion.
-  ///
-  /// In en, this message translates to:
-  /// **'Do you want to report this task?'**
-  String get reportTaskQuestion;
-
-  /// No description provided for @taskAlreadyImported.
-  ///
-  /// In en, this message translates to:
-  /// **'This task is already imported'**
-  String get taskAlreadyImported;
-
-  /// No description provided for @completed.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ Completed'**
-  String get completed;
-
-  /// No description provided for @notCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'❌ Not completed'**
-  String get notCompleted;
-
-  /// No description provided for @inboxReceived.
-  ///
-  /// In en, this message translates to:
-  /// **'📥 Received'**
-  String get inboxReceived;
-
-  /// No description provided for @inboxPostponed.
-  ///
-  /// In en, this message translates to:
-  /// **'⏳ Postponed'**
-  String get inboxPostponed;
-
-  /// No description provided for @inboxCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ Completed'**
-  String get inboxCompleted;
-
-  /// No description provided for @inboxRejected.
-  ///
-  /// In en, this message translates to:
-  /// **'❌ Rejected'**
-  String get inboxRejected;
-
-  /// No description provided for @reactionMessageRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'✍️ Please write a reason or reaction.'**
-  String get reactionMessageRequired;
-
-  /// No description provided for @receivedStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'📥 Received'**
-  String get receivedStatus;
-
-  /// No description provided for @postponedStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'⏳ Postponed'**
-  String get postponedStatus;
-
-  /// No description provided for @rejectedStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'❌ Rejected'**
-  String get rejectedStatus;
-
-  /// No description provided for @reactionDecision.
-  ///
-  /// In en, this message translates to:
-  /// **'Decision'**
-  String get reactionDecision;
-
-  /// No description provided for @reactionComplete.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ I will do it'**
-  String get reactionComplete;
-
-  /// No description provided for @reactionPostpone.
-  ///
-  /// In en, this message translates to:
-  /// **'⏳ Postpone'**
-  String get reactionPostpone;
-
-  /// No description provided for @reactionReject.
-  ///
-  /// In en, this message translates to:
-  /// **'❌ I refuse'**
-  String get reactionReject;
-
-  /// No description provided for @rejectedScenarioInfo.
-  ///
-  /// In en, this message translates to:
-  /// **'❌ This scenario was rejected.\n\nWould you like to reconsider it?'**
-  String get rejectedScenarioInfo;
-
-  /// No description provided for @reconsiderScenario.
-  ///
-  /// In en, this message translates to:
-  /// **'❤️ Reconsider'**
-  String get reconsiderScenario;
-
-  /// No description provided for @scenarioMovedToPostponed.
-  ///
-  /// In en, this message translates to:
-  /// **'⏳ Scenario moved to postponed'**
-  String get scenarioMovedToPostponed;
-
-  /// No description provided for @reactionDetail.
-  ///
-  /// In en, this message translates to:
-  /// **'Reaction Detail'**
-  String get reactionDetail;
-
-  /// No description provided for @reactionCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Completed'**
-  String get reactionCompleted;
-
-  /// No description provided for @reactionNotCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Not Completed'**
-  String get reactionNotCompleted;
-
-  /// No description provided for @reactionMessageLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Message:'**
-  String get reactionMessageLabel;
-
-  /// No description provided for @reactionDateLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Date:'**
-  String get reactionDateLabel;
-
-  /// No description provided for @statistics.
-  ///
-  /// In en, this message translates to:
-  /// **'📊 Statistics'**
-  String get statistics;
-
-  /// No description provided for @proofAccepted.
-  ///
-  /// In en, this message translates to:
-  /// **'✅ Proof Accepted'**
-  String get proofAccepted;
-
-  /// No description provided for @proofSentWhatsapp.
-  ///
-  /// In en, this message translates to:
-  /// **'📷 Proof Sent via WhatsApp'**
-  String get proofSentWhatsapp;
-
-  /// No description provided for @proofWaiting.
-  ///
-  /// In en, this message translates to:
-  /// **'⏳ Waiting for Proof'**
-  String get proofWaiting;
-
-  /// No description provided for @proofSentButton.
-  ///
-  /// In en, this message translates to:
-  /// **'📷 I Sent Proof via WhatsApp'**
-  String get proofSentButton;
-
-  /// No description provided for @confirmation.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirmation'**
-  String get confirmation;
-
-  /// No description provided for @proofSentQuestion.
-  ///
-  /// In en, this message translates to:
-  /// **'Did you really send proof to your partner via WhatsApp?'**
-  String get proofSentQuestion;
-
-  /// No description provided for @proofMarkedSent.
-  ///
-  /// In en, this message translates to:
-  /// **'📷 Proof marked as sent'**
-  String get proofMarkedSent;
-
-  /// No description provided for @proofAcceptedSnackBar.
-  ///
-  /// In en, this message translates to:
-  /// **'Proof accepted'**
-  String get proofAcceptedSnackBar;
-
-  /// No description provided for @favoriteScenarios.
-  ///
-  /// In en, this message translates to:
-  /// **'⭐ Favorite Scenarios'**
-  String get favoriteScenarios;
-
-  /// No description provided for @favoriteScenariosEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'You don\'t have any favorite scenarios yet.'**
-  String get favoriteScenariosEmpty;
-
-  /// No description provided for @favorite.
-  ///
-  /// In en, this message translates to:
-  /// **'Favorite'**
-  String get favorite;
-
-  /// No description provided for @relationshipJournal.
-  ///
-  /// In en, this message translates to:
-  /// **'❤️ Relationship Journal'**
-  String get relationshipJournal;
-
-  /// No description provided for @relationshipJournalEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'You don\'t have any shared memories yet.'**
-  String get relationshipJournalEmpty;
 
   /// No description provided for @saveToRelationshipJournal.
   ///
@@ -1328,29 +1244,125 @@ abstract class AppLocalizations {
   /// **'Would you like to save this moment to your relationship journal?'**
   String get saveToRelationshipJournalQuestion;
 
-  /// No description provided for @chapterTitle.
+  /// No description provided for @scenarioAlreadyImported.
   ///
   /// In en, this message translates to:
-  /// **'Chapter title'**
-  String get chapterTitle;
+  /// **'Scenario already imported'**
+  String get scenarioAlreadyImported;
 
-  /// No description provided for @ourThoughts.
+  /// No description provided for @scenarioDetail.
   ///
   /// In en, this message translates to:
-  /// **'Our thoughts'**
-  String get ourThoughts;
+  /// **'Scenario Detail'**
+  String get scenarioDetail;
 
-  /// No description provided for @sharedMemory.
+  /// No description provided for @scenarioEmotions.
   ///
   /// In en, this message translates to:
-  /// **'Shared memory'**
-  String get sharedMemory;
+  /// **'What emotions should the scenario evoke?'**
+  String get scenarioEmotions;
 
-  /// No description provided for @relationshipStory.
+  /// No description provided for @scenarioGoal.
   ///
   /// In en, this message translates to:
-  /// **'Our Story'**
-  String get relationshipStory;
+  /// **'🎯 Scenario Goal'**
+  String get scenarioGoal;
+
+  /// No description provided for @scenarioHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'🕰️ Scenario History'**
+  String get scenarioHistory;
+
+  /// No description provided for @scenarioImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario imported'**
+  String get scenarioImported;
+
+  /// No description provided for @scenarioLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'🏷️ {name}'**
+  String scenarioLabel(Object name);
+
+  /// No description provided for @scenarioMovedToPostponed.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Scenario moved to postponed'**
+  String get scenarioMovedToPostponed;
+
+  /// No description provided for @scenarioReported.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario reported'**
+  String get scenarioReported;
+
+  /// No description provided for @scenarioText.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario Text'**
+  String get scenarioText;
+
+  /// No description provided for @scenarioTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario Title'**
+  String get scenarioTitle;
+
+  /// No description provided for @selectClothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Click clothing you want to wear:'**
+  String get selectClothing;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @sendReaction.
+  ///
+  /// In en, this message translates to:
+  /// **'💌 Send Reaction'**
+  String get sendReaction;
+
+  /// No description provided for @sendReactionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Reaction'**
+  String get sendReactionTitle;
+
+  /// No description provided for @sentAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get sentAt;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'⚙️ Settings'**
+  String get settings;
+
+  /// No description provided for @shareAnonymously.
+  ///
+  /// In en, this message translates to:
+  /// **'Share anonymously'**
+  String get shareAnonymously;
+
+  /// No description provided for @shareToCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Share with community'**
+  String get shareToCommunity;
+
+  /// No description provided for @shoes.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoes'**
+  String get shoes;
 
   /// No description provided for @skip.
   ///
@@ -1358,29 +1370,131 @@ abstract class AppLocalizations {
   /// **'Skip'**
   String get skip;
 
-  /// No description provided for @write.
+  /// No description provided for @socks.
   ///
   /// In en, this message translates to:
-  /// **'Write'**
-  String get write;
+  /// **'Socks'**
+  String get socks;
 
-  /// No description provided for @proofConfirmedByPartner.
+  /// No description provided for @startGame.
   ///
   /// In en, this message translates to:
-  /// **'✅ Partner confirmed the proof'**
-  String get proofConfirmedByPartner;
+  /// **'Start Game'**
+  String get startGame;
 
-  /// No description provided for @proofConfirmed.
+  /// No description provided for @stateMaybeLater.
   ///
   /// In en, this message translates to:
-  /// **'✅ Proof confirmed'**
-  String get proofConfirmed;
+  /// **'maybe later'**
+  String get stateMaybeLater;
 
-  /// No description provided for @proofSent.
+  /// No description provided for @stateWillDo.
   ///
   /// In en, this message translates to:
-  /// **'📷 Proof sent'**
-  String get proofSent;
+  /// **'I will do it'**
+  String get stateWillDo;
+
+  /// No description provided for @stateWillNotDo.
+  ///
+  /// In en, this message translates to:
+  /// **'I will not do it'**
+  String get stateWillNotDo;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @sweater.
+  ///
+  /// In en, this message translates to:
+  /// **'Sweater'**
+  String get sweater;
+
+  /// No description provided for @taskAlreadyImported.
+  ///
+  /// In en, this message translates to:
+  /// **'This task is already imported'**
+  String get taskAlreadyImported;
+
+  /// No description provided for @taskImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Task imported'**
+  String get taskImported;
+
+  /// No description provided for @taskManager.
+  ///
+  /// In en, this message translates to:
+  /// **'🛠 Task Manager'**
+  String get taskManager;
+
+  /// No description provided for @taskManagerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'🛠️ Task Manager'**
+  String get taskManagerTitle;
+
+  /// No description provided for @taskReported.
+  ///
+  /// In en, this message translates to:
+  /// **'Task reported'**
+  String get taskReported;
+
+  /// No description provided for @taskShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to share task'**
+  String get taskShareFailed;
+
+  /// No description provided for @taskShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Task shared with community'**
+  String get taskShared;
+
+  /// No description provided for @timeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get timeline;
+
+  /// No description provided for @topScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Rated Scenarios'**
+  String get topScenarios;
+
+  /// No description provided for @topTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Rated'**
+  String get topTasks;
+
+  /// No description provided for @tshirt.
+  ///
+  /// In en, this message translates to:
+  /// **'T-Shirt'**
+  String get tshirt;
+
+  /// No description provided for @unlink.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect'**
+  String get unlink;
+
+  /// No description provided for @votingPlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Voting player:'**
+  String get votingPlayer;
+
+  /// No description provided for @waitingProof.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Waiting for proof'**
+  String get waitingProof;
 
   /// No description provided for @waitingProofConfirmation.
   ///
@@ -1394,179 +1508,65 @@ abstract class AppLocalizations {
   /// **'⏳ Waiting to send proof'**
   String get waitingProofUpload;
 
-  /// No description provided for @waitingProof.
+  /// No description provided for @write.
   ///
   /// In en, this message translates to:
-  /// **'⏳ Waiting for proof'**
-  String get waitingProof;
+  /// **'Write'**
+  String get write;
 
-  /// No description provided for @relationshipStorySubtitle.
+  /// No description provided for @writeScenario.
   ///
   /// In en, this message translates to:
-  /// **'Every shared memory becomes another page of your story.'**
-  String get relationshipStorySubtitle;
+  /// **'✍️ Write New Scenario'**
+  String get writeScenario;
 
-  /// No description provided for @relationshipBook.
+  /// No description provided for @yes.
   ///
   /// In en, this message translates to:
-  /// **'Relationship Book'**
-  String get relationshipBook;
+  /// **'YES'**
+  String get yes;
 
-  /// No description provided for @chapter.
+  /// No description provided for @youRemove.
   ///
   /// In en, this message translates to:
-  /// **'Chapter'**
-  String get chapter;
+  /// **'You remove:'**
+  String get youRemove;
 
-  /// No description provided for @relationshipReflections.
+  /// No description provided for @yourCode.
   ///
   /// In en, this message translates to:
-  /// **'Our reflections'**
-  String get relationshipReflections;
+  /// **'Your code:'**
+  String get yourCode;
 
-  /// No description provided for @relationshipChallenge.
+  /// No description provided for @no.
   ///
   /// In en, this message translates to:
-  /// **'The challenge that started it all'**
-  String get relationshipChallenge;
+  /// **'NO'**
+  String get no;
 
-  /// No description provided for @relationshipAboutChapter.
+  /// No description provided for @sharedMemory.
   ///
   /// In en, this message translates to:
-  /// **'About this chapter'**
-  String get relationshipAboutChapter;
+  /// **'❤️ Shared Memory'**
+  String get sharedMemory;
 
-  /// No description provided for @relationshipReflectionPlaceholderMine.
+  /// No description provided for @statistics.
   ///
   /// In en, this message translates to:
-  /// **'Your reflection will appear here.'**
-  String get relationshipReflectionPlaceholderMine;
+  /// **'📊 Statistics'**
+  String get statistics;
 
-  /// No description provided for @relationshipReflectionPlaceholderPartner.
+  /// No description provided for @attachProof.
   ///
   /// In en, this message translates to:
-  /// **'Your partner\'s reflection will appear here.'**
-  String get relationshipReflectionPlaceholderPartner;
+  /// **'📷 Attach Proof'**
+  String get attachProof;
 
-  /// No description provided for @chapterDraft.
+  /// No description provided for @copyCode.
   ///
   /// In en, this message translates to:
-  /// **'✍️ Writing'**
-  String get chapterDraft;
-
-  /// No description provided for @chapterWaitingForPartner.
-  ///
-  /// In en, this message translates to:
-  /// **'💛 Waiting for partner'**
-  String get chapterWaitingForPartner;
-
-  /// No description provided for @chapterCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'💚 Completed'**
-  String get chapterCompleted;
-
-  /// No description provided for @chapterArchived.
-  ///
-  /// In en, this message translates to:
-  /// **'📚 Archived'**
-  String get chapterArchived;
-
-  /// No description provided for @timeline.
-  ///
-  /// In en, this message translates to:
-  /// **'Timeline'**
-  String get timeline;
-
-  /// No description provided for @me.
-  ///
-  /// In en, this message translates to:
-  /// **'Me'**
-  String get me;
-
-  /// No description provided for @partner.
-  ///
-  /// In en, this message translates to:
-  /// **'Partner'**
-  String get partner;
-
-  /// No description provided for @status.
-  ///
-  /// In en, this message translates to:
-  /// **'Status'**
-  String get status;
-
-  /// No description provided for @created.
-  ///
-  /// In en, this message translates to:
-  /// **'Created'**
-  String get created;
-
-  /// No description provided for @noEventsYet.
-  ///
-  /// In en, this message translates to:
-  /// **'No events yet'**
-  String get noEventsYet;
-
-  /// No description provided for @relationshipPhotos.
-  ///
-  /// In en, this message translates to:
-  /// **'Our Photos'**
-  String get relationshipPhotos;
-
-  /// No description provided for @relationshipNoPhotos.
-  ///
-  /// In en, this message translates to:
-  /// **'There are no photos yet.'**
-  String get relationshipNoPhotos;
-
-  /// No description provided for @scenarioLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'🏷️ {name}'**
-  String scenarioLabel(Object name);
-
-  /// No description provided for @messageLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'💬 {message}'**
-  String messageLabel(Object message);
-
-  /// No description provided for @dateLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'📅 {date}'**
-  String dateLabel(Object date);
-
-  /// No description provided for @proofAcceptedButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Proof Accepted'**
-  String get proofAcceptedButton;
-
-  /// No description provided for @settings.
-  ///
-  /// In en, this message translates to:
-  /// **'⚙️ Settings'**
-  String get settings;
-
-  /// No description provided for @account.
-  ///
-  /// In en, this message translates to:
-  /// **'👤 Account'**
-  String get account;
-
-  /// No description provided for @logout.
-  ///
-  /// In en, this message translates to:
-  /// **'🚪 Sign out'**
-  String get logout;
-
-  /// No description provided for @emailAddress.
-  ///
-  /// In en, this message translates to:
-  /// **'📧 Email'**
-  String get emailAddress;
+  /// **'📋 Copy Code'**
+  String get copyCode;
 }
 
 class _AppLocalizationsDelegate

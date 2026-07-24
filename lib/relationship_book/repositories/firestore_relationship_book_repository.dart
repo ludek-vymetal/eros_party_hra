@@ -33,8 +33,12 @@ class FirestoreRelationshipBookRepository
             doc.data(),
           ),
         )
+        .where(
+          (chapter) => !chapter.isDeleted,
+        )
         .toList();
-  }
+      }
+  
 
   @override
   Future<RelationshipChapter?> getMemory(
@@ -76,5 +80,16 @@ class FirestoreRelationshipBookRepository
     } catch (_) {
       return null;
     }
+
   }
+  @override
+  Future<List<RelationshipChapter>> getDeletedMemories() async {
+    final chapters = await getAllMemories();
+
+    return chapters
+        .where(
+          (chapter) => chapter.isDeleted,
+        )
+        .toList();
+  } 
 }

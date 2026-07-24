@@ -106,6 +106,20 @@ class LocalRelationshipPhotoRepository
       photo.chapterId,
     );
   }
+  @override
+  Future<void> deletePhotosForChapter(
+    String chapterId,
+  ) async {
+    final photos = await getPhotos(
+      chapterId,
+    );
+
+    for (final photo in photos) {
+      await deletePhoto(
+        photo.id,
+      );
+    }
+  }
 
   Future<void> _savePhotosToDisk(
     String chapterId,

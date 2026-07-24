@@ -6,6 +6,10 @@ class RelationshipPhoto {
   final String downloadUrl;
   final String description;
   final DateTime createdAt;
+ 
+
+  /// zda je fotografie sdílená s partnerem
+  final bool sharedWithPartner;
 
   const RelationshipPhoto({
     required this.id,
@@ -15,6 +19,7 @@ class RelationshipPhoto {
     required this.downloadUrl,
     required this.description,
     required this.createdAt,
+    this.sharedWithPartner = false,
   });
 
   RelationshipPhoto copyWith({
@@ -25,6 +30,7 @@ class RelationshipPhoto {
     String? downloadUrl,
     String? description,
     DateTime? createdAt,
+    bool? sharedWithPartner,
   }) {
     return RelationshipPhoto(
       id: id ?? this.id,
@@ -34,6 +40,8 @@ class RelationshipPhoto {
       downloadUrl: downloadUrl ?? this.downloadUrl,
       description: description ?? this.description,
       createdAt: createdAt ?? this.createdAt,
+      sharedWithPartner:
+          sharedWithPartner ?? this.sharedWithPartner,
     );
   }
 
@@ -46,6 +54,7 @@ class RelationshipPhoto {
       'downloadUrl': downloadUrl,
       'description': description,
       'createdAt': createdAt.toIso8601String(),
+      'sharedWithPartner': sharedWithPartner,
     };
   }
 
@@ -62,6 +71,8 @@ class RelationshipPhoto {
       createdAt: DateTime.parse(
         json['createdAt'] as String,
       ),
+      sharedWithPartner:
+          json['sharedWithPartner'] as bool? ?? false,
     );
   }
 }

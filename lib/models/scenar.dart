@@ -1,15 +1,15 @@
 class Scenar {
-  final String id;               // 🔑 trvalé ID
+  final String id;              // 🔑 trvalé ID
   final String autor;
   final String pro;
   final String nazev;
-  final String cil;              // 🎯 PROČ scénář vznikl
+  final String cil;             // 🎯 PROČ scénář vznikl
   final String text;
   final String hranice;
   final List<String> emoce;
   final List<String> ocekavanaReakce; // 🤍 návrh odpovědi
-  final DateTime createdAt;      // 🕒 kdy vznikl
-  final bool archived;           // 📦 archiv
+  final DateTime createdAt;     // 🕒 kdy vznikl
+  final bool archived;          // 📦 archiv
 
   Scenar({
     required this.id,

@@ -43,11 +43,17 @@ class CloudRelationshipPhotoRepository
   }
 
   @override
+  Future<void> deletePhotosForChapter(
+    String chapterId,
+  ) async {
+    // TODO: Cloud implementace
+  }
+
+  @override
   Future<void> savePhoto(
     RelationshipPhoto photo,
     File imageFile,
   ) async {
-
     print("REPOSITORY START");
 
     final storageRef = _storage

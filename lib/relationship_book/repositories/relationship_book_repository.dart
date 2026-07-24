@@ -18,4 +18,8 @@ abstract class RelationshipBookRepository {
   Future<void> updateMemory(RelationshipChapter memory);
 
   Future<void> deleteMemory(String id);
+
+  Future<List<RelationshipChapter>> getDeletedMemories();
+
+  
 }

@@ -31,6 +31,10 @@ class RelationshipChapter {
   final int? erosVoiceId;
 
   final String? customMotto;
+
+  final bool isDeleted;
+
+  final DateTime? deletedAt;
  
   const RelationshipChapter({
     required this.id,
@@ -45,6 +49,8 @@ class RelationshipChapter {
     required this.events,
     this.erosVoiceId,
     this.customMotto,
+    this.isDeleted = false,
+    this.deletedAt,
   });
 
   Map<String, dynamic> toJson() {
@@ -65,6 +71,8 @@ class RelationshipChapter {
       'updatedAt': updatedAt.toIso8601String(),
       'erosVoiceId': erosVoiceId,
       'customMotto': customMotto,
+      'isDeleted': isDeleted,
+      'deletedAt': deletedAt?.toIso8601String(),
     };
   }
   factory RelationshipChapter.fromJson(
@@ -96,6 +104,16 @@ class RelationshipChapter {
       status: ChapterStatus.values.firstWhere(
         (value) => value.name == json['status'],
       ),
+      isDeleted:
+          json['isDeleted'] as bool? ?? false,
+
+      deletedAt:
+          json['deletedAt'] != null
+              ? DateTime.parse(
+                  json['deletedAt'] as String,
+                )
+              : null,
+          
       events: (json['events'] as List<dynamic>)
           .map(
             (event) => RelationshipEvent.fromJson(
@@ -119,6 +137,8 @@ class RelationshipChapter {
     List<RelationshipEvent>? events,
     int? erosVoiceId,
     String? customMotto,
+    bool? isDeleted,
+    DateTime? deletedAt,
   }) {
     return RelationshipChapter(
       id: id ?? this.id,
@@ -133,6 +153,8 @@ class RelationshipChapter {
       events: events ?? this.events,
       erosVoiceId: erosVoiceId ?? this.erosVoiceId,
       customMotto: customMotto ?? this.customMotto,
+      isDeleted: isDeleted ?? this.isDeleted,
+      deletedAt: deletedAt ?? this.deletedAt,
     );
   }
   

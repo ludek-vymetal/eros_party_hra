@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/relationship_chapter.dart';
 import '../repositories/firestore_relationship_book_repository.dart';
 import 'relationship_chapter_screen.dart';
+import 'relationship_trash_screen.dart';
 
 class RelationshipBookScreen extends StatefulWidget {
   const RelationshipBookScreen({
@@ -19,7 +20,7 @@ class _RelationshipBookScreenState
   final FirestoreRelationshipBookRepository repository =
       FirestoreRelationshipBookRepository();
 
-  late final Future<List<RelationshipChapter>> memories;
+  late Future<List<RelationshipChapter>> memories;
 
   @override
   void initState() {
@@ -34,6 +35,31 @@ class _RelationshipBookScreenState
         title: const Text(
           'Relationship Book',
         ),
+        actions: [
+          IconButton(
+            tooltip: 'Koš',
+            icon: const Icon(
+              Icons.delete_outline,
+            ),
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      const RelationshipTrashScreen(),
+                ),
+              );
+
+              if (!mounted) {
+                return;
+              }
+
+              setState(() {
+                memories = repository.getAllMemories();
+              });
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<List<RelationshipChapter>>(
         future: memories,

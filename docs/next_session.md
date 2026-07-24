@@ -46,3 +46,25 @@ deleteMemory()
 
 v FirestoreRelationshipBookRepository.
 
+# Next Session
+
+## Sprint
+
+RB-027 – Relationship Photos
+
+## Goals
+
+- Create RelationshipPhoto model
+- Create CloudRelationshipPhotoRepository
+- Upload images to Firebase Storage
+- Save metadata to Firestore
+- Display photo gallery inside Relationship Chapter
+- Delete photos
+- Full synchronization with Firebase
+
+## Notes
+
+Reflection persistence is complete and stable.
+
+Next step is adding photos to Relationship Book using Firebase Storage.
+

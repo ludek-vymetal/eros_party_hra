@@ -15,4 +15,8 @@ abstract class RelationshipPhotoRepository {
   Future<void> deletePhoto(
     String photoId,
   );
+  Future<void> deletePhotosForChapter(
+    String chapterId,
+  );
+ 
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 import '../models/relationship_chapter.dart';
@@ -16,14 +18,14 @@ import '../widgets/chapter_motto_dialog.dart';
 import '../engine/chapter_engine.dart';
 import '../repositories/firestore_relationship_book_repository.dart';
 import '../../screens/add_relationship_photo_screen.dart';
-import 'dart:io';
 import '../services/partner_service.dart';
-
+import '../services/permission_service.dart';
+import 'relationship_photo_viewer_screen.dart';
+import '../services/relationship_chapter_service.dart';
 
 class RelationshipChapterScreen extends StatefulWidget {
   final RelationshipChapter chapter;
   final int chapterNumber;
-  
 
   const RelationshipChapterScreen({
     super.key,
@@ -34,14 +36,13 @@ class RelationshipChapterScreen extends StatefulWidget {
   @override
   State<RelationshipChapterScreen> createState() =>
       _RelationshipChapterScreenState();
-      
 }
 
 class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
   final RelationshipReflectionService _reflectionService =
-    RelationshipReflectionService(
-      repository: CloudRelationshipReflectionRepository(),
-    );
+      RelationshipReflectionService(
+    repository: CloudRelationshipReflectionRepository(),
+  );
 
   RelationshipReflection? _myReflection;
   RelationshipReflection? _partnerReflection;
@@ -57,14 +58,17 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
   final ChapterEngine _chapterEngine = ChapterEngine(
     repository: FirestoreRelationshipBookRepository(),
   );
+  final RelationshipChapterService _chapterService =
+      RelationshipChapterService();
 
   @override
-    void initState() {
+  void initState() {
     super.initState();
     _loadReflection();
     _loadPhotos();
     _loadChapterMotto();
   }
+
   void _loadChapterMotto() {
     if (widget.chapter.customMotto != null &&
         widget.chapter.customMotto!.trim().isNotEmpty) {
@@ -72,9 +76,10 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
       return;
     }
 
-  // Zatím použijeme výchozí motto.
-  _chapterMotto = "Tak co... čím ho nebo ji překvapíš příště?";
-}
+    // Zatím použijeme výchozí motto.
+    _chapterMotto = "Tak co... čím ho nebo ji překvapíš příště?";
+  }
+
   Future<void> _loadReflection() async {
     final reflections = await _reflectionService.getReflections(
       widget.chapter.id,
@@ -119,9 +124,15 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    
+
     final reflectionCount = (_myReflection != null ? 1 : 0) + (_partnerReflection != null ? 1 : 0);
     final challengeCount = 1;
+
+    // Seřazená kopie událostí sestupně podle data vytvoření
+    final events = [...widget.chapter.events]
+      ..sort(
+        (a, b) => b.createdAt.compareTo(a.createdAt),
+      );
 
     return Scaffold(
       backgroundColor: const Color(0xFF12080C),
@@ -155,6 +166,57 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                 setState(() {
                   _chapterMotto = motto;
                 });
+              } // <--- Added missing closing brace here
+              else if (value == 'delete') {
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text(
+                      'Smazat kapitolu?',
+                    ),
+                    content: const Text(
+                      'Opravdu chcete odstranit tuto kapitolu?',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(
+                            context,
+                            false,
+                          );
+                        },
+                        child: const Text(
+                          'Zrušit',
+                        ),
+                      ),
+                      FilledButton(
+                        onPressed: () {
+                          Navigator.pop(
+                            context,
+                            true,
+                          );
+                        },
+                        child: const Text(
+                          'Smazat',
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (confirm != true) {
+                  return;
+                }
+
+                await _chapterService.deleteChapter(
+                  widget.chapter.id,
+                );
+
+                if (!mounted) {
+                  return;
+                }
+
+                Navigator.pop(context);
               }
             },
             itemBuilder: (context) => [
@@ -170,6 +232,13 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
               const PopupMenuItem(
                 value: 'archive',
                 child: Text('📦 Archivovat'),
+              ),
+              const PopupMenuDivider(),
+              const PopupMenuItem(
+                value: 'delete',
+                child: Text(
+                  '🗑 Smazat kapitolu',
+                ),
               ),
             ],
           ),
@@ -395,10 +464,8 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                                     await Navigator.push<bool>(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) =>
-                                        AddRelationshipPhotoScreen(
+                                    builder: (_) => AddRelationshipPhotoScreen(
                                       chapterId: widget.chapter.id,
-                                      authorId: PartnerService.currentUid!,
                                     ),
                                   ),
                                 );
@@ -434,30 +501,111 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                               itemBuilder: (context, index) {
                                 final photo = _photos[index];
 
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.file(
-                                    File(photo.storagePath),
-                                    fit: BoxFit.cover,
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => RelationshipPhotoViewerScreen(
+                                          photos: _photos,
+                                          initialIndex: index,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  onLongPress: () async {
+                                    if (!PermissionService.canDeletePhoto(photo)) {
+                                      return;
+                                    }
+
+                                    final delete = await showDialog<bool>(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        title: const Text(
+                                          'Smazat fotografii?',
+                                        ),
+                                        content: const Text(
+                                          'Opravdu chcete tuto fotografii odstranit?',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context, false);
+                                            },
+                                            child: const Text(
+                                              'Zrušit',
+                                            ),
+                                          ),
+                                          FilledButton(
+                                            onPressed: () {
+                                              Navigator.pop(context, true);
+                                            },
+                                            child: const Text(
+                                              'Smazat',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+
+                                    if (delete != true) {
+                                      return;
+                                    }
+
+                                    await _photoService.deletePhoto(
+                                      photo.id,
+                                    );
+
+                                    await _loadPhotos();
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Hero(
+                                          tag: photo.id,
+                                          child: Image.file(
+                                            File(photo.storagePath),
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 6,
+                                        right: 6,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black54,
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: Icon(
+                                            photo.sharedWithPartner
+                                                ? Icons.favorite
+                                                : Icons.lock,
+                                            color: Colors.white,
+                                            size: 18,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 );
                               },
                             ),
-
                             const SizedBox(
                               height: 20,
                             ),
-
                             FilledButton.icon(
                               onPressed: () async {
                                 final saved =
                                     await Navigator.push<bool>(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) =>
-                                        AddRelationshipPhotoScreen(
+                                    builder: (_) => AddRelationshipPhotoScreen(
                                       chapterId: widget.chapter.id,
-                                      authorId: PartnerService.currentUid!,
                                     ),
                                   ),
                                 );
@@ -533,7 +681,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                         )
                       : Column(
                           children: [
-                            ...widget.chapter.events.map(
+                            ...events.map(
                               (event) => EventTile(
                                 event: event,
                               ),
