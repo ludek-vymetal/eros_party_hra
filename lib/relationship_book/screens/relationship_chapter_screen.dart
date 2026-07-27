@@ -574,6 +574,77 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                                       ),
                                       Positioned(
                                         top: 6,
+                                        left: 6,
+                                        child: Row(
+                                          children: [
+                                            if (PermissionService.canDeletePhoto(photo))
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  final delete = await showDialog<bool>(
+                                                    context: context,
+                                                    builder: (_) => AlertDialog(
+                                                      title: const Text(
+                                                        'Smazat fotografii?',
+                                                      ),
+                                                      content: const Text(
+                                                        'Opravdu chcete tuto fotografii odstranit?',
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                              context,
+                                                              false,
+                                                            );
+                                                          },
+                                                          child: const Text(
+                                                            'Zrušit',
+                                                          ),
+                                                        ),
+                                                        FilledButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                              context,
+                                                              true,
+                                                            );
+                                                          },
+                                                          child: const Text(
+                                                            'Smazat',
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+
+                                                  if (delete != true) {
+                                                    return;
+                                                  }
+
+                                                  await _photoService.deletePhoto(
+                                                    photo.id,
+                                                  );
+
+                                                  await _loadPhotos();
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red.withValues(alpha: 0.85),
+                                                    borderRadius: BorderRadius.circular(20),
+                                                  ),
+                                                  child: const Icon(
+                                                    Icons.delete,
+                                                    color: Colors.white,
+                                                    size: 18,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      Positioned(
+                                        top: 6,
                                         right: 6,
                                         child: Container(
                                           padding: const EdgeInsets.all(5),
@@ -590,6 +661,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                                           ),
                                         ),
                                       ),
+                                      
                                     ],
                                   ),
                                 );

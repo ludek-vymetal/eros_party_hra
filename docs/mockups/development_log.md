@@ -871,3 +871,13 @@ git  bbff26f  RB-033: Introduced Relationship Book Trash system
 - Hidden deleted chapters
 - Added deleted chapter repository
 - Fixed l10n 
+
+git  2d01530 feat: dokončen Relationship Book Trash System
+
+- soft delete (isDeleted, deletedAt)
+- obnova vzpomínek
+- trvalé odstranění
+- mazání fotografií
+- aktualizace repository a services
+- vyčištěn kód
+- analyzer: 0 errors, 0 warnings
