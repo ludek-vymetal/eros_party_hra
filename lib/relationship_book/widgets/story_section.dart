@@ -50,7 +50,9 @@ class StorySection extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(22),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.55),
+              color: Colors.white.withValues(
+                alpha: 0.55,
+              ),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: Colors.brown.shade200,

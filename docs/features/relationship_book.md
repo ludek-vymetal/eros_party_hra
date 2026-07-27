@@ -143,3 +143,41 @@ Firestore
 ✅ Otestováno
 
 ✅ Připraveno pro RB-012
+
+## Shared Memories
+
+Fotografie nejsou automaticky sdíleny.
+
+Po přidání fotografie si autor zvolí:
+
+- 🔒 Jen pro mě
+- ❤️ Sdílet s partnerem
+
+Výchozí volba bude poslední použitá.
+
+Fotografie označené jako "Jen pro mě":
+
+- zůstávají pouze na zařízení autora
+- nikdy se nesynchronizují
+
+Fotografie označené jako "Sdílet s partnerem":
+
+- budou synchronizovány mezi partnery
+- budou dostupné v obou knihách
+
+Výběr fotografií pro tištěnou knihu probíhá až při exportu.
+## Relationship Book – fotografie
+
+Rozhodnutí:
+
+Fotografie nejsou sdíleny automaticky.
+
+Důvody:
+
+- respektování soukromí
+- možnost ukládat intimní fotografie pouze pro sebe
+- možnost připravovat překvapení
+- uživatel má plnou kontrolu nad tím, co sdílí
+
+Synchronizovány budou pouze fotografie, které autor označí jako sdílené.
+## Design Principles

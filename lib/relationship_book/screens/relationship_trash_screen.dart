@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/relationship_chapter.dart';
 import '../services/relationship_trash_service.dart';
+import '../services/relationship_chapter_service.dart';
 
 class RelationshipTrashScreen extends StatefulWidget {
   const RelationshipTrashScreen({
@@ -17,6 +18,9 @@ class _RelationshipTrashScreenState
     extends State<RelationshipTrashScreen> {
   final RelationshipTrashService _trashService =
       RelationshipTrashService();
+
+  final RelationshipChapterService _chapterService =
+    RelationshipChapterService();    
 
   List<RelationshipChapter> _chapters = [];
   bool _loading = true;
@@ -40,8 +44,12 @@ class _RelationshipTrashScreenState
     });
   }
 
-  Future<void> _restoreChapter(RelationshipChapter chapter) async {
-    await _trashService.restoreChapter(chapter.id);
+  Future<void> _restoreChapter(
+    RelationshipChapter chapter,
+  ) async {
+    await _trashService.restoreChapter(
+      chapter.id,
+    );
 
     if (!mounted) {
       return;
@@ -55,17 +63,91 @@ class _RelationshipTrashScreenState
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Kapitola "${chapter.chapterTitle}"Vzpomínka byla vrácena zpět do vaší knihy.',),
-        duration: const Duration(seconds: 3),
+        content: Text(
+          'Vzpomínka "${chapter.chapterTitle}" byla úspěšně obnovena.',
+        ),
+        duration: const Duration(
+          seconds: 3,
+        ),
       ),
     );
   }
+  Future<void> _deleteForever(
+    RelationshipChapter chapter,
+  ) async {
+    final delete = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text(
+          'Smazat navždy?',
+        ),
+        content: const Text(
+          'Tato vzpomínka bude nenávratně odstraněna.\n\n'
+          'Budou odstraněny také všechny fotografie a další navázaná data.\n\n'
+          'Tuto akci již nelze vrátit zpět.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(
+                context,
+                false,
+              );
+            },
+            child: const Text(
+              'Zrušit',
+            ),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(
+                context,
+                true,
+              );
+            },
+            child: const Text(
+              'Smazat navždy',
+            ),
+          ),
+        ],
+      ),
+    );
 
+    if (delete != true) {
+      return;
+    }
+
+    await _chapterService.deleteChapterForever(
+      chapter.id,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    await _loadTrash();
+
+    if (!mounted) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Vzpomínka "${chapter.chapterTitle}" byla trvale odstraněna.',
+        ),
+      ),
+    );
+  }
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Koš'),
+        title: const Text(
+          'Koš',
+        ),
       ),
       body: _loading
           ? const Center(
@@ -87,23 +169,83 @@ class _RelationshipTrashScreenState
                         horizontal: 12,
                         vertical: 6,
                       ),
-                      child: ListTile(
-                        leading: const Icon(
-                          Icons.delete_outline,
-                        ),
-                        title: Text(
-                          chapter.chapterTitle,
-                        ),
-                        subtitle: Text(
-                          chapter.scenario.title,
-                        ),
-                        trailing: IconButton(
-                          tooltip: 'Obnovit',
-                          icon: const Icon(
-                            Icons.restore,
-                            color: Colors.green,
-                          ),
-                          onPressed: () => _restoreChapter(chapter),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.delete_outline,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    chapter.chapterTitle,
+                                    style:
+                                        const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight:
+                                          FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(
+                              height: 8,
+                            ),
+
+                            Text(
+                              chapter.scenario.title,
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                              ),
+                            ),
+
+                            const SizedBox(
+                              height: 16,
+                            ),
+
+                            Row(
+                              children: [
+                                FilledButton.icon(
+                                  onPressed: () =>
+                                      _restoreChapter(
+                                    chapter,
+                                  ),
+                                  icon: const Icon(
+                                    Icons.restore,
+                                  ),
+                                  label: const Text(
+                                    'Obnovit',
+                                  ),
+                                ),
+
+                                const SizedBox(
+                                  width: 12,
+                                ),
+
+                                OutlinedButton.icon(
+                                  onPressed: () => _deleteForever(
+                                    chapter,
+                                  ),
+                                  icon: const Icon(
+                                    Icons.delete_forever,
+                                  ),
+                                  label: const Text(
+                                    'Smazat navždy',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     );

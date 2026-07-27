@@ -106,17 +106,24 @@ class _RelationshipBookScreenState
                 trailing: const Icon(
                   Icons.chevron_right,
                 ),
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) =>
-                          RelationshipChapterScreen(
+                      builder: (_) => RelationshipChapterScreen(
                         chapter: chapter,
                         chapterNumber: index + 1,
                       ),
                     ),
                   );
+
+                  if (!mounted) {
+                    return;
+                  }
+
+                  setState(() {
+                    memories = repository.getAllMemories();
+                  });
                 },
               );
             },

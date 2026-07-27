@@ -52,4 +52,25 @@ class RelationshipChapterService {
       restoredChapter,
     );
   }
+
+  Future<void> deleteChapterForever(
+    String chapterId,
+  ) async {
+    await _photoService.deletePhotosForChapter(
+      chapterId,
+    );
+
+    // TODO
+    // await _reflectionService.deleteReflectionsForChapter(chapterId);
+
+    // TODO
+    // await _timelineService.deleteTimeline(chapterId);
+
+    // TODO
+    // await _mottoService.deleteMotto(chapterId);
+
+    await _repository.deleteMemory(
+      chapterId,
+    );
+  }
 }

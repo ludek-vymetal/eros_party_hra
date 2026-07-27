@@ -66,16 +66,13 @@ class CloudPartnerReactionDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     
     final myUid = FirebaseAuth.instance.currentUser!.uid;
-    debugPrint('MY UID: $myUid');
-    debugPrint('senderUid: ${reaction.senderUid}');
-    debugPrint('receiverUid: ${reaction.receiverUid}');
+    
     // ten kdo scénář splnil a poslal reakci
     final isCompleter = myUid == reaction.senderUid;
 
     // autor scénáře
     final isAuthor = myUid == reaction.receiverUid;
-    debugPrint('isCompleter: $isCompleter');
-    debugPrint('isAuthor: $isAuthor');
+    
     final l10n = AppLocalizations.of(context);
 
     

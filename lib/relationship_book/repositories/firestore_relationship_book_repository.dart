@@ -84,9 +84,15 @@ class FirestoreRelationshipBookRepository
   }
   @override
   Future<List<RelationshipChapter>> getDeletedMemories() async {
-    final chapters = await getAllMemories();
+    final snapshot =
+        await CloudRelationshipBookService.getAllChapters();
 
-    return chapters
+    return snapshot.docs
+        .map(
+          (doc) => RelationshipChapter.fromJson(
+            doc.data(),
+          ),
+        )
         .where(
           (chapter) => chapter.isDeleted,
         )

@@ -54,7 +54,7 @@ class CloudRelationshipPhotoRepository
     RelationshipPhoto photo,
     File imageFile,
   ) async {
-    print("REPOSITORY START");
+    
 
     final storageRef = _storage
         .ref()
@@ -62,15 +62,13 @@ class CloudRelationshipPhotoRepository
           'relationship_book/${photo.chapterId}/${photo.id}.jpg',
         );
 
-    print(storageRef.fullPath);
-
-    print("PUT FILE");
+    
 
     await storageRef.putFile(
       imageFile,
     );
 
-    print("GET URL");
+   
 
     final downloadUrl =
         await storageRef.getDownloadURL();

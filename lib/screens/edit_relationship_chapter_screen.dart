@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/relationship_chapter.dart';
 import '../services/relationship_journal_storage.dart';
+
 class EditRelationshipChapterScreen extends StatefulWidget {
   final RelationshipChapter chapter;
 
@@ -56,7 +57,9 @@ class _EditRelationshipChapterScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Upravit kapitolu"),
+        title: const Text(
+          "Upravit kapitolu",
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -104,28 +107,35 @@ class _EditRelationshipChapterScreenState
 
             const SizedBox(height: 30),
 
-           FilledButton(
-            onPressed: () async {
-              final updated = widget.chapter.copyWith(
-                chapterTitle: chapterController.text.trim(),
-                introduction: introductionController.text.trim(),
-                authorReflection: authorController.text.trim(),
-                partnerReflection: partnerController.text.trim(),
-              );
+            FilledButton(
+              onPressed: () async {
+                final updated = widget.chapter.copyWith(
+                  chapterTitle: chapterController.text.trim(),
+                  introduction: introductionController.text.trim(),
+                  authorReflection: authorController.text.trim(),
+                  partnerReflection: partnerController.text.trim(),
+                );
 
-              await RelationshipJournalStorage.updateChapter(updated);
+                await RelationshipJournalStorage.updateChapter(
+                  updated,
+                );
 
-              if (!mounted) return;
+                if (!context.mounted) {
+                  return;
+                }
 
-              Navigator.pop(context, true);
-            },
-            child: const Text(
-              "💾 Uložit",
+                Navigator.pop(
+                  context,
+                  true,
+                );
+              },
+              child: const Text(
+                "💾 Uložit",
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
+    );
   }
 }

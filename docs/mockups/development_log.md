@@ -863,3 +863,11 @@ proč vznikl Koš,
 jak funguje obnova,
 že cloud fotky jsme odložili až na pozdější fázi,
 jaká je nová roadmapa.
+git  bbff26f  RB-033: Introduced Relationship Book Trash system
+- Added soft delete architecture
+- Added restore support
+- Added trash screen
+- Added trash service
+- Hidden deleted chapters
+- Added deleted chapter repository
+- Fixed l10n 

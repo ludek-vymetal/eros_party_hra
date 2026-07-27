@@ -114,7 +114,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
       _photos = photos;
     });
   }
-
+  
   String _pluralize(int count, String one, String few, String other) {
     if (count == 1) return "$count $one";
     if (count >= 2 && count <= 4) return "$count $few";
@@ -212,7 +212,7 @@ class _RelationshipChapterScreenState extends State<RelationshipChapterScreen> {
                   widget.chapter.id,
                 );
 
-                if (!mounted) {
+                if (!context.mounted) {
                   return;
                 }
 

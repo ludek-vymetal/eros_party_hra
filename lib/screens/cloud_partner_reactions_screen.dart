@@ -145,14 +145,7 @@ class CloudPartnerReactionsScreen
                   ),
 
                   onTap: () {
-                    print("KLIKNUTO");
-                    debugPrint('========== OTVIRAM DETAIL ==========');
-                    debugPrint('senderUid: ${reaction.senderUid}');
-                    debugPrint('receiverUid: ${reaction.receiverUid}');
-                    debugPrint('proofSent: ${reaction.proofSent}');
-                    debugPrint('proofAccepted: ${reaction.proofAccepted}');
-                    debugPrint('correlationId: ${reaction.correlationId}');
-
+                   
                     Navigator.push(
                       context,
                       MaterialPageRoute(

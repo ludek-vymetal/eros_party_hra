@@ -85,32 +85,59 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
     };
   }
 
-  Widget _buildReconsiderButton(BuildContext context, AppLocalizations l10n) {
+  Widget _buildReconsiderButton(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(l10n.rejectedScenarioInfo),
-        const SizedBox(height: 12),
+        Text(
+          l10n.rejectedScenarioInfo,
+        ),
+        const SizedBox(
+          height: 12,
+        ),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () async {
-              debugPrint("DEBUG: Reconsidering scenario ID: ${scenario.id}");
               try {
-                await CloudPartnerScenarioService.updateScenarioStatus(scenario.id, 'postponed');
-                debugPrint("DEBUG: Update POSTPONED OK");
+                await CloudPartnerScenarioService
+                    .updateScenarioStatus(
+                  scenario.id,
+                  'postponed',
+                );
               } catch (e) {
-                developer.log("ERROR: Update failed", error: e, name: 'CloudPartnerScenario');
+                developer.log(
+                  'Update failed',
+                  error: e,
+                  name: 'CloudPartnerScenario',
+                );
               }
 
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.reactionSent)));
+              if (!context.mounted) {
+                return;
+              }
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    l10n.reactionSent,
+                  ),
+                ),
+              );
+
               Navigator.pop(context);
             },
-            child: Text(l10n.reconsiderScenario),
+            child: Text(
+              l10n.reconsiderScenario,
+            ),
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(
+          height: 24,
+        ),
       ],
     );
   }
@@ -138,7 +165,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               DropdownButtonFormField<String>(
-                value: selectedStatus,
+                initialValue: selectedStatus,
                 decoration: InputDecoration(
                   labelText: l10n.reactionDecision,
                 ),
@@ -257,6 +284,8 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
         ),
       ) ?? false;
 
+      if (!context.mounted) return;
+
       if (saveToJournal) {
         final chapterController = TextEditingController();
         final chapterTitle = await showDialog<String>(
@@ -281,6 +310,8 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
           ),
         );
 
+        if (!context.mounted) return;
+
         if (chapterTitle != null && chapterTitle.isNotEmpty) {
           String introduction = '';
           final writeIntroduction = await showDialog<bool>(
@@ -300,6 +331,8 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
               ],
             ),
           ) ?? false;
+
+          if (!context.mounted) return;
 
           if (writeIntroduction) {
             final introController = TextEditingController();
@@ -331,6 +364,9 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
                 ],
               ),
             );
+
+            if (!context.mounted) return;
+
             introduction = intro ?? '';
           }
 
@@ -350,14 +386,19 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
               description: 'Autor přidal úvod kapitoly.',
             ),
           );
-      } // Konec if (saveToJournal)
 
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.reactionSent)),
-      );
+          if (!context.mounted) {
+            return;
+          }
 
-      Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.reactionSent),
+            ),
+          );
+
+          Navigator.pop(context);
+          }
     } catch (e) {
       developer.log("ERROR: Handle reaction failed", error: e, name: 'CloudPartnerScenario');
 
