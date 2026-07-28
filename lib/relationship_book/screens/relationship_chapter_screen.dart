@@ -27,10 +27,15 @@ class RelationshipChapterScreen extends StatefulWidget {
   final RelationshipChapter chapter;
   final int chapterNumber;
 
+  final List<RelationshipChapter> chapters;
+  final int currentIndex;
+
   const RelationshipChapterScreen({
     super.key,
     required this.chapter,
     required this.chapterNumber,
+    required this.chapters,
+    required this.currentIndex,
   });
 
   @override

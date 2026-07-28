@@ -113,7 +113,9 @@ class _RelationshipBookScreenState
                       builder: (_) => RelationshipChapterScreen(
                         chapter: chapter,
                         chapterNumber: index + 1,
-                      ),
+                        chapters: chapters,
+                        currentIndex: index,
+                      )
                     ),
                   );
 

@@ -881,3 +881,18 @@ git  2d01530 feat: dokončen Relationship Book Trash System
 - aktualizace repository a services
 - vyčištěn kód
 - analyzer: 0 errors, 0 warnings
+✅ Relationship Book
+✔ vytváření kapitol
+✔ editace kapitol
+✔ archivace do koše
+✔ obnova z koše
+✔ trvalé smazání kapitoly
+✔ přidávání fotografií
+✔ prohlížení fotografií
+✔ mazání jednotlivých fotografií
+✔ opravené authorId
+✔ oprávnění přes PermissionService
+✔ nové kapitoly fungují správně
+✔ nové fotografie fungují správně
+
+git 2c49416  mazani fotografii
