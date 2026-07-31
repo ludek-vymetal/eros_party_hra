@@ -1,47 +1,54 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../services/relationship_service.dart';
 import '../models/relationship_chapter.dart';
 
 class CloudRelationshipBookService {
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
-
-  static CollectionReference<Map<String, dynamic>>
-      get _collection =>
-          _firestore.collection('relationship_book');
-
   static Future<void> createChapter(
     RelationshipChapter chapter,
   ) async {
-    await _collection.doc(chapter.id).set(
+    final collection =
+        await RelationshipService.relationshipBook();
+
+    await collection.doc(chapter.id).set(
       chapter.toJson(),
     );
   }
 
-  static Future<DocumentSnapshot<Map<String, dynamic>>>
-      getChapter(
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getChapter(
     String documentId,
   ) async {
-    return await _collection.doc(documentId).get();
+    final collection =
+        await RelationshipService.relationshipBook();
+
+    return await collection.doc(documentId).get();
   }
 
   static Future<void> updateChapter(
     String documentId,
     RelationshipChapter chapter,
   ) async {
-    await _collection.doc(documentId).update(
+    final collection =
+        await RelationshipService.relationshipBook();
+
+    await collection.doc(documentId).update(
       chapter.toJson(),
     );
   }
 
-  static Future<QuerySnapshot<Map<String, dynamic>>>
-      getAllChapters() async {
-    return await _collection.get();
+  static Future<QuerySnapshot<Map<String, dynamic>>> getAllChapters() async {
+    final collection =
+        await RelationshipService.relationshipBook();
+
+    return await collection.get();
   }
 
   static Future<void> deleteChapter(
     String documentId,
   ) async {
-    await _collection.doc(documentId).delete();
+    final collection =
+        await RelationshipService.relationshipBook();
+
+    await collection.doc(documentId).delete();
   }
 }

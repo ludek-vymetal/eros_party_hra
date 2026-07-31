@@ -896,3 +896,132 @@ git  2d01530 feat: dokončen Relationship Book Trash System
 ✔ nové fotografie fungují správně
 
 git 2c49416  mazani fotografii
+
+======================================================================
+ARCHITEKTURA VÍCE PARTNERŮ – FINÁLNÍ NÁVRH
+Datum: 31.7.2026
+======================================================================
+
+Po rozsáhlé analýze jsme se rozhodli nepřesouvat celý partnerský systém
+pod Relationship.
+
+Původní úvaha byla:
+
+relationships/
+    relationshipId/
+        partner_scenarios/
+        partner_reactions/
+        relationship_book/
+
+Po hlubším zamyšlení jsme zjistili, že by to architektonicky nebylo správně.
+
+Rozdělili jsme celý systém EROS na dvě samostatné části.
+
+======================================================================
+1. KOMUNIKACE PARTNERŮ
+======================================================================
+
+Tyto kolekce zůstávají samostatné:
+
+partner_scenarios
+partner_reactions
+
+Důvod:
+
+Scénář není ještě společná vzpomínka.
+
+Je to pouze návrh nebo pozvánka pro partnera.
+
+Stejně tak reakce představují komunikaci mezi partnery,
+nikoliv historii vztahu.
+
+Tyto kolekce proto zůstávají mimo Relationship.
+
+======================================================================
+2. RELATIONSHIP (SPOLEČNÁ HISTORIE)
+======================================================================
+
+Do Relationship patří pouze skutečně společná data.
+
+Finální struktura:
+
+relationships
+    relationshipId
+        relationship_book
+        photos
+        reflections
+        memories
+        settings
+
+Sem budou ukládána pouze data,
+která vzniknou po přijetí scénáře nebo při společném používání aplikace.
+
+======================================================================
+FILOZOFIE
+======================================================================
+
+Scénář = pozvánka.
+
+Přijatý a splněný scénář = společná vzpomínka.
+
+Teprve v okamžiku přijetí se vytvoří kapitola
+v Relationship Book.
+
+======================================================================
+PODPORA VÍCE PARTNERŮ
+======================================================================
+
+Každý Relationship představuje jeden konkrétní vztah.
+
+Příklad:
+
+Luděk ↔ Martina
+Relationship A
+
+Luděk ↔ Katka
+Relationship B
+
+Luděk ↔ Eva
+Relationship C
+
+Přepnutí partnera znamená pouze změnu activeRelationshipId.
+
+Po opětovném propojení se stejným partnerem se automaticky načte:
+
+• společná Kniha vztahu
+• fotografie
+• reflexe
+• společné vzpomínky
+• statistiky vztahu
+
+Příběh pokračuje přesně tam,
+kde před rozchodem skončil.
+
+======================================================================
+NOVÁ ARCHITEKTURA
+======================================================================
+
+RelationshipService se stává jediným místem,
+které zná strukturu Firestore.
+
+Ostatní služby již nebudou pracovat přímo s Firestore,
+ale pouze přes RelationshipService.
+
+======================================================================
+DALŠÍ POSTUP
+======================================================================
+
+✔ Relationship model
+✔ RelationshipService
+✔ ActiveRelationship
+✔ PartnerLink využívá RelationshipService
+
+Následuje migrace:
+
+1. CloudRelationshipBookService
+2. RelationshipPhotoService
+3. RelationshipReflectionService
+
+Partner scénáře ani partner reakce se migrovat nebudou,
+protože představují komunikační vrstvu aplikace.
+======================================================================

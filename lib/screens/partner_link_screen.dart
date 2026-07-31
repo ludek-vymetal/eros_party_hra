@@ -5,6 +5,7 @@ import '../../l10n/app_localizations.dart';
 
 import '../services/partner_link_service.dart';
 import '../services/cloud_partner_service.dart';
+import '../services/relationship_service.dart';
 
 class PartnerLinkScreen extends StatefulWidget {
   const PartnerLinkScreen({
@@ -40,9 +41,6 @@ class _PartnerLinkScreenState
     code,
   );
 
-  await CloudPartnerService.saveMyCode(
-    code,
-  );
 
   final isLinked =
       await PartnerLinkService.isLinked();
@@ -189,23 +187,32 @@ class _PartnerLinkScreenState
                         return;
                       }
 
-                      await PartnerLinkService
-                          .savePartnerCode(
+                      await PartnerLinkService.savePartnerCode(
                         code,
                       );
 
-                      await PartnerLinkService
-                          .savePartnerCode(
-                        code,
+                      // Najde existující vztah nebo vytvoří nový
+                      final relationship =
+                          await RelationshipService.getOrCreateRelationship(
+                        partnerUid: partnerUid,
                       );
 
-                      await PartnerLinkService
-                          .savePartnerUid(
+                      // Nastaví aktivní vztah
+                      await RelationshipService.setActiveRelationship(
+                        relationship.id,
+                      );
+
+                      // Uloží Relationship ID (zatím kvůli kompatibilitě)
+                      await PartnerLinkService.saveRelationshipId(
+                        relationship.id,
+                      );
+
+                      // Starý systém zatím ponecháme
+                      await PartnerLinkService.savePartnerUid(
                         partnerUid,
                       );
 
-                      await CloudPartnerService
-                          .savePartnerUid(
+                      await CloudPartnerService.savePartnerUid(
                         partnerUid,
                       );
 

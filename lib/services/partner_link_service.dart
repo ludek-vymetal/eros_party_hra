@@ -5,6 +5,7 @@ class PartnerLinkService {
   static const _keyMyCode = 'my_partner_code';
   static const _keyPartnerCode = 'partner_code';
   static const _keyPartnerUid = 'partner_uid';
+  static const _keyRelationshipId = 'relationship_id';
 
   /// vygeneruje nebo vrátí existující kód
   static Future<String> getOrCreateMyCode() async {
@@ -88,6 +89,9 @@ class PartnerLinkService {
     await prefs.remove(
       _keyPartnerUid,
     );
+    await prefs.remove(_keyPartnerCode);
+    await prefs.remove(_keyPartnerUid);
+    await prefs.remove(_keyRelationshipId);
   }
 
   /// smaže vlastní kód
@@ -97,6 +101,24 @@ class PartnerLinkService {
 
     await prefs.remove(
       _keyMyCode,
+    );
+  }
+  static Future<void> saveRelationshipId(
+    String relationshipId,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString(
+      _keyRelationshipId,
+      relationshipId,
+    );
+  }
+
+  static Future<String?> getRelationshipId() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    return prefs.getString(
+      _keyRelationshipId,
     );
   }
 
