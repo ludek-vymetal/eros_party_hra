@@ -1027,3 +1027,177 @@ protože představují komunikační vrstvu aplikace.
 ======================================================================
 git add .
 git b8179f8   commit -m "refactor: Relationship Book uses RelationshipService"
+
+# 3. 8. 2026
+
+## Cloud Partner
+
+### Opraveno
+- opraveno propojení partnerů (Partner UID)
+- opraveno doručování scénářů mezi PC ↔ Android
+- opraveno ukládání reakcí
+- opraveno vytváření Relationship Book po dokončení scénáře
+- opraveny Firestore Rules pro subkolekci relationship_book
+- znovu zprovozněn dialog "Naše myšlenky"
+
+### Otestováno
+- PC → Android scénář
+- Android → PC scénář
+- reakce
+- vytvoření kapitoly
+- zobrazení kapitoly
+- ukládání úvodní vzpomínky
+
+### Zbývá
+- doplnit partnerovu vzpomínku do kapitoly
+- kompletní synchronizace Relationship Book
+- dlouhodobé testování
+
+git 3166431  git commit -m "Oprava synchronizace partnerů a vytvoření Relationship Book"
+
+📅 Vývojový deník – Relationship Book
+
+Datum: 3. 8. 2026
+
+✅ Dokončena stabilizace Relationship systému
+
+Po několika dnech ladění byla dokončena synchronizace mezi:
+
+Partner Scenarios
+Partner Reactions
+Relationship Book
+
+Byly odstraněny chyby způsobené starými párovacími kódy a neplatným propojením partnerů.
+
+Ověřeno:
+
+✅ scénáře se doručují správnému partnerovi
+✅ reakce se zobrazují oběma partnerům
+✅ historie funguje správně
+✅ nevzniká zobrazení cizích scénářů
+📖 Relationship Book propojen s reakcemi
+
+Po dokončení scénáře se nyní automaticky vytváří kapitola v Relationship Book.
+
+Po odeslání reakce může autor scénáře přidat úvodní vzpomínku ("Jak to začalo").
+
+Tato vzpomínka se okamžitě uloží do společné knihy.
+
+Bylo opraveno:
+
+automatické vytvoření kapitoly
+ukládání úvodního textu
+synchronizace přes Cloud Firestore
+Firestore Rules pro relationship_book
+☁️ Firestore
+
+Byla opravena pravidla.
+
+Relationship Book již není samostatná kolekce.
+
+Správná struktura:
+
+relationships
+ └── relationshipId
+      └── relationship_book
+            └── chapter
+
+Po úpravě pravidel byly odstraněny chyby:
+
+PERMISSION_DENIED
+🎯 Zásadní rozhodnutí projektu
+
+Dnes bylo definitivně potvrzeno, že Relationship Book nebude klasická mobilní aplikace.
+
+Nebude používat vzhled:
+
+Material Design
+seznamů
+karet
+formulářů
+administrace
+📖 Filozofie Relationship Book
+
+Relationship Book musí působit jako skutečná luxusní kronika vztahu.
+
+Uživatel nesmí mít pocit:
+
+"Vyplňuji aplikaci."
+
+Musí mít pocit:
+
+"Listuji naším společným příběhem."
+
+To je jeden z hlavních pilířů projektu EROS.
+
+📚 Struktura knihy
+
+Každý scénář představuje jednu kapitolu.
+
+Jedna kapitola = jedna dvojstrana otevřené knihy.
+
+Levá stránka obsahuje:
+
+číslo kapitoly
+název
+datum
+Eros Voice
+krátký příběh
+úvodní vzpomínku
+jemnou ilustraci
+
+Pravá stránka obsahuje:
+
+hlavní fotografii
+vzpomínku partnera A
+vzpomínku partnera B
+drobné informace o kapitole
+🎨 Vizuální styl
+
+Definitivně schválen styl:
+
+pergamen
+luxusní papír
+jemné stíny
+knižní typografie
+ozdobné prvky
+fotografie nalepené do kroniky
+žádné Material Card
+žádné ostré rámečky
+žádný administrativní vzhled
+
+Inspirace:
+
+svatební kroniky
+luxusní fotoknihy
+rodinné kroniky
+historické knihy
+📖 Navigace
+
+Bylo rozhodnuto, že Relationship Book nebude využívat běžné přepínání obrazovek ani klasické scrollování mezi kapitolami.
+
+Cílový způsob ovládání:
+
+realistické listování knihou
+animace otočení stránky (Page Curl / Book Flip)
+pocit práce se skutečnou knihou
+🖼️ Budoucnost projektu
+
+Celý Relationship Book bude navržen tak, aby používal jeden společný layout pro:
+
+aplikaci
+HTML
+PDF
+profesionální tisk
+
+Nebude existovat zvláštní tisková šablona.
+
+Stejná kniha, kterou budou partneři několik let používat v aplikaci, bude moci být jedním kliknutím vytištěna jako luxusní fotokniha.
+
+❤️ Hlavní myšlenka projektu
+
+Bylo potvrzeno, že největší hodnotou projektu EROS nebude samotná erotická hra.
+
+Největší hodnotou bude možnost vytvořit během let společnou digitální kroniku vztahu, kterou si partneři budou moci nechat vytisknout jako skutečnou knihu vzpomínek.
+
+Tato filozofie se stává jedním z hlavních pilířů celého projektu EROS.
