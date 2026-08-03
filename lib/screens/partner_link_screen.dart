@@ -202,6 +202,20 @@ class _PartnerLinkScreenState
                         relationship.id,
                       );
 
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: const Text('Relationship'),
+                          content: Text(relationship.id),
+                        ),
+                      );
+                          
+
+                      final id =
+                          await RelationshipService.getActiveRelationshipId();
+
+                      debugPrint(
+                          'LOADED RELATIONSHIP = $id');    
                       // Uloží Relationship ID (zatím kvůli kompatibilitě)
                       await PartnerLinkService.saveRelationshipId(
                         relationship.id,

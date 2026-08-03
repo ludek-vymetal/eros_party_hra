@@ -1025,3 +1025,5 @@ Následuje migrace:
 Partner scénáře ani partner reakce se migrovat nebudou,
 protože představují komunikační vrstvu aplikace.
 ======================================================================
+git add .
+git b8179f8   commit -m "refactor: Relationship Book uses RelationshipService"

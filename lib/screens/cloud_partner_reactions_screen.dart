@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../l10n/app_localizations.dart';
 
 import '../services/cloud_partner_reaction_service.dart';
+import '../services/relationship_service.dart';
+
 import 'cloud_partner_reaction_detail_screen.dart';
 
 class CloudPartnerReactionsScreen
@@ -18,7 +20,6 @@ class CloudPartnerReactionsScreen
   ) {
     final l10n =
         AppLocalizations.of(context);
-    
 
     return Scaffold(
       appBar: AppBar(
@@ -26,136 +27,220 @@ class CloudPartnerReactionsScreen
           l10n.incomingReactions,
         ),
       ),
-      body: StreamBuilder(
-        stream:
-            CloudPartnerReactionService
-                .incomingReactions(
-          FirebaseAuth
-              .instance
-              .currentUser!
-              .uid,
-        ),
+
+      body: FutureBuilder<String?>(
+        future:
+            RelationshipService.getActiveRelationshipId(),
+
         builder: (
           context,
-          snapshot,
+          relationshipSnapshot,
         ) {
-          if (!snapshot.hasData) {
+          if (relationshipSnapshot.hasError) {
+            debugPrint(
+              'RELATIONSHIP ERROR: ${relationshipSnapshot.error}',
+            );
+
+            return Center(
+              child: Text(
+                relationshipSnapshot.error.toString(),
+              ),
+            );
+          }
+
+          if (relationshipSnapshot.connectionState ==
+              ConnectionState.waiting) {
             return const Center(
               child:
                   CircularProgressIndicator(),
             );
           }
 
-          final reactions =
-              List.of(snapshot.data!);
+          final relationshipId =
+              relationshipSnapshot.data;
 
-          reactions.sort(
-            (a, b) => b.createdAt.compareTo(
-              a.createdAt,
-            ),
+          debugPrint(
+            'RELATIONSHIP ID = $relationshipId',
           );
 
-          if (reactions.isEmpty) {
-            return Center(
+          if (relationshipId == null) {
+            return const Center(
               child: Text(
-                l10n.noIncomingReactions,
+                'Není aktivní vztah.',
               ),
             );
           }
 
-          return ListView.builder(
-            itemCount: reactions.length,
-            itemBuilder: (
+          return StreamBuilder(
+            stream:
+                CloudPartnerReactionService
+                    .incomingReactions(
+              relationshipId,
+            ),
+
+            builder: (
               context,
-              index,
+              snapshot,
             ) {
-              final reaction =
-                  reactions[index];
-              final myUid = FirebaseAuth.instance.currentUser!.uid;
+              if (snapshot.hasError) {
+                debugPrint(
+                  'REACTION ERROR: ${snapshot.error}',
+                );
 
-              final isCompleter = reaction.senderUid == myUid;
-              final isAuthor = reaction.receiverUid == myUid;   
-              assert(isCompleter || isAuthor); 
-             
-              return Card(
-                margin:
-                    const EdgeInsets.all(
-                  8,
-                ),
-                child: ListTile(
-                  leading: Icon(
-                    reaction.completed
-                        ? Icons.check_circle
-                        : Icons.cancel,
-                    color:
-                        reaction.completed
-                            ? Colors.green
-                            : Colors.red,
+                return Center(
+                  child: Text(
+                    snapshot.error.toString(),
                   ),
+                );
+              }
 
-                  title: Text(
-                    l10n.scenarioLabel(
-                      reaction.scenarioName,
+              if (snapshot.connectionState ==
+                  ConnectionState.waiting) {
+                return const Center(
+                  child:
+                      CircularProgressIndicator(),
+                );
+              }
+
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: Text(
+                    'NO DATA',
+                  ),
+                );
+              }
+
+              final reactions =
+                  List.of(snapshot.data!);
+
+              reactions.sort(
+                (a, b) => b.createdAt.compareTo(
+                  a.createdAt,
+                ),
+              );
+
+              if (reactions.isEmpty) {
+                return Center(
+                  child: Text(
+                    l10n.noIncomingReactions,
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                itemCount:
+                    reactions.length,
+
+                itemBuilder: (
+                  context,
+                  index,
+                ) {
+                  final reaction =
+                      reactions[index];
+
+                  final myUid =
+                      FirebaseAuth
+                          .instance
+                          .currentUser!
+                          .uid;
+
+                  final isCompleter =
+                      reaction.senderUid ==
+                          myUid;
+
+                  final isAuthor =
+                      reaction.receiverUid ==
+                          myUid;
+
+                  return Card(
+                    margin:
+                        const EdgeInsets.all(
+                      8,
                     ),
-                  ),
 
-                  subtitle: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment
-                            .start,
-                    children: [
-                      Text(
+                    child: ListTile(
+                      leading: Icon(
                         reaction.completed
-                            ? '✅ ${l10n.completed}'
-                            : '❌ ${l10n.notCompleted}',
+                            ? Icons.check_circle
+                            : Icons.cancel,
+                        color:
+                            reaction.completed
+                                ? Colors.green
+                                : Colors.red,
                       ),
 
-                      Text(
-                        l10n.dateLabel(
-                          reaction.datumFormatted,
+                      title: Text(
+                        l10n.scenarioLabel(
+                          reaction.scenarioName,
                         ),
                       ),
 
-                      if (reaction.proofAccepted)
-                        Text(
-                          isCompleter
-                              ? l10n.proofConfirmedByPartner
-                              : l10n.proofConfirmed,
-                        )
-                      else if (reaction.proofSent)
-                        Text(
-                          isCompleter
-                              ? l10n.proofSent
-                              : l10n.waitingProofConfirmation,
-                        ),
-
-                      if (reaction.message
-                          .isNotEmpty)
-                        Text(
-                          l10n.messageLabel(
-                            reaction.message,
+                      subtitle: Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment
+                                .start,
+                        children: [
+                          Text(
+                            reaction.completed
+                                ? '✅ ${l10n.completed}'
+                                : '❌ ${l10n.notCompleted}',
                           ),
-                        
-                          maxLines: 1,
-                          overflow:
-                              TextOverflow
-                                  .ellipsis,
-                        ),
-                    ],
-                  ),
 
-                  onTap: () {
-                   
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => CloudPartnerReactionDetailScreen(
-                          reaction: reaction,
-                        ),
+                          Text(
+                            l10n.dateLabel(
+                              reaction.datumFormatted,
+                            ),
+                          ),
+
+                          if (reaction
+                              .proofAccepted)
+                            Text(
+                              isCompleter
+                                  ? l10n
+                                      .proofConfirmedByPartner
+                                  : l10n
+                                      .proofConfirmed,
+                            )
+                          else if (reaction
+                              .proofSent)
+                            Text(
+                              isCompleter
+                                  ? l10n
+                                      .proofSent
+                                  : l10n
+                                      .waitingProofConfirmation,
+                            ),
+
+                          if (reaction
+                              .message
+                              .isNotEmpty)
+                            Text(
+                              l10n.messageLabel(
+                                reaction.message,
+                              ),
+                              maxLines: 1,
+                              overflow:
+                                  TextOverflow
+                                      .ellipsis,
+                            ),
+                        ],
                       ),
-                    );
-                  },
-                ),
+
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                CloudPartnerReactionDetailScreen(
+                              reaction:
+                                  reaction,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               );
             },
           );

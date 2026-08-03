@@ -83,6 +83,7 @@ class _PartnerWriteScreenState
   } 
 
   Future<void> _save() async {
+    debugPrint("SAVE START");
     
     final l10n =
         AppLocalizations.of(context);
@@ -199,35 +200,26 @@ class _PartnerWriteScreenState
       }
 
       final partnerUid =
-        await PartnerLinkService
-            .getPartnerUid();
+          await PartnerLinkService.getPartnerUid();
 
-    debugPrint(
-      'PARTNER UID: $partnerUid',
-    );
+      debugPrint('PARTNER UID: $partnerUid');
 
-    if (partnerUid != null) {
-      debugPrint(
-        'SENDING TO FIREBASE',
-      );
+      if (partnerUid != null) {
+        debugPrint('SENDING TO FIREBASE');
+        debugPrint('VOLAM SEND SCENARIO');
 
-      await CloudPartnerScenarioService
-          .sendScenario(
-        receiverUid: partnerUid,
+        await CloudPartnerScenarioService.sendScenario(
+          receiverUid: partnerUid,
+          parentScenarioId: widget.repeatScenario
+              ? widget.existingRecord!.parentScenarioId
+              : recordId,
+          nazev: scenar.nazev,
+          text: scenar.text,
+        );
 
-        parentScenarioId:
-            widget.repeatScenario
-                ? widget.existingRecord!.parentScenarioId
-                : recordId,
-
-        nazev: scenar.nazev,
-        text: scenar.text,
-      );
-
-      debugPrint(
-        'SENT',
-      );
-    }
+        debugPrint('SEND HOTOVO');
+        debugPrint('SENT');
+      }
       
       // Zde opraveno uzavření metody
       setState(() {

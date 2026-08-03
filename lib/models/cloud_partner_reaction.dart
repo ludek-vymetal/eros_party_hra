@@ -2,7 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CloudPartnerReaction {
   final String id;
-  final String correlationId; // Klíčové pro propojení obou stran
+
+  /// ❤️ Vztah, ke kterému reakce patří
+  final String relationshipId;
+
+  /// Klíčové pro propojení obou stran
+  final String correlationId;
 
   final String senderUid;
   final String receiverUid;
@@ -11,19 +16,20 @@ class CloudPartnerReaction {
   final String scenarioName;
   final String message;
 
-  // ✅ splněno / nesplněno
+  /// ✅ splněno / nesplněno
   final bool completed;
 
-  // 📷 důkaz odeslán přes WhatsApp
+  /// 📷 důkaz odeslán přes WhatsApp
   final bool proofSent;
 
-  // ✅ partner uznal důkaz
+  /// ✅ partner uznal důkaz
   final bool proofAccepted;
 
   final DateTime createdAt;
 
   CloudPartnerReaction({
     required this.id,
+    required this.relationshipId,
     required this.correlationId,
     required this.senderUid,
     required this.receiverUid,
@@ -43,31 +49,63 @@ class CloudPartnerReaction {
 
     return CloudPartnerReaction(
       id: doc.id,
-      correlationId: data['correlationId'] ?? '',
-      senderUid: data['senderUid'] ?? '',
-      receiverUid: data['receiverUid'] ?? '',
-      scenarioId: data['scenarioId'] ?? '',
-      scenarioName: data['scenarioName'] ?? '',
-      message: data['message'] ?? '',
-      completed: data['completed'] ?? false,
-      proofSent: data['proofSent'] ?? false,
-      proofAccepted: data['proofAccepted'] ?? false,
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+
+      relationshipId:
+          data['relationshipId'] ?? '',
+
+      correlationId:
+          data['correlationId'] ?? '',
+
+      senderUid:
+          data['senderUid'] ?? '',
+
+      receiverUid:
+          data['receiverUid'] ?? '',
+
+      scenarioId:
+          data['scenarioId'] ?? '',
+
+      scenarioName:
+          data['scenarioName'] ?? '',
+
+      message:
+          data['message'] ?? '',
+
+      completed:
+          data['completed'] ?? false,
+
+      proofSent:
+          data['proofSent'] ?? false,
+
+      proofAccepted:
+          data['proofAccepted'] ?? false,
+
+      createdAt:
+          (data['createdAt'] as Timestamp?)
+                  ?.toDate() ??
+              DateTime.now(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'relationshipId': relationshipId,
+
       'correlationId': correlationId,
+
       'senderUid': senderUid,
       'receiverUid': receiverUid,
+
       'scenarioId': scenarioId,
       'scenarioName': scenarioName,
       'message': message,
+
       'completed': completed,
       'proofSent': proofSent,
       'proofAccepted': proofAccepted,
-      'createdAt': FieldValue.serverTimestamp(),
+
+      'createdAt':
+          FieldValue.serverTimestamp(),
     };
   }
 

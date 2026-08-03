@@ -23,13 +23,27 @@ class Relationship {
     String id,
     Map<String, dynamic> json,
   ) {
+    final createdAtValue = json['createdAt'];
+
+    DateTime createdAt;
+
+    if (createdAtValue is String) {
+      createdAt = DateTime.parse(createdAtValue);
+    } else if (createdAtValue is DateTime) {
+      createdAt = createdAtValue;
+    } else if (createdAtValue != null &&
+        createdAtValue.runtimeType.toString() == 'Timestamp') {
+      createdAt = createdAtValue.toDate();
+    } else {
+      createdAt = DateTime.now();
+    }
+
     return Relationship(
       id: id,
-      user1Uid: json['user1Uid'] as String,
-      user2Uid: json['user2Uid'] as String,
-      createdAt: DateTime.parse(
-        json['createdAt'] as String,
-      ),
+      user1Uid: json['user1Uid'] ?? '',
+      user2Uid: json['user2Uid'] ?? '',
+      createdAt: createdAt,
     );
+
   }
 }

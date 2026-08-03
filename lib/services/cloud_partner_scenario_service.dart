@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+
 import '../models/cloud_partner_scenario.dart';
+import 'relationship_service.dart';
 
 class CloudPartnerScenarioService {
-  static final _firestore =
+  static final FirebaseFirestore _firestore =
       FirebaseFirestore.instance;
 
-  static final _auth =
+  static final FirebaseAuth _auth =
       FirebaseAuth.instance;
 
   static CollectionReference<Map<String, dynamic>>
@@ -28,14 +30,21 @@ class CloudPartnerScenarioService {
       return;
     }
 
-    final scenario =
-        CloudPartnerScenario(
+    final relationship =
+        await RelationshipService.getActiveRelationship();
+
+    if (relationship == null) {
+      throw Exception(
+        'No active relationship.',
+      );
+    }
+
+    final scenario = CloudPartnerScenario(
       id: '',
+      relationshipId: relationship.id,
       senderUid: user.uid,
       receiverUid: receiverUid,
-
       parentScenarioId: parentScenarioId,
-
       nazev: nazev,
       text: text,
       status: 'received',
@@ -51,25 +60,35 @@ class CloudPartnerScenarioService {
     String scenarioId,
     String status,
   ) async {
-    debugPrint("========== UPDATE SCENARIO ==========");
-    debugPrint("DOC ID = $scenarioId");
-    debugPrint("STATUS = $status");
+    debugPrint(
+      '========== UPDATE SCENARIO =========='
+    );
+    debugPrint(
+      'DOC ID = $scenarioId',
+    );
+    debugPrint(
+      'STATUS = $status',
+    );
 
-    await _scenarios.doc(scenarioId).update({
+    await _scenarios.doc(
+      scenarioId,
+    ).update({
       'status': status,
     });
 
-    debugPrint("UPDATE DONE");
+    debugPrint(
+      'UPDATE DONE',
+    );
   }
 
   static Stream<List<CloudPartnerScenario>>
       incomingScenarios(
-    String myUid,
+    String relationshipId,
   ) {
     return _scenarios
         .where(
-          'receiverUid',
-          isEqualTo: myUid,
+          'relationshipId',
+          isEqualTo: relationshipId,
         )
         .snapshots()
         .map(

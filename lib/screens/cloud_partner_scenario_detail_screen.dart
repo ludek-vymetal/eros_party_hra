@@ -252,6 +252,7 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
 
       await ScenarioRecordStorage.add(record);
       debugPrint("DEBUG: Local storage updated");
+      debugPrint("1 CREATE CHAPTER");
 
       await _chapterEngine.createChapterFromScenario(
         scenario: RelationshipScenario(
@@ -263,9 +264,9 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
           createdAt: DateTime.now(),
         ),
       );
-
+      debugPrint("2 CREATE CHAPTER OK");
       if (!context.mounted) return;
-
+      debugPrint("3 SHOW DIALOG");
       final saveToJournal = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
