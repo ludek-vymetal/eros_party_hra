@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/relationship_chapter.dart';
 import '../repositories/firestore_relationship_book_repository.dart';
-import 'relationship_chapter_screen.dart';
+import 'book_preview_screen.dart';
 import 'relationship_trash_screen.dart';
 
 class RelationshipBookScreen extends StatefulWidget {
@@ -32,15 +32,11 @@ class _RelationshipBookScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Relationship Book',
-        ),
+        title: const Text('Relationship Book'),
         actions: [
           IconButton(
             tooltip: 'Koš',
-            icon: const Icon(
-              Icons.delete_outline,
-            ),
+            icon: const Icon(Icons.delete_outline),
             onPressed: () async {
               await Navigator.push(
                 context,
@@ -50,9 +46,7 @@ class _RelationshipBookScreenState
                 ),
               );
 
-              if (!mounted) {
-                return;
-              }
+              if (!mounted) return;
 
               setState(() {
                 memories = repository.getAllMemories();
@@ -110,18 +104,12 @@ class _RelationshipBookScreenState
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => RelationshipChapterScreen(
-                        chapter: chapter,
-                        chapterNumber: index + 1,
-                        chapters: chapters,
-                        currentIndex: index,
-                      )
+                      builder: (_) =>
+                          const BookPreviewScreen(),
                     ),
                   );
 
-                  if (!mounted) {
-                    return;
-                  }
+                  if (!mounted) return;
 
                   setState(() {
                     memories = repository.getAllMemories();
