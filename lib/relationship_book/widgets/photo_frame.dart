@@ -13,43 +13,47 @@ class PhotoFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
-      angle: -0.02,
+      angle: -0.035,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(2),
-        child: Container(
+        borderRadius: BorderRadius.circular(8),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
           width: double.infinity,
-          height: 200,
+          height: 260,
           margin: const EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 8,
+            horizontal: 14,
+            vertical: 10,
           ),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
+            borderRadius: BorderRadius.circular(4),
             boxShadow: [
               BoxShadow(
-                color: Colors.black26,
-                blurRadius: 18,
-                offset: Offset(0, 10),
+                color: Colors.black.withValues(alpha: .22),
+                blurRadius: 30,
+                spreadRadius: 2,
+                offset: const Offset(0, 18),
               ),
             ],
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
-              10,
-              10,
-              10,
-              32,
+              14,
+              14,
+              14,
+              42,
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xffdddddd),
+                color: const Color(0xFFE2E2E2),
                 border: Border.all(
-                  color: const Color(0xffcfcfcf),
+                  color: const Color(0xFFD0D0D0),
                 ),
               ),
               child: image != null
-                  ? ClipRect(
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(2),
                       child: Image(
                         image: image!,
                         fit: BoxFit.cover,
@@ -58,23 +62,22 @@ class PhotoFrame extends StatelessWidget {
                       ),
                     )
                   : Column(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Icon(
-                          Icons.photo_outlined,
-                          size: 62,
+                          Icons.photo_camera_outlined,
+                          size: 82,
                           color: Colors.grey,
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(height: 18),
                         Text(
                           "Klepněte pro vložení\nspolečné fotografie",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black54,
-                            height: 1.5,
+                            fontSize: 18,
+                            height: 1.6,
                             fontStyle: FontStyle.italic,
+                            color: Colors.black54,
                           ),
                         ),
                       ],

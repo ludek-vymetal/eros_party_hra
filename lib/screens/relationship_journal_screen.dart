@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 import '../models/relationship_chapter.dart';
 import '../services/relationship_journal_storage.dart';
-import 'relationship_chapter_screen.dart';
+import '../relationship_book/screens/relationship_book_screen.dart';
+
 class RelationshipJournalScreen extends StatefulWidget {
   const RelationshipJournalScreen({
     super.key,
@@ -70,10 +71,7 @@ class _RelationshipJournalScreenState
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => RelationshipChapterScreen(
-                          chapter: chapter,
-                          chapterNumber: index + 1,
-                        ),
+                        builder: (_) => RelationshipBookScreen(),
                       ),
                     );
 

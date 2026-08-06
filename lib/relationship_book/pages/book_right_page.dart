@@ -11,7 +11,6 @@ class BookRightPage extends StatelessWidget {
   final List<RelationshipPhoto> photos;
   final RelationshipReflection? myReflection;
   final RelationshipReflection? partnerReflection;
-
   final VoidCallback onAddPhoto;
 
   const BookRightPage({
@@ -26,14 +25,13 @@ class BookRightPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        34,
         28,
-        34,
-        26,
+        24,
+        28,
+        22,
       ),
       child: Column(
         children: [
-
           PhotoFrame(
             image: photos.isNotEmpty
                 ? FileImage(
@@ -42,44 +40,42 @@ class BookRightPage extends StatelessWidget {
                     ),
                   )
                 : null,
-
             onTap: onAddPhoto,
+          ),
+
+          const SizedBox(height: 26),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  if (myReflection != null)
+                    MemoryBlock(
+                      author: "Já",
+                      text: myReflection!.text,
+                    ),
+
+                  if (myReflection != null &&
+                      partnerReflection != null)
+                    const SizedBox(height: 18),
+
+                  if (partnerReflection != null)
+                    MemoryBlock(
+                      author: "Partner",
+                      text: partnerReflection!.text,
+                    ),
+                ],
+              ),
+            ),
           ),
 
           const SizedBox(height: 18),
 
-          Expanded(
-            child: ListView(
-              children: [
-
-                if (myReflection != null)
-                  MemoryBlock(
-                    author: "Já",
-                    text: myReflection!.text,
-                  ),
-
-                if (myReflection != null &&
-                    partnerReflection != null)
-                  const SizedBox(height: 12),
-
-                if (partnerReflection != null)
-                  MemoryBlock(
-                    author: "Partner",
-                    text: partnerReflection!.text,
-                  ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          const Center(
-            child: Text(
-              "— 2 —",
-              style: TextStyle(
-                fontSize: 18,
-                fontStyle: FontStyle.italic,
-              ),
+          const Text(
+            "— 2 —",
+            style: TextStyle(
+              fontSize: 18,
+              fontStyle: FontStyle.italic,
             ),
           ),
         ],

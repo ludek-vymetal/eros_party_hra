@@ -16,41 +16,53 @@ class MemoryBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-
-      padding: const EdgeInsets.all(18),
-
+      margin: const EdgeInsets.only(bottom: 22),
+      padding: const EdgeInsets.fromLTRB(22, 18, 22, 20),
       decoration: BoxDecoration(
+        color: const Color(0xFFF8F2E8),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: BookTheme.accent.withValues(
-            alpha: 0.25,
-          ),
+          color: Colors.brown.shade200,
         ),
-        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
-
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
           Text(
             author,
             style: TextStyle(
-              color: BookTheme.title,
-              fontSize: 18,
+              color: Colors.brown.shade800,
+              fontSize: 19,
               fontWeight: FontWeight.bold,
+              letterSpacing: 1,
             ),
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
+
+          Divider(
+            color: Colors.brown.shade300,
+            thickness: 1,
+          ),
+
+          const SizedBox(height: 14),
 
           Text(
             text,
+            textAlign: TextAlign.justify,
             style: TextStyle(
               color: BookTheme.body,
-              fontSize: 16,
-              height: 1.6,
+              fontSize: 17,
+              height: 1.8,
+              fontStyle: FontStyle.italic,
             ),
           ),
         ],

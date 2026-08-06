@@ -18,47 +18,70 @@ class OpenBook extends StatelessWidget {
       aspectRatio: 1.65,
       child: Container(
         decoration: BoxDecoration(
-          boxShadow: [
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
             BoxShadow(
+              color: Colors.black26,
               blurRadius: 35,
-              color: Colors.black.withValues(alpha: 0.25),
-              offset: const Offset(0, 18),
+              spreadRadius: 2,
+              offset: Offset(0, 18),
             ),
           ],
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: _BookPage(
-                child: leftPage,
-                isLeft: true,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Row(
+            children: [
+              Expanded(
+                child: _BookPage(
+                  child: leftPage,
+                  isLeft: true,
+                ),
               ),
-            ),
 
-            Container(
-              width: 22,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    Colors.brown.shade900,
-                    Colors.brown.shade700,
-                    Colors.brown.shade500,
-                    Colors.brown.shade700,
-                    Colors.brown.shade900,
+              // =========================
+              // HŘBET KNIHY
+              // =========================
+
+              Container(
+                width: 26,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Colors.brown.shade900,
+                      Colors.brown.shade700,
+                      Colors.brown.shade500,
+                      Colors.brown.shade300,
+                      Colors.brown.shade500,
+                      Colors.brown.shade700,
+                      Colors.brown.shade900,
+                    ],
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: .25),
+                      blurRadius: 10,
+                      offset: const Offset(-2, 0),
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: .25),
+                      blurRadius: 10,
+                      offset: const Offset(2, 0),
+                    ),
                   ],
                 ),
               ),
-            ),
 
-            Expanded(
-              child: _BookPage(
-                child: rightPage,
-                isLeft: false,
+              Expanded(
+                child: _BookPage(
+                  child: rightPage,
+                  isLeft: false,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -78,25 +101,34 @@ class _BookPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: BookTheme.paperColor,
+        color: isLeft
+            ? BookTheme.paperLeft
+            : BookTheme.paperRight,
+        gradient: LinearGradient(
+          begin:
+              isLeft ? Alignment.centerRight : Alignment.centerLeft,
+          end:
+              isLeft ? Alignment.centerLeft : Alignment.centerRight,
+          colors: isLeft
+              ? [
+                  const Color(0xFFF4EBDD),
+                  BookTheme.paperLeft,
+                ]
+              : [
+                  const Color(0xFFF4EBDD),
+                  BookTheme.paperRight,
+                ],
+        ),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(
-            isLeft ? 8 : 2,
-          ),
-          bottomLeft: Radius.circular(
-            isLeft ? 8 : 2,
-          ),
-          topRight: Radius.circular(
-            isLeft ? 2 : 8,
-          ),
-          bottomRight: Radius.circular(
-            isLeft ? 2 : 8,
-          ),
+          topLeft: Radius.circular(isLeft ? 14 : 3),
+          bottomLeft: Radius.circular(isLeft ? 14 : 3),
+          topRight: Radius.circular(isLeft ? 3 : 14),
+          bottomRight: Radius.circular(isLeft ? 3 : 14),
         ),
         boxShadow: [
           BoxShadow(
-            blurRadius: 10,
-            color: Colors.black.withValues(alpha: 0.12),
+            color: Colors.black.withValues(alpha: .08),
+            blurRadius: 12,
             offset: Offset(
               isLeft ? -2 : 2,
               0,
@@ -104,7 +136,35 @@ class _BookPage extends StatelessWidget {
           ),
         ],
       ),
-      child: child,
+      child: Stack(
+        children: [
+          child,
+
+          IgnorePointer(
+            child: Align(
+              alignment:
+                  isLeft ? Alignment.centerRight : Alignment.centerLeft,
+              child: Container(
+                width: 18,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: isLeft
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    end: isLeft
+                        ? Alignment.centerLeft
+                        : Alignment.centerRight,
+                    colors: [
+                      Colors.black.withValues(alpha: .08),
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

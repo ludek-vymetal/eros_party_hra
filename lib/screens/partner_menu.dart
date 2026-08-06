@@ -204,7 +204,7 @@ class _PartnerMenuScreenState
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const RelationshipBookScreen(),
+                    builder: (_) => RelationshipBookScreen(),
                   ),
                 ),
               ),
@@ -213,7 +213,7 @@ class _PartnerMenuScreenState
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const FavoriteScenariosScreen(),
+                    builder: (_) => FavoriteScenariosScreen(),
                   ),
                 ),
               ),
@@ -224,7 +224,7 @@ class _PartnerMenuScreenState
                   context,
                   MaterialPageRoute(
                     builder: (_) =>
-                        const SettingsScreen(),
+                        SettingsScreen(),
                   ),
                 ),
               ),

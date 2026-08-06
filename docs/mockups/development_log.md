@@ -1201,3 +1201,233 @@ Bylo potvrzeno, že největší hodnotou projektu EROS nebude samotná erotická
 Největší hodnotou bude možnost vytvořit během let společnou digitální kroniku vztahu, kterou si partneři budou moci nechat vytisknout jako skutečnou knihu vzpomínek.
 
 Tato filozofie se stává jedním z hlavních pilířů celého projektu EROS.
+
+>> git commit -m "Relationship Book architecture split"
+📖 PŘEDÁVACÍ PROTOKOL – RELATIONSHIP BOOK (aktuální stav)
+✅ Hotové
+Partner mód
+✅ scénáře se doručují správnému partnerovi
+✅ reakce se zobrazují oběma partnerům
+✅ historie funguje správně
+✅ nevzniká zobrazení cizích scénářů
+📖 Relationship Book
+
+Po dokončení scénáře se automaticky vytváří nová kapitola.
+
+Autor scénáře může po reakci partnera přidat:
+
+úvodní vzpomínku
+motto
+fotografie
+vlastní komentář
+
+Kniha se synchronizuje přes Firestore.
+
+☁️ Firestore
+
+Struktura:
+
+relationships
+ └── relationshipId
+      └── relationship_book
+            └── chapter
+                 └── reflections
+
+Fotografie se zatím NEUKLÁDAJÍ do cloudu.
+
+Používá se:
+
+LocalRelationshipPhotoRepository
+
+Je to záměr.
+
+Firebase Storage se bude řešit až po dokončení celé knihy.
+
+🏗 Architektura (nová)
+
+Bylo rozhodnuto, že existuje pouze jedna kniha.
+
+Partner Menu
+        │
+        ▼
+RelationshipBookScreen
+        │
+        ▼
+RelationshipBookViewerScreen
+        │
+        ▼
+BookBuilder
+        │
+        ▼
+OpenBook
+      │      │
+      ▼      ▼
+BookLeftPage
+BookRightPage
+
+Toto je jediná podporovaná cesta.
+
+❌ Stará architektura
+
+RelationshipChapterScreen
+
+už nebude používaný jako prohlížeč knihy.
+
+Obsahuje velké množství starého kódu.
+
+Například:
+
+_buildOriginalContent()
+_buildLeftBookPage()
+_buildRightBookPage()
+
+Tyto metody jsou dnes mrtvý kód.
+
+📚 Struktura kapitoly
+
+Jedna kapitola = jedna otevřená dvojstrana.
+
+Levá stránka
+
+Obsahuje:
+
+číslo kapitoly
+název
+datum
+ozdobnou linku
+motto
+hlavní text
+Eros Voice
+číslo stránky
+Pravá stránka
+
+Obsahuje:
+
+hlavní fotografii
+vzpomínku autora
+vzpomínku partnera
+číslo stránky
+🎨 Styl knihy
+
+Definitivně schváleno:
+
+pergamen
+luxusní papír
+měkké stíny
+stará knižní typografie
+fotokniha
+rodinná kronika
+svatební kronika
+
+Zakázáno:
+
+Material Card
+administrativní vzhled
+ostré rámečky
+klasické seznamy
+formulářový vzhled
+📷 Fotografie
+
+Fotografie mají připomínat:
+
+nalepenou fotografii
+polaroid
+lehké natočení
+jemný stín
+
+Fotografie se zatím ukládají lokálně.
+
+❤️ Memory Block
+
+MemoryBlock nemá připomínat kartu.
+
+Má působit jako zápis do kroniky.
+
+Obsahuje:
+
+autora
+oddělovací linku
+text
+jemný papír
+měkký stín
+✨ Motto
+
+Motto není administrativní pole.
+
+Má působit jako citát.
+
+Velké uvozovky.
+
+Kurzíva.
+
+Vycentrovaný text.
+
+📜 Eros Voice
+
+Eros Voice nebude placeholder.
+
+Každá kapitola bude mít vlastní krátký text.
+
+Například:
+
+„Některé okamžiky netrvají dlouho. Vzpomínky ano.“
+
+Do budoucna může být:
+
+generovaný AI,
+náhodně vybraný,
+vytvořený editorem.
+📖 Navigace
+
+Nebude se scrollovat.
+
+Bude se listovat.
+
+Cílový stav:
+
+realistické otočení stránky
+animace Book Flip
+Page Curl
+pocit skutečné knihy
+🖨 Budoucnost
+
+Stejný layout bude použit pro:
+
+aplikaci
+PDF
+HTML
+profesionální tisk
+
+Nebude existovat zvláštní tisková šablona.
+
+Jedna kniha = všechny platformy.
+
+⚠ Aktuální technický dluh
+
+V současné chvíli existuje jeden známý architektonický problém.
+
+BookBuilder dostává:
+
+photos
+myReflection
+partnerReflection
+
+jen pro jednu kapitolu.
+
+Správný stav bude:
+
+Každá BookRightPage si sama načte data podle svého chapter.id.
+
+Tím bude mít každá kapitola vlastní:
+
+fotografie
+vzpomínky
+motto
+Eros Voice
+❤️ Hlavní myšlenka projektu
+
+Největší hodnotou EROS nebude erotická hra.
+
+Největší hodnotou bude možnost vytvářet během let společnou kroniku vztahu.
+
+Kroniku, kterou si partneři po letech otevřou, budou jí listovat jako skutečnou knihou a jedním kliknutím ji nechají vytisknout jako luxusní fotoknihu.
