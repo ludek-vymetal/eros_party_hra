@@ -1,8 +1,9 @@
+
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'cloud_partner_service.dart';
 
 class PartnerLinkService {
   PartnerLinkService._();
@@ -13,129 +14,60 @@ class PartnerLinkService {
   static const _keyPartnerCode = 'partner_code';
   static const _keyPartnerUid = 'partner_uid';
 
-  // TODO(MIGRATION):
-  // Po dokončení migrace na RelationshipService odstranit.
+  // Dočasně kvůli kompatibilitě se starším systémem.
   static const _keyRelationshipId = 'relationship_id';
 
-  static final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
-
-  static final FirebaseAuth _auth =
-      FirebaseAuth.instance;
-
-  static CollectionReference<Map<String, dynamic>> get _users =>
-      _firestore.collection('users');
-
   // ==========================================================
-  // MY PARTNER CODE
+  // VLASTNÍ PARTNERSKÝ KÓD
   // ==========================================================
 
-  /// Vrátí trvalý párovací kód aktuálně přihlášeného uživatele.
+  /// Vrátí trvalý kód aktuálně přihlášeného uživatele.
   ///
-  /// Kód je uložený ve Firestore u konkrétního UID.
+  /// Skutečným zdrojem pravdy je CloudPartnerService.
   ///
-  /// Při první migraci se případně použije starý lokální kód
-  /// ze SharedPreferences, aby uživatel nepřišel o svůj původní kód.
-  static Future<String> getOrCreateMyCode() async {
-    final user = _auth.currentUser;
-
-    if (user == null) {
-      throw Exception('User not logged in.');
-    }
-
-    final uid = user.uid;
-    final prefs = await SharedPreferences.getInstance();
-
-    final userDoc = await _users.doc(uid).get();
-    final data = userDoc.data();
-
-    // ----------------------------------------------------------
-    // 1. Kód už existuje ve Firestore
-    // ----------------------------------------------------------
-
-    final firestoreCode = data?['partnerCode'];
-
-    if (firestoreCode is String &&
-        firestoreCode.isNotEmpty) {
-      await prefs.setString(
-        _keyMyCode,
-        firestoreCode,
-      );
-
-      await prefs.setString(
-        _keyMyCodeUid,
-        uid,
-      );
-
-      return firestoreCode;
-    }
-
-    // ----------------------------------------------------------
-    // 2. MIGRACE STARÉHO LOKÁLNÍHO KÓDU
-    // ----------------------------------------------------------
-    //
-    // Pokud máme starý kód, například HSSG8K,
-    // zachováme ho a uložíme ho k aktuálnímu UID.
-    //
-
-    final localCode = prefs.getString(_keyMyCode);
-    final localCodeUid = prefs.getString(_keyMyCodeUid);
-
-    if (localCode != null &&
-        localCode.isNotEmpty &&
-        (localCodeUid == null || localCodeUid == uid)) {
-      await _users.doc(uid).set(
-        {
-          'partnerCode': localCode,
-          'email': user.email,
-        },
-        SetOptions(merge: true),
-      );
-
-      await prefs.setString(
-        _keyMyCodeUid,
-        uid,
-      );
-
-      return localCode;
-    }
-
-    // ----------------------------------------------------------
-    // 3. Vygenerujeme úplně nový kód
-    // ----------------------------------------------------------
-
-    final newCode = _generateCode();
-
-    await _users.doc(uid).set(
-      {
-        'partnerCode': newCode,
-        'email': user.email,
-      },
-      SetOptions(merge: true),
+  /// Kód je uložen v:
+  ///
+  /// partner_links/{code}
+  ///
+  /// a současně:
+  ///
+  /// users/{uid}.myCode
+  ///
+  /// SharedPreferences zde používáme pouze jako lokální cache.
+  static Future<String?> getOrCreateMyCode() async {
+    final code =
+        await CloudPartnerService.getOrCreateMyCode(
+      _generateCode,
     );
 
+    if (code == null) {
+      return null;
+    }
+
+    final prefs =
+        await SharedPreferences.getInstance();
+
+    // Lokální cache vlastního kódu.
     await prefs.setString(
       _keyMyCode,
-      newCode,
+      code,
     );
 
-    await prefs.setString(
-      _keyMyCodeUid,
-      uid,
-    );
-
-    return newCode;
+    return code;
   }
 
   // ==========================================================
   // PARTNER CODE
   // ==========================================================
 
-  /// Uloží partnerský kód.
+  /// Uloží zadaný partnerský kód pouze lokálně.
+  ///
+  /// Samotné propojení je řízené RelationshipService.
   static Future<void> savePartnerCode(
     String code,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
     await prefs.setString(
       _keyPartnerCode,
@@ -147,11 +79,12 @@ class PartnerLinkService {
   // PARTNER UID
   // ==========================================================
 
-  /// Uloží UID partnera.
+  /// Uloží UID partnera jako lokální cache.
   static Future<void> savePartnerUid(
     String uid,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
     await prefs.setString(
       _keyPartnerUid,
@@ -159,9 +92,13 @@ class PartnerLinkService {
     );
   }
 
-  /// Vrátí UID partnera.
+  /// Vrátí lokálně uložené UID partnera.
+  ///
+  /// Pro skutečné získání partnera používej
+  /// RelationshipService.getPartnerUid().
   static Future<String?> getPartnerUid() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
     return prefs.getString(
       _keyPartnerUid,
@@ -172,9 +109,13 @@ class PartnerLinkService {
   // LINK STATUS
   // ==========================================================
 
-  /// Vrátí true, pokud je partner propojen.
+  /// Vrátí true, pokud je lokálně uložen partnerský kód.
+  ///
+  /// Tento údaj je pouze kompatibilní cache.
+  /// Skutečný stav Relationship určuje RelationshipService.
   static Future<bool> isLinked() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
     return prefs.containsKey(
       _keyPartnerCode,
@@ -185,12 +126,12 @@ class PartnerLinkService {
   // UNLINK
   // ==========================================================
 
-  /// Odpojí partnera.
+  /// Odpojí lokálního partnera.
   ///
-  /// Vlastní párovací kód se NEMAŽE.
-  /// Ten patří uživatelskému účtu a musí zůstat trvalý.
+  /// Vlastní partnerský kód se NEMAŽE.
   static Future<void> unlink() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
     await prefs.remove(
       _keyPartnerCode,
@@ -200,33 +141,23 @@ class PartnerLinkService {
       _keyPartnerUid,
     );
 
-    // Přechodně kvůli kompatibilitě.
+    // Dočasně kvůli kompatibilitě.
     await prefs.remove(
       _keyRelationshipId,
     );
   }
 
   // ==========================================================
-  // RESET MY CODE
+  // RESET VLASTNÍHO KÓDU
   // ==========================================================
 
-  /// Úplně smaže vlastní párovací kód.
+  /// Smaže pouze lokální cache vlastního kódu.
   ///
-  /// Toto je skutečný RESET kódu.
-  /// Při dalším volání getOrCreateMyCode()
-  /// vznikne nový kód.
+  /// Skutečný Firebase kód nemažeme.
+  /// Trvalý kód uživatele spravuje CloudPartnerService.
   static Future<void> resetMyCode() async {
-    final user = _auth.currentUser;
-    final prefs = await SharedPreferences.getInstance();
-
-    if (user != null) {
-      await _users.doc(user.uid).set(
-        {
-          'partnerCode': FieldValue.delete(),
-        },
-        SetOptions(merge: true),
-      );
-    }
+    final prefs =
+        await SharedPreferences.getInstance();
 
     await prefs.remove(
       _keyMyCode,
@@ -241,20 +172,12 @@ class PartnerLinkService {
   // LOGOUT
   // ==========================================================
 
-  /// Vyčistí lokální údaje při odhlášení účtu.
+  /// Vyčistí lokální údaje o partnerovi.
   ///
-  /// POZOR:
-  /// Vlastní partnerCode se NEMAŽE.
-  /// Je uložený ve Firestore u UID uživatele.
+  /// Vlastní partnerský kód zůstává zachován.
   static Future<void> clearForLogout() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    // Vlastní kód NESMAZAT.
-    //
-    // _keyMyCode
-    // _keyMyCodeUid
-    //
-    // zůstávají kvůli lokální cache a migraci.
+    final prefs =
+        await SharedPreferences.getInstance();
 
     await prefs.remove(
       _keyPartnerCode,
@@ -267,16 +190,20 @@ class PartnerLinkService {
     await prefs.remove(
       _keyRelationshipId,
     );
+
+    // Vlastní kód NEMAŽEME.
   }
 
   // ==========================================================
   // RELATIONSHIP MIGRATION
   // ==========================================================
 
+  /// Dočasně ponecháno kvůli starším částem aplikace.
   static Future<void> saveRelationshipId(
     String relationshipId,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
     await prefs.setString(
       _keyRelationshipId,
@@ -284,8 +211,10 @@ class PartnerLinkService {
     );
   }
 
+  /// Dočasně ponecháno kvůli starším částem aplikace.
   static Future<String?> getRelationshipId() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
     return prefs.getString(
       _keyRelationshipId,
@@ -293,19 +222,21 @@ class PartnerLinkService {
   }
 
   // ==========================================================
-  // CODE GENERATOR
+  // GENERÁTOR KÓDU
   // ==========================================================
 
+  /// Generátor používaný CloudPartnerService.
   static String _generateCode() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const chars =
+        'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
-    final rand = Random.secure();
+    final random =
+        Random.secure();
 
     return List.generate(
       6,
-      (index) {
-        return chars[rand.nextInt(chars.length)];
-      },
+      (_) => chars[
+          random.nextInt(chars.length)],
     ).join();
   }
 }

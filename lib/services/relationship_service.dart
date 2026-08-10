@@ -8,10 +8,12 @@ class RelationshipService {
   static final _firestore = FirebaseFirestore.instance;
   static final _auth = FirebaseAuth.instance;
 
-  static const _activeRelationshipKey = 'active_relationship_id';
+  static const _activeRelationshipKey =
+      'active_relationship_id';
 
-  static CollectionReference<Map<String, dynamic>> get _relationships =>
-      _firestore.collection('relationships');
+  static CollectionReference<Map<String, dynamic>>
+      get _relationships =>
+          _firestore.collection('relationships');
 
   // ==========================================================
   // RELATIONSHIP
@@ -64,7 +66,8 @@ class RelationshipService {
   static Future<void> setActiveRelationship(
     String relationshipId,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
     await prefs.setString(
       _activeRelationshipKey,
@@ -73,7 +76,8 @@ class RelationshipService {
   }
 
   static Future<String?> getActiveRelationshipId() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
     return prefs.getString(
       _activeRelationshipKey,
@@ -81,46 +85,93 @@ class RelationshipService {
   }
 
   static Future<void> clearActiveRelationship() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+        await SharedPreferences.getInstance();
 
     await prefs.remove(
       _activeRelationshipKey,
     );
   }
 
-  static Future<Relationship?> getActiveRelationship() async {
-    final relationshipId = await getActiveRelationshipId();
+  // ==========================================================
+  // AKTIVNÍ RELATIONSHIP
+  // ==========================================================
+
+  static Future<Relationship?>
+      getActiveRelationship() async {
+    final relationshipId =
+        await getActiveRelationshipId();
 
     if (relationshipId == null) {
       return null;
     }
 
-    final doc = await _relationships.doc(
-      relationshipId,
-    ).get();
+    final currentUser =
+        _auth.currentUser;
 
-    if (!doc.exists || doc.data() == null) {
+    if (currentUser == null) {
+      await clearActiveRelationship();
       return null;
     }
 
-    return Relationship.fromFirestore(
+    final doc = await _relationships
+        .doc(relationshipId)
+        .get();
+
+    if (!doc.exists ||
+        doc.data() == null) {
+      await clearActiveRelationship();
+      return null;
+    }
+
+    final relationship =
+        Relationship.fromFirestore(
       doc.id,
       doc.data()!,
     );
+
+    // ========================================================
+    // 🔐 BEZPEČNOSTNÍ KONTROLA
+    //
+    // Aktivní Relationship MUSÍ patřit
+    // aktuálně přihlášenému Firebase účtu.
+    // ========================================================
+
+    final belongsToCurrentUser =
+        relationship.user1Uid ==
+                currentUser.uid ||
+            relationship.user2Uid ==
+                currentUser.uid;
+
+    if (!belongsToCurrentUser) {
+      // Starý Relationship patří jinému účtu.
+      // Okamžitě odstraníme lokální odkaz.
+      await clearActiveRelationship();
+
+      return null;
+    }
+
+    return relationship;
   }
 
-  static Future<DocumentReference<Map<String, dynamic>>>
-      relationshipDocument() async {
-    final relationshipId = await getActiveRelationshipId();
+  // ==========================================================
+  // RELATIONSHIP DOCUMENT
+  // ==========================================================
 
-    if (relationshipId == null) {
+  static Future<
+      DocumentReference<Map<String, dynamic>>>
+      relationshipDocument() async {
+    final relationship =
+        await getActiveRelationship();
+
+    if (relationship == null) {
       throw Exception(
-        'No active relationship.',
+        'No valid active relationship.',
       );
     }
 
     return _relationships.doc(
-      relationshipId,
+      relationship.id,
     );
   }
 
@@ -128,54 +179,66 @@ class RelationshipService {
   // SUBCOLLECTIONS
   // ==========================================================
 
-  static Future<CollectionReference<Map<String, dynamic>>>
+  static Future<
+      CollectionReference<Map<String, dynamic>>>
       scenarios() async {
-    final doc = await relationshipDocument();
+    final doc =
+        await relationshipDocument();
 
     return doc.collection(
       'scenarios',
     );
   }
 
-  static Future<CollectionReference<Map<String, dynamic>>>
+  static Future<
+      CollectionReference<Map<String, dynamic>>>
       reactions() async {
-    final doc = await relationshipDocument();
+    final doc =
+        await relationshipDocument();
 
     return doc.collection(
       'reactions',
     );
   }
 
-  static Future<CollectionReference<Map<String, dynamic>>>
+  static Future<
+      CollectionReference<Map<String, dynamic>>>
       relationshipBook() async {
-    final doc = await relationshipDocument();
+    final doc =
+        await relationshipDocument();
 
     return doc.collection(
       'relationship_book',
     );
   }
 
-  static Future<CollectionReference<Map<String, dynamic>>>
+  static Future<
+      CollectionReference<Map<String, dynamic>>>
       photos() async {
-    final doc = await relationshipDocument();
+    final doc =
+        await relationshipDocument();
 
     return doc.collection(
       'photos',
     );
   }
 
-  static Future<CollectionReference<Map<String, dynamic>>>
+  static Future<
+      CollectionReference<Map<String, dynamic>>>
       reflections() async {
-    final doc = await relationshipDocument();
+    final doc =
+        await relationshipDocument();
 
     return doc.collection(
       'reflections',
     );
   }
 
-  static Future<CollectionReference<Map<String, dynamic>>>
+  static Future<
+      CollectionReference<Map<String, dynamic>>>
       settings() async {
-    final doc = await relationshipDocument();
+    final doc =
+        await relationshipDocument();
 
     return doc.collection(
       'settings',
@@ -187,23 +250,27 @@ class RelationshipService {
   // ==========================================================
 
   static Future<String?> getPartnerUid() async {
-    final relationship = await getActiveRelationship();
+    final relationship =
+        await getActiveRelationship();
 
     if (relationship == null) {
       return null;
     }
 
-    final myUid = _auth.currentUser?.uid;
+    final myUid =
+        _auth.currentUser?.uid;
 
     if (myUid == null) {
       return null;
     }
 
-    if (relationship.user1Uid == myUid) {
+    if (relationship.user1Uid ==
+        myUid) {
       return relationship.user2Uid;
     }
 
-    if (relationship.user2Uid == myUid) {
+    if (relationship.user2Uid ==
+        myUid) {
       return relationship.user1Uid;
     }
 

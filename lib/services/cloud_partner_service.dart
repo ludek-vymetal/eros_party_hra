@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class CloudPartnerService {
-  static final _firestore =
+  static final FirebaseFirestore _firestore =
       FirebaseFirestore.instance;
 
-  static final _auth =
+  static final FirebaseAuth _auth =
       FirebaseAuth.instance;
 
   static CollectionReference<Map<String, dynamic>>
@@ -38,7 +38,10 @@ class CloudPartnerService {
     // --------------------------------------------------------
 
     final existingQuery = await _links
-        .where('uid', isEqualTo: user.uid)
+        .where(
+          'uid',
+          isEqualTo: user.uid,
+        )
         .limit(1)
         .get();
 
@@ -185,7 +188,8 @@ class CloudPartnerService {
       return null;
     }
 
-    final data = doc.data();
+    final data =
+        doc.data();
 
     return data?['uid'];
   }
@@ -211,11 +215,13 @@ class CloudPartnerService {
       return;
     }
 
-    await doc.set({
-      'email': user.email,
-      'createdAt':
-          FieldValue.serverTimestamp(),
-    });
+    await doc.set(
+      {
+        'email': user.email,
+        'createdAt':
+            FieldValue.serverTimestamp(),
+      },
+    );
   }
 
   // ==========================================================

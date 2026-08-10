@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../services/partner_link_service.dart';
+import '../services/relationship_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
@@ -28,19 +29,32 @@ class _SettingsScreenState
     });
 
     try {
-      // 1. Smažeme lokální párování.
+      // 1. Odpojíme lokálního partnera.
+      //
+      // Maže pouze:
+      // - partner_code
+      // - partner_uid
+      // - starý relationship_id
+      //
+      // Nemazáme vlastní účet ani vlastní partnerCode.
       await PartnerLinkService.unlink();
 
-      // 2. Smažeme vlastní párovací kód.
-      //    Při dalším přihlášení se vytvoří nový.
-      await PartnerLinkService.resetMyCode();
+      // 2. Vyčistíme aktivní Relationship.
+      //
+      // Je důležité, aby po odhlášení
+      // další účet nepoužil Relationship
+      // předchozího účtu.
+      await RelationshipService
+          .clearActiveRelationship();
 
       // 3. Odhlásíme Firebase účet.
+      //
+      // Vlastní Firebase účet ani jeho
+      // trvalý partnerCode nemažeme.
       await FirebaseAuth.instance.signOut();
 
-      // AuthWrapper automaticky zjistí,
-      // že uživatel není přihlášen,
-      // a zobrazí LoginScreen.
+      // AuthWrapper zachytí signOut přes
+      // authStateChanges() a zobrazí LoginScreen.
     } catch (e) {
       if (!mounted) {
         return;
