@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
 
+import '../engine/chapter_engine.dart';
+import '../models/relationship_chapter.dart';
+import '../repositories/relationship_book_repository.dart';
+import '../services/relationship_chapter_service.dart';
+import '../widgets/chapter_options_sheet.dart';
+
 class RelationshipBookViewerScreen extends StatefulWidget {
   final List<Widget> spreads;
+  final List<RelationshipChapter> chapters;
+  final RelationshipBookRepository repository;
+  final int initialIndex;
 
   const RelationshipBookViewerScreen({
     super.key,
     required this.spreads,
+    required this.chapters,
+    required this.repository,
+    required this.initialIndex,
   });
 
   @override
@@ -15,87 +27,156 @@ class RelationshipBookViewerScreen extends StatefulWidget {
 
 class _RelationshipBookViewerScreenState
     extends State<RelationshipBookViewerScreen> {
-  int currentSpread = 0;
+  late int currentSpread;
+
+  final RelationshipChapterService _chapterService =
+      RelationshipChapterService();
+
+  late final ChapterEngine _chapterEngine;
+
+  @override
+  void initState() {
+    super.initState();
+
+    currentSpread = widget.initialIndex;
+
+    _chapterEngine = ChapterEngine(
+      repository: widget.repository,
+    );
+  }
 
   void nextSpread() {
-    if (currentSpread >= widget.spreads.length - 1) return;
-
-    setState(() {
-      currentSpread++;
-    });
+    if (currentSpread < widget.spreads.length - 1) {
+      setState(() {
+        currentSpread++;
+      });
+    }
   }
 
   void previousSpread() {
-    if (currentSpread <= 0) return;
+    if (currentSpread > 0) {
+      setState(() {
+        currentSpread--;
+      });
+    }
+  }
 
-    setState(() {
-      currentSpread--;
-    });
+  Future<void> _handleOptionsSheet() async {
+    final currentChapter = widget.chapters[currentSpread];
+
+    final result = await ChapterOptionsSheet.show(
+      context,
+      chapter: currentChapter,
+    );
+
+    if (result == null || !mounted) return;
+
+    switch (result) {
+      case ChapterOptionResult.favoriteToggled:
+        await _chapterService.toggleFavorite(currentChapter);
+
+        setState(() {
+          widget.chapters[currentSpread] = currentChapter.copyWith(
+            favorite: !currentChapter.favorite,
+          );
+        });
+        break;
+
+      case ChapterOptionResult.mottoUpdated:
+        final updated = await _chapterEngine.getChapter(
+          currentChapter.id,
+        );
+
+        if (updated != null && mounted) {
+          setState(() {
+            widget.chapters[currentSpread] = updated;
+          });
+        }
+        break;
+
+      case ChapterOptionResult.archived:
+        await _chapterService.archiveChapter(currentChapter);
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Kapitola byla archivována.'),
+            ),
+          );
+        }
+        break;
+
+      case ChapterOptionResult.deleted:
+        await _chapterService.deleteChapter(
+          currentChapter.id,
+        );
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Kapitola byla přesunuta do koše.'),
+            ),
+          );
+        }
+        break;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final currentChapter = widget.chapters[currentSpread];
 
     return Scaffold(
       backgroundColor: const Color(0xFFD9C3A0),
-      body: SafeArea(
-        child: Stack(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Center(
-              child: SizedBox(
-                width: size.width * 0.80,
-                height: size.height * 0.88,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 450),
-                  switchInCurve: Curves.easeOutCubic,
-                  switchOutCurve: Curves.easeInCubic,
-                  child: KeyedSubtree(
-                    key: ValueKey(currentSpread),
-                    child: widget.spreads[currentSpread],
-                  ),
-                ),
+            if (currentChapter.favorite) ...[
+              const Icon(
+                Icons.favorite,
+                color: Color(0xFFC84B31),
+                size: 20,
               ),
-            ),
-
-            Positioned(
-              left: 18,
-              top: 0,
-              bottom: 0,
-              child: Center(
-                child: Material(
-                  color: Colors.white.withOpacity(0.70),
-                  elevation: 6,
-                  shape: const CircleBorder(),
-                  child: IconButton(
-                    icon: const Icon(Icons.chevron_left),
-                    iconSize: 42,
-                    color: Colors.brown.shade700,
-                    onPressed: previousSpread,
-                  ),
-                ),
-              ),
-            ),
-
-            Positioned(
-              right: 18,
-              top: 0,
-              bottom: 0,
-              child: Center(
-                child: Material(
-                  color: Colors.white.withOpacity(0.70),
-                  elevation: 6,
-                  shape: const CircleBorder(),
-                  child: IconButton(
-                    icon: const Icon(Icons.chevron_right),
-                    iconSize: 42,
-                    color: Colors.brown.shade700,
-                    onPressed: nextSpread,
-                  ),
+              const SizedBox(width: 8),
+            ],
+            Flexible(
+              child: Text(
+                currentChapter.chapterTitle,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ],
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: _handleOptionsSheet,
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Center(
+          child: SizedBox(
+            width: size.width * 0.80,
+            height: size.height * 0.88,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 450),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              child: KeyedSubtree(
+                key: ValueKey(currentSpread),
+                child: widget.spreads[currentSpread],
+              ),
+            ),
+          ),
         ),
       ),
     );

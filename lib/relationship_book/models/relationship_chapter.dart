@@ -1,41 +1,29 @@
-import 'relationship_participant.dart';
-import 'relationship_scenario.dart';
 import 'chapter_status.dart';
 import 'relationship_event.dart';
+import 'relationship_participant.dart';
+import 'relationship_scenario.dart';
 
 /// Jedna společná kapitola Relationship Book.
-///
-/// Obsahuje scénář, účastníky a společné informace
-/// o jedné vzpomínce.
 class RelationshipChapter {
   final String id;
-
   final List<RelationshipParticipant> participants;
-
   final RelationshipScenario scenario;
-
   final String chapterTitle;
-
   final String introduction;
-
   final bool favorite;
-
   final DateTime createdAt;
-
   final DateTime updatedAt;
-
   final ChapterStatus status;
-
   final List<RelationshipEvent> events;
-
   final int? erosVoiceId;
-
   final String? customMotto;
-
+  final int photoCount;
+  final int reflectionCount;
+  final bool hasVoiceMessage;
+  final bool hasVideo;
   final bool isDeleted;
-
   final DateTime? deletedAt;
- 
+
   const RelationshipChapter({
     required this.id,
     required this.participants,
@@ -51,17 +39,21 @@ class RelationshipChapter {
     this.customMotto,
     this.isDeleted = false,
     this.deletedAt,
+    this.photoCount = 0,
+    this.reflectionCount = 0,
+    this.hasVoiceMessage = false,
+    this.hasVideo = false,
   });
+
+  /// Getter zpřístupňující motto pro UI komponenty
+  String? get motto => customMotto;
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'participants': participants
-          .map((participant) => participant.toJson())
-          .toList(),
-      'events': events
-          .map((event) => event.toJson())
-          .toList(),    
+      'participants':
+          participants.map((participant) => participant.toJson()).toList(),
+      'events': events.map((event) => event.toJson()).toList(),
       'scenario': scenario.toJson(),
       'chapterTitle': chapterTitle,
       'introduction': introduction,
@@ -73,8 +65,13 @@ class RelationshipChapter {
       'customMotto': customMotto,
       'isDeleted': isDeleted,
       'deletedAt': deletedAt?.toIso8601String(),
+      'photoCount': photoCount,
+      'reflectionCount': reflectionCount,
+      'hasVoiceMessage': hasVoiceMessage,
+      'hasVideo': hasVideo,
     };
   }
+
   factory RelationshipChapter.fromJson(
     Map<String, dynamic> json,
   ) {
@@ -95,6 +92,10 @@ class RelationshipChapter {
       favorite: json['favorite'] as bool,
       erosVoiceId: json['erosVoiceId'] as int?,
       customMotto: json['customMotto'] as String?,
+      photoCount: json['photoCount'] as int? ?? 0,
+      reflectionCount: json['reflectionCount'] as int? ?? 0,
+      hasVoiceMessage: json['hasVoiceMessage'] as bool? ?? false,
+      hasVideo: json['hasVideo'] as bool? ?? false,
       createdAt: DateTime.parse(
         json['createdAt'] as String,
       ),
@@ -104,16 +105,12 @@ class RelationshipChapter {
       status: ChapterStatus.values.firstWhere(
         (value) => value.name == json['status'],
       ),
-      isDeleted:
-          json['isDeleted'] as bool? ?? false,
-
-      deletedAt:
-          json['deletedAt'] != null
-              ? DateTime.parse(
-                  json['deletedAt'] as String,
-                )
-              : null,
-          
+      isDeleted: json['isDeleted'] as bool? ?? false,
+      deletedAt: json['deletedAt'] != null
+          ? DateTime.parse(
+              json['deletedAt'] as String,
+            )
+          : null,
       events: (json['events'] as List<dynamic>)
           .map(
             (event) => RelationshipEvent.fromJson(
@@ -122,8 +119,8 @@ class RelationshipChapter {
           )
           .toList(),
     );
-    
   }
+
   RelationshipChapter copyWith({
     String? id,
     List<RelationshipParticipant>? participants,
@@ -139,6 +136,10 @@ class RelationshipChapter {
     String? customMotto,
     bool? isDeleted,
     DateTime? deletedAt,
+    int? photoCount,
+    int? reflectionCount,
+    bool? hasVoiceMessage,
+    bool? hasVideo,
   }) {
     return RelationshipChapter(
       id: id ?? this.id,
@@ -155,8 +156,10 @@ class RelationshipChapter {
       customMotto: customMotto ?? this.customMotto,
       isDeleted: isDeleted ?? this.isDeleted,
       deletedAt: deletedAt ?? this.deletedAt,
+      photoCount: photoCount ?? this.photoCount,
+      reflectionCount: reflectionCount ?? this.reflectionCount,
+      hasVoiceMessage: hasVoiceMessage ?? this.hasVoiceMessage,
+      hasVideo: hasVideo ?? this.hasVideo,
     );
   }
-  
 }
-    

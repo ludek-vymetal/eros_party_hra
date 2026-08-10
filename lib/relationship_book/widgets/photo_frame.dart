@@ -20,10 +20,10 @@ class PhotoFrame extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           width: double.infinity,
-          height: 260,
+          height: 235,
           margin: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 10,
+            horizontal: 6,
+            vertical: 6,
           ),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -39,21 +39,22 @@ class PhotoFrame extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
-              14,
-              14,
-              14,
-              42,
+              10,
+              10,
+              10,
+              8,
             ),
             child: Container(
               decoration: BoxDecoration(
                 color: const Color(0xFFE2E2E2),
                 border: Border.all(
-                  color: const Color(0xFFD0D0D0),
+                  color: const Color(0xFFE5E5E5),
+                  width: 0.8,
                 ),
               ),
               child: image != null
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: BorderRadius.circular(1),
                       child: Image(
                         image: image!,
                         fit: BoxFit.cover,

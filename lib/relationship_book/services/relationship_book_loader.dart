@@ -22,36 +22,36 @@ class RelationshipBookLoader {
   );
 
   Future<List<RelationshipBookPage>> load() async {
-    final chapters = await repository.getAllMemories();
+  final chapters = await repository.getAllMemories();
 
-    final List<RelationshipBookPage> pages = [];
+  final List<RelationshipBookPage> pages = [];
 
-    for (final chapter in chapters) {
-      final photos = await photoService.getPhotos(
-        chapter.id,
-      );
+  for (final chapter in chapters) {
+    final photos = await photoService.getPhotos(
+      chapter.id,
+    );
 
-      final reflections =
-          await reflectionService.getReflections(
-        chapter.id,
-      );
+    final reflections =
+        await reflectionService.getReflections(
+      chapter.id,
+    );
 
-      pages.add(
-        RelationshipBookPage(
-          chapter: chapter,
-          photos: photos,
-          myReflection:
-              reflections.isNotEmpty
-                  ? reflections.first
-                  : null,
-          partnerReflection:
-              reflections.length > 1
-                  ? reflections[1]
-                  : null,
-        ),
-      );
-    }
-
-    return pages;
+    pages.add(
+      RelationshipBookPage(
+        chapter: chapter,
+        photos: photos,
+        myReflection:
+            reflections.isNotEmpty
+                ? reflections.first
+                : null,
+        partnerReflection:
+            reflections.length > 1
+                ? reflections[1]
+                : null,
+      ),
+    );
   }
+
+  return pages;
+}
 }

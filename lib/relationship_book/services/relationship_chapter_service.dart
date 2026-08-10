@@ -1,3 +1,5 @@
+import '../models/chapter_status.dart';
+import '../models/relationship_chapter.dart';
 import '../repositories/firestore_relationship_book_repository.dart';
 import '../repositories/local/local_relationship_photo_repository.dart';
 import 'relationship_photo_service.dart';
@@ -51,6 +53,28 @@ class RelationshipChapterService {
     await _repository.updateMemory(
       restoredChapter,
     );
+  }
+
+  Future<void> toggleFavorite(
+    RelationshipChapter chapter,
+  ) async {
+    final updated = chapter.copyWith(
+      favorite: !chapter.favorite,
+      updatedAt: DateTime.now(),
+    );
+
+    await _repository.updateMemory(updated);
+  }
+
+  Future<void> archiveChapter(
+    RelationshipChapter chapter,
+  ) async {
+    final updated = chapter.copyWith(
+      status: ChapterStatus.archived,
+      updatedAt: DateTime.now(),
+    );
+
+    await _repository.updateMemory(updated);
   }
 
   Future<void> deleteChapterForever(

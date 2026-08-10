@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 
 import '../models/relationship_chapter.dart';
+import '../models/relationship_reflection.dart';
+import '../widgets/memory_block.dart';
 
 class BookLeftPage extends StatelessWidget {
   final RelationshipChapter chapter;
   final int chapterNumber;
+  final int pageNumber; // <-- Přidáno samostatné číslo stránky
   final String? motto;
+  final RelationshipReflection? partnerReflection;
+  final VoidCallback? onPreviousPage;
 
   const BookLeftPage({
     super.key,
     required this.chapter,
     required this.chapterNumber,
+    required this.pageNumber, // <-- Přidáno do konstruktoru
     required this.motto,
+    required this.partnerReflection,
+    this.onPreviousPage,
   });
 
   String _formatDate(DateTime date) {
@@ -65,12 +73,10 @@ class BookLeftPage extends StatelessWidget {
 
           const SizedBox(height: 18),
 
-          Center(
-            child: Container(
-              width: double.infinity,
-              height: 1,
-              color: Colors.brown.shade300,
-            ),
+          Container(
+            width: double.infinity,
+            height: 1,
+            color: Colors.brown.shade300,
           ),
 
           if (motto != null && motto!.trim().isNotEmpty) ...[
@@ -99,19 +105,33 @@ class BookLeftPage extends StatelessWidget {
 
           Expanded(
             child: SingleChildScrollView(
-              child: Text(
-                chapter.introduction,
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  color: Colors.brown.shade900,
-                  fontSize: 19,
-                  height: 2.0,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    chapter.introduction,
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      color: Colors.brown.shade900,
+                      fontSize: 19,
+                      height: 2.0,
+                    ),
+                  ),
+
+                  if (partnerReflection != null) ...[
+                    const SizedBox(height: 26),
+
+                    MemoryBlock(
+                      author: "Partner",
+                      text: partnerReflection!.text,
+                    ),
+                  ],
+                ],
               ),
             ),
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
 
           Container(
             width: double.infinity,
@@ -152,15 +172,26 @@ class BookLeftPage extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 26),
+          const SizedBox(height: 20),
 
+          // Číslo levé stránky s reakcí na kliknutí
           Center(
-            child: Text(
-              "— $chapterNumber —",
-              style: TextStyle(
-                color: Colors.brown.shade700,
-                fontSize: 18,
-                fontStyle: FontStyle.italic,
+            child: GestureDetector(
+              onTap: onPreviousPage,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    "— $pageNumber —", // <-- Zde zobrazení přesného čísla stránky
+                    style: TextStyle(
+                      color: Colors.brown.shade800,
+                      fontSize: 18,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

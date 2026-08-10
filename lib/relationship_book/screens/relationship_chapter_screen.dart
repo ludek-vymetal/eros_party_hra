@@ -1,33 +1,28 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+
 import '../../l10n/app_localizations.dart';
-import '../models/relationship_chapter.dart';
-import '../models/relationship_reflection.dart';
-import '../widgets/reflection_card.dart';
-import 'edit_relationship_reflection_screen.dart';
-import '../services/relationship_reflection_service.dart';
-import '../repositories/cloud/cloud_relationship_reflection_repository.dart';
-import '../models/relationship_photo.dart';
-import '../services/relationship_photo_service.dart';
-import '../repositories/local/local_relationship_photo_repository.dart';
-import '../widgets/chapter_motto_dialog.dart';
+import '../../screens/add_relationship_photo_screen.dart';
+import '../book_builder.dart';
 import '../engine/chapter_engine.dart';
+import '../models/relationship_chapter.dart';
+import '../models/relationship_photo.dart';
+import '../models/relationship_reflection.dart';
+import '../repositories/cloud/cloud_relationship_reflection_repository.dart';
 import '../repositories/firestore_relationship_book_repository.dart';
+import '../repositories/local/local_relationship_photo_repository.dart';
 import '../services/partner_service.dart';
 import '../services/permission_service.dart';
 import '../services/relationship_chapter_service.dart';
+import '../services/relationship_photo_service.dart';
+import '../services/relationship_reflection_service.dart';
 import '../theme/book_theme.dart';
-
-import '../../screens/add_relationship_photo_screen.dart';
-
 import '../widgets/book_pager.dart';
-import '../book_builder.dart';
+import '../widgets/chapter_motto_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RelationshipChapterScreen extends StatefulWidget {
   final RelationshipChapter chapter;
   final int chapterNumber;
-
   final List<RelationshipChapter> chapters;
   final int currentIndex;
 
@@ -46,6 +41,9 @@ class RelationshipChapterScreen extends StatefulWidget {
 
 class _RelationshipChapterScreenState
     extends State<RelationshipChapterScreen> {
+  // Přidán PageController pro ovládání přetáčení stránek
+  late final PageController _pageController;
+
   final RelationshipReflectionService _reflectionService =
       RelationshipReflectionService(
     repository: CloudRelationshipReflectionRepository(),
@@ -59,7 +57,6 @@ class _RelationshipChapterScreenState
   );
 
   List<RelationshipPhoto> _photos = [];
-  String? _chapterMotto;
 
   final ChapterEngine _chapterEngine = ChapterEngine(
     repository: FirestoreRelationshipBookRepository(),
@@ -70,19 +67,15 @@ class _RelationshipChapterScreenState
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(initialPage: widget.currentIndex);
     _loadReflection();
     _loadPhotos();
-    _loadChapterMotto();
   }
 
-  void _loadChapterMotto() {
-    if (widget.chapter.customMotto != null &&
-        widget.chapter.customMotto!.trim().isNotEmpty) {
-      _chapterMotto = widget.chapter.customMotto;
-      return;
-    }
-
-    _chapterMotto = "Tak co... čím ho nebo ji překvapíš příště?";
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadReflection() async {
@@ -173,6 +166,10 @@ class _RelationshipChapterScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final mottoText = (widget.chapter.customMotto != null &&
+            widget.chapter.customMotto!.trim().isNotEmpty)
+        ? widget.chapter.customMotto!
+        : "Tak co... čím ho nebo ji překvapíš příště?";
 
     return Scaffold(
       backgroundColor: BookTheme.background,
@@ -198,9 +195,7 @@ class _RelationshipChapterScreenState
 
                 if (!mounted) return;
 
-                setState(() {
-                  _chapterMotto = motto;
-                });
+                setState(() {});
               } else if (value == 'delete') {
                 final confirm = await showDialog<bool>(
                   context: context,
@@ -257,27 +252,94 @@ class _RelationshipChapterScreenState
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: BookPager(
-              spreads: BookBuilder.build(
-                chapters: widget.chapters,
-                photos: _photos,
-                myReflection: _myReflection,
-                partnerReflection: _partnerReflection,
-                onAddPhoto: (chapterId) async {
-                  final saved = await Navigator.push<bool>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AddRelationshipPhotoScreen(
-                        chapterId: chapterId,
-                      ),
-                    ),
-                  );
+            child: Column(
+              children: [
+                _buildMottoWhisper(mottoText),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: BookPager(
+                    // Pokud má váš BookPager parametr controller, předáme ho zde
+                     
+                    spreads: BookBuilder.build(
+                      chapters: widget.chapters,
+                      photos: _photos,
+                      myReflection: _myReflection,
+                      partnerReflection: _partnerReflection,
+                      pageController: _pageController, // Předáno do BookBuilderu
+                      onAddReflection: (chapterId) async {
+                        final controller = TextEditingController(
+                          text: _myReflection?.text ?? '',
+                        );
 
-                  if (saved == true) {
-                    await _loadPhotos();
-                  }
-                },
-              ),
+                        final text = await showDialog<String>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Tvůj vzkaz'),
+                            content: TextField(
+                              controller: controller,
+                              maxLines: 4,
+                              decoration: const InputDecoration(
+                                hintText:
+                                    'Napiš, jak jsi tento okamžik prožíval/a ty...',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Zrušit'),
+                              ),
+                              FilledButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, controller.text),
+                                child: const Text('Uložit'),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        if (text != null && text.trim().isNotEmpty) {
+                          final now = DateTime.now();
+                          final currentUserId =
+                              FirebaseAuth.instance.currentUser?.uid ?? '';
+
+                          final reflection = RelationshipReflection(
+                            id: now.millisecondsSinceEpoch.toString(),
+                            chapterId: chapterId,
+                            authorId: currentUserId,
+                            text: text.trim(),
+                            createdAt: now,
+                            updatedAt: now,
+                          );
+
+                          await _reflectionService
+                              .saveReflection(reflection);
+                          await _loadReflection();
+                        }
+                      },
+                      onAddPhoto: (chapterId) async {
+                        final navigator = Navigator.of(context);
+                        final saved = await navigator.push<bool>(
+                          MaterialPageRoute(
+                            builder: (_) => AddRelationshipPhotoScreen(
+                              chapterId: chapterId,
+                            ),
+                          ),
+                        );
+
+                        if (saved == true) {
+                          await _loadPhotos();
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                if (_photos.isNotEmpty)
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () => _deletePhoto(_photos.first),
+                  ),
+              ],
             ),
           ),
         ),

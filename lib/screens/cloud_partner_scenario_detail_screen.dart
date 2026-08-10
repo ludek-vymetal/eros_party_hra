@@ -17,6 +17,10 @@ import '../relationship_book/engine/chapter_engine.dart';
 import '../relationship_book/repositories/firestore_relationship_book_repository.dart';
 import '../relationship_book/models/relationship_scenario.dart';
 import 'package:uuid/uuid.dart';
+import '../relationship_book/models/relationship_reflection.dart';
+import '../relationship_book/services/relationship_reflection_service.dart';
+import '../relationship_book/repositories/cloud/cloud_relationship_reflection_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CloudPartnerScenarioDetailScreen extends StatelessWidget {
   final CloudPartnerScenario scenario;
@@ -264,6 +268,26 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
           createdAt: DateTime.now(),
         ),
       );
+      final chapter = await _chapterEngine.findChapterByScenario(
+        scenario.id,
+      );
+
+      if (chapter != null) {
+        final now = DateTime.now();
+
+        final reflection = RelationshipReflection(
+          id: const Uuid().v4(),
+          chapterId: chapter.id,
+          authorId: FirebaseAuth.instance.currentUser!.uid,
+          text: message.trim(),
+          createdAt: now,
+          updatedAt: now,
+        );
+
+        await RelationshipReflectionService(
+          repository: CloudRelationshipReflectionRepository(),
+        ).saveReflection(reflection);
+      }
       debugPrint("2 CREATE CHAPTER OK");
       if (!context.mounted) return;
       debugPrint("3 SHOW DIALOG");

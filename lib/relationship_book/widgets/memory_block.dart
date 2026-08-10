@@ -16,7 +16,7 @@ class MemoryBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 22),
+      margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.fromLTRB(22, 18, 22, 20),
       decoration: BoxDecoration(
         color: const Color(0xFFF8F2E8),
@@ -40,28 +40,29 @@ class MemoryBlock extends StatelessWidget {
             author,
             style: TextStyle(
               color: Colors.brown.shade800,
-              fontSize: 19,
+              fontSize: 12,
               fontWeight: FontWeight.bold,
               letterSpacing: 1,
             ),
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
 
           Divider(
             color: Colors.brown.shade300,
-            thickness: 1,
+            thickness: .8,
+            height: 10,
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 8),
 
           Text(
             text,
             textAlign: TextAlign.justify,
             style: TextStyle(
               color: BookTheme.body,
-              fontSize: 17,
-              height: 1.8,
+              fontSize: 16,
+              height: 1.55,
               fontStyle: FontStyle.italic,
             ),
           ),

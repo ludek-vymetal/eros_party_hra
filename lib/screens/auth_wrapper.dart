@@ -6,16 +6,16 @@ import '../relationship_book/services/partner_service.dart';
 import 'login_screen.dart';
 
 class AuthWrapper extends StatefulWidget {
-  const AuthWrapper({super.key});
+  const AuthWrapper({
+    super.key,
+  });
 
   @override
   State<AuthWrapper> createState() =>
       _AuthWrapperState();
 }
 
-class _AuthWrapperState
-    extends State<AuthWrapper> {
-
+class _AuthWrapperState extends State<AuthWrapper> {
   bool _initialized = false;
 
   Future<void> _initializePartner() async {
@@ -28,22 +28,30 @@ class _AuthWrapperState
     await PartnerService.initialize();
   }
 
+  void _handleLoggedOut() {
+    if (_initialized) {
+      _initialized = false;
+      PartnerService.clear();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      stream:
-          FirebaseAuth.instance
-              .authStateChanges(),
+      stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState ==
             ConnectionState.waiting) {
           return const Scaffold(
             body: Center(
-              child:
-                  CircularProgressIndicator(),
+              child: CircularProgressIndicator(),
             ),
           );
         }
+
+        // ==========================================
+        // UŽIVATEL JE PŘIHLÁŠENÝ
+        // ==========================================
 
         if (snapshot.hasData) {
           return FutureBuilder<void>(
@@ -53,8 +61,7 @@ class _AuthWrapperState
                   ConnectionState.done) {
                 return const Scaffold(
                   body: Center(
-                    child:
-                        CircularProgressIndicator(),
+                    child: CircularProgressIndicator(),
                   ),
                 );
               }
@@ -64,8 +71,11 @@ class _AuthWrapperState
           );
         }
 
-        _initialized = false;
-        PartnerService.clear();
+        // ==========================================
+        // UŽIVATEL JE ODHLÁŠENÝ
+        // ==========================================
+
+        _handleLoggedOut();
 
         return const LoginScreen();
       },

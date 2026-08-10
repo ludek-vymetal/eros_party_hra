@@ -35,15 +35,10 @@ class _PartnerLinkScreenState
 
   Future<void> _load() async {
     final code =
-      await PartnerLinkService.getOrCreateMyCode();
+        await PartnerLinkService.getOrCreateMyCode();
 
-  await CloudPartnerService.registerMyCode(
-    code,
-  );
-
-
-  final isLinked =
-      await PartnerLinkService.isLinked();
+    final isLinked =
+        await PartnerLinkService.isLinked();
 
     if (!mounted) return;
 

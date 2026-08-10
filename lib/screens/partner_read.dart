@@ -16,6 +16,7 @@ import '../services/scenario_record_storage.dart';
 import 'partner_reaction_detail.dart';
 import '../relationship_book/engine/chapter_engine.dart';
 import '../relationship_book/repositories/firestore_relationship_book_repository.dart';
+import '../relationship_book/mappers/relationship_scenario_mapper.dart';
 
 class PartnerReadScreen
     extends StatefulWidget {
@@ -196,10 +197,22 @@ class _PartnerReadScreenState
     // Synchronizace s Relationship Book
     // ======================================================
 
-    // TODO:
-    // 1. Najít kapitolu podle scenarioId.
-    // 2. Pokud neexistuje, vytvořit ji.
-    // 3. Pokud existuje, přidat RelationshipEvent.
+    final relationshipScenario =
+        RelationshipScenarioMapper.fromScenar(scenar!);
+
+    var chapter = await _chapterEngine.findChapterByScenario(
+      relationshipScenario.scenarioId,
+    );
+
+    if (chapter == null) {
+      await _chapterEngine.createChapterFromScenario(
+        scenario: relationshipScenario,
+      );
+
+      chapter = await _chapterEngine.findChapterByScenario(
+        relationshipScenario.scenarioId,
+      );
+    }
 
     if (!mounted) return;
 
