@@ -10,47 +10,86 @@ import 'widgets/open_book.dart';
 class BookBuilder {
   static List<Widget> build({
     required List<RelationshipChapter> chapters,
-    required List<RelationshipPhoto> photos,
-    required RelationshipReflection? myReflection,
-    required RelationshipReflection? partnerReflection,
+
+    required Map<String, List<RelationshipPhoto>> photosByChapter,
+
+    required Map<String, RelationshipReflection?> myReflectionsByChapter,
+
+    required Map<String, RelationshipReflection?> partnerReflectionsByChapter,
+
     required PageController pageController,
+
     required Future<void> Function(String chapterId) onAddPhoto,
+
     required Future<void> Function(String chapterId) onAddReflection,
   }) {
     return List.generate(
       chapters.length,
       (index) {
         final chapter = chapters[index];
-        final chapterPhotos = photos
-            .where((photo) => photo.chapterId == chapter.id)
-            .toList();
+
+        // ======================================================
+        // DATA KONKRÉTNÍ KAPITOLY
+        // ======================================================
+
+        final chapterPhotos =
+            photosByChapter[chapter.id] ?? const [];
+
+        final myReflection =
+            myReflectionsByChapter[chapter.id];
+
+        final partnerReflection =
+            partnerReflectionsByChapter[chapter.id];
+
+        // ======================================================
+        // ČÍSLA STRÁNEK
+        // ======================================================
 
         final leftNumber = (index * 2) + 1;
         final rightNumber = (index * 2) + 2;
 
+        // ======================================================
+        // NAVIGACE
+        // ======================================================
+
         void goToPrevious() {
           if (pageController.hasClients && index > 0) {
             pageController.previousPage(
-              duration: const Duration(milliseconds: 400),
+              duration: const Duration(
+                milliseconds: 400,
+              ),
               curve: Curves.easeInOut,
             );
           }
         }
 
         void goToNext() {
-          if (pageController.hasClients && index < chapters.length - 1) {
+          if (
+              pageController.hasClients &&
+              index < chapters.length - 1) {
             pageController.nextPage(
-              duration: const Duration(milliseconds: 400),
+              duration: const Duration(
+                milliseconds: 400,
+              ),
               curve: Curves.easeInOut,
             );
           }
         }
+
+        // ======================================================
+        // KAPITOLA
+        // ======================================================
 
         return OpenBook(
           leftPageNumber: leftNumber,
           rightPageNumber: rightNumber,
           onPrevious: goToPrevious,
           onNext: goToNext,
+
+          // ====================================================
+          // LEVÁ STRÁNKA
+          // ====================================================
+
           leftPage: BookLeftPage(
             chapter: chapter,
             chapterNumber: index + 1,
@@ -59,12 +98,21 @@ class BookBuilder {
             partnerReflection: partnerReflection,
             onPreviousPage: goToPrevious,
           ),
+
+          // ====================================================
+          // PRAVÁ STRÁNKA
+          // ====================================================
+
           rightPage: BookRightPage(
-            photos: chapterPhotos.isNotEmpty ? chapterPhotos : photos,
+            photos: chapterPhotos,
             myReflection: myReflection,
             pageNumber: rightNumber,
-            onAddPhoto: () => onAddPhoto(chapter.id),
-            onAddReflection: () => onAddReflection(chapter.id),
+            onAddPhoto: () => onAddPhoto(
+              chapter.id,
+            ),
+            onAddReflection: () => onAddReflection(
+              chapter.id,
+            ),
             onNextPage: goToNext,
           ),
         );

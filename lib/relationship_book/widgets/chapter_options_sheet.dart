@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../engine/chapter_engine.dart';
 import '../models/chapter_status.dart';
 import '../models/relationship_chapter.dart';
+import '../repositories/relationship_book_repository.dart';
 import 'chapter_motto_dialog.dart';
 
 enum ChapterOptionResult {
@@ -13,21 +15,27 @@ enum ChapterOptionResult {
 
 class ChapterOptionsSheet extends StatelessWidget {
   final RelationshipChapter chapter;
+  final RelationshipBookRepository repository;
 
   const ChapterOptionsSheet({
     super.key,
     required this.chapter,
+    required this.repository,
   });
 
   static Future<ChapterOptionResult?> show(
     BuildContext context, {
     required RelationshipChapter chapter,
+    required RelationshipBookRepository repository,
   }) {
     return showModalBottomSheet<ChapterOptionResult>(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (context) => ChapterOptionsSheet(chapter: chapter),
+      builder: (context) => ChapterOptionsSheet(
+        chapter: chapter,
+        repository: repository,
+      ),
     );
   }
 
@@ -39,7 +47,9 @@ class ChapterOptionsSheet extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Color(0xFF2C2421),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(28),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black45,
@@ -48,7 +58,10 @@ class ChapterOptionsSheet extends StatelessWidget {
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 16,
+      ),
       child: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -57,11 +70,14 @@ class ChapterOptionsSheet extends StatelessWidget {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: const Color(0xFF8D7B68).withValues(alpha: 0.4),
+                color: const Color(0xFF8D7B68)
+                    .withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
+
             const SizedBox(height: 20),
+
             Text(
               chapter.chapterTitle,
               maxLines: 1,
@@ -73,56 +89,135 @@ class ChapterOptionsSheet extends StatelessWidget {
                 letterSpacing: 0.5,
               ),
             ),
+
             const SizedBox(height: 16),
-            const Divider(color: Color(0xFF4A3E3D), height: 1),
+
+            const Divider(
+              color: Color(0xFF4A3E3D),
+              height: 1,
+            ),
+
             const SizedBox(height: 12),
+
+            // ==================================================
+            // OBLÍBENÉ
+            // ==================================================
+
             _buildOptionTile(
               context: context,
-              icon: isFavorite ? Icons.favorite : Icons.favorite_border,
+              icon: isFavorite
+                  ? Icons.favorite
+                  : Icons.favorite_border,
               iconColor: const Color(0xFFC84B31),
-              title: isFavorite ? 'Odebrat z oblíbených' : '❤️ Oblíbená',
+              title: isFavorite
+                  ? 'Odebrat z oblíbených'
+                  : '❤️ Oblíbená',
               onTap: () {
-                Navigator.pop(context, ChapterOptionResult.favoriteToggled);
+                Navigator.pop(
+                  context,
+                  ChapterOptionResult.favoriteToggled,
+                );
               },
             ),
+
+            // ==================================================
+            // MOTTO
+            // ==================================================
+
             _buildOptionTile(
               context: context,
               icon: Icons.auto_awesome,
               iconColor: const Color(0xFFD4AF37),
               title: '✨ Motto',
               onTap: () async {
-                final newMotto = await showDialog<String>(
+                final newMotto =
+                    await showDialog<String>(
                   context: context,
-                  builder: (ctx) => ChapterMottoDialog(
+                  builder: (ctx) =>
+                      ChapterMottoDialog(
                     initialMotto: chapter.motto,
                   ),
                 );
-                if (newMotto != null && context.mounted) {
-                  Navigator.pop(context, ChapterOptionResult.mottoUpdated);
+
+                if (newMotto == null ||
+                    newMotto.trim().isEmpty ||
+                    !context.mounted) {
+                  return;
                 }
+
+                // ==========================================
+                // ULOŽENÍ MOTTA
+                // ==========================================
+
+                final engine = ChapterEngine(
+                  repository: repository,
+                );
+
+                await engine.updateMotto(
+                  chapterId: chapter.id,
+                  customMotto: newMotto,
+                );
+
+                if (!context.mounted) {
+                  return;
+                }
+
+                Navigator.pop(
+                  context,
+                  ChapterOptionResult.mottoUpdated,
+                );
               },
             ),
+
+            // ==================================================
+            // ARCHIV
+            // ==================================================
+
             _buildOptionTile(
               context: context,
               icon: Icons.archive_outlined,
               iconColor: const Color(0xFF8D7B68),
-              title: isArchived ? 'Vrátit z archivu' : '📦 Archiv',
+              title: isArchived
+                  ? 'Vrátit z archivu'
+                  : '📦 Archiv',
               onTap: () {
-                Navigator.pop(context, ChapterOptionResult.archived);
+                Navigator.pop(
+                  context,
+                  ChapterOptionResult.archived,
+                );
               },
             ),
+
+            // ==================================================
+            // KOŠ
+            // ==================================================
+
             _buildOptionTile(
               context: context,
               icon: Icons.delete_outline,
               iconColor: const Color(0xFFE57373),
               title: '🗑 Přesunout do koše',
               onTap: () {
-                Navigator.pop(context, ChapterOptionResult.deleted);
+                Navigator.pop(
+                  context,
+                  ChapterOptionResult.deleted,
+                );
               },
             ),
+
             const SizedBox(height: 8),
-            const Divider(color: Color(0xFF4A3E3D), height: 1),
+
+            const Divider(
+              color: Color(0xFF4A3E3D),
+              height: 1,
+            ),
+
             const SizedBox(height: 8),
+
+            // ==================================================
+            // ZAVŘÍT
+            // ==================================================
+
             _buildOptionTile(
               context: context,
               icon: Icons.close,
@@ -149,7 +244,11 @@ class ChapterOptionsSheet extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        leading: Icon(icon, color: iconColor, size: 24),
+        leading: Icon(
+          icon,
+          color: iconColor,
+          size: 24,
+        ),
         title: Text(
           title,
           style: const TextStyle(

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../screens/add_relationship_photo_screen.dart';
 import '../book_builder.dart';
 import '../models/relationship_chapter.dart';
+import '../models/relationship_photo.dart';
 import '../models/relationship_reflection.dart';
 import '../repositories/cloud/cloud_relationship_reflection_repository.dart';
 import '../repositories/firestore_relationship_book_repository.dart';
 import '../repositories/local/local_relationship_photo_repository.dart';
-
 import '../services/relationship_photo_service.dart';
 import '../services/relationship_reflection_service.dart';
 import 'relationship_book_viewer_screen.dart';
 import 'relationship_trash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class RelationshipBookScreen extends StatefulWidget {
   final FirestoreRelationshipBookRepository repository;
@@ -24,7 +24,8 @@ class RelationshipBookScreen extends StatefulWidget {
     FirestoreRelationshipBookRepository? repository,
     RelationshipPhotoService? photoService,
     RelationshipReflectionService? reflectionService,
-  })  : repository = repository ?? FirestoreRelationshipBookRepository(),
+  })  : repository =
+            repository ?? FirestoreRelationshipBookRepository(),
         photoService = photoService ??
             RelationshipPhotoService(
               repository: LocalRelationshipPhotoRepository(),
@@ -39,7 +40,8 @@ class RelationshipBookScreen extends StatefulWidget {
       _RelationshipBookScreenState();
 }
 
-class _RelationshipBookScreenState extends State<RelationshipBookScreen> {
+class _RelationshipBookScreenState
+    extends State<RelationshipBookScreen> {
   late Future<List<RelationshipChapter>> _memoriesFuture;
 
   @override
@@ -49,7 +51,8 @@ class _RelationshipBookScreenState extends State<RelationshipBookScreen> {
   }
 
   void _loadMemories() {
-    _memoriesFuture = widget.repository.getAllMemories();
+    _memoriesFuture =
+        widget.repository.getAllMemories();
   }
 
   void _refreshMemories() {
@@ -63,82 +66,183 @@ class _RelationshipBookScreenState extends State<RelationshipBookScreen> {
     RelationshipChapter chapter,
     List<RelationshipChapter> allChapters,
   ) async {
+    final initialIndex =
+        allChapters.indexOf(chapter);
+
+    final pageController = PageController(
+      initialPage: initialIndex,
+    );
+
     final navigator = Navigator.of(context);
 
-    final photos = await widget.photoService.getPhotos(chapter.id);
-    final reflections =
-        await widget.reflectionService.getReflections(chapter.id);
+    final photosByChapter =
+        <String, List<RelationshipPhoto>>{};
 
-    if (!mounted) return;
+    final myReflectionsByChapter =
+        <String, RelationshipReflection?>{};
+
+    final partnerReflectionsByChapter =
+        <String, RelationshipReflection?>{};
+
+    // ----------------------------------------------------------
+    // Načteme data pro všechny kapitoly
+    // ----------------------------------------------------------
+
+    for (final currentChapter in allChapters) {
+      final chapterPhotos =
+          await widget.photoService.getPhotos(
+        currentChapter.id,
+      );
+
+      photosByChapter[currentChapter.id] =
+          chapterPhotos;
+
+      final reflections =
+          await widget.reflectionService
+              .getReflections(
+        currentChapter.id,
+      );
+
+      myReflectionsByChapter[
+          currentChapter.id] =
+          reflections.isNotEmpty
+              ? reflections.first
+              : null;
+
+      partnerReflectionsByChapter[
+          currentChapter.id] =
+          reflections.length > 1
+              ? reflections[1]
+              : null;
+    }
+
+    if (!mounted) {
+      pageController.dispose();
+      return;
+    }
 
     await navigator.push(
       MaterialPageRoute(
-        builder: (_) => RelationshipBookViewerScreen(
+        builder: (_) =>
+            RelationshipBookViewerScreen(
           repository: widget.repository,
-          initialIndex: allChapters.indexOf(chapter),
+          initialIndex: initialIndex,
+          pageController: pageController,
           spreads: BookBuilder.build(
             chapters: allChapters,
-            photos: photos,
-            myReflection:
-                reflections.isNotEmpty ? reflections.first : null,
-            partnerReflection:
-                reflections.length > 1 ? reflections[1] : null,
-            pageController: PageController(),
+            photosByChapter:
+                photosByChapter,
+            myReflectionsByChapter:
+                myReflectionsByChapter,
+            partnerReflectionsByChapter:
+                partnerReflectionsByChapter,
+            pageController:
+                pageController,
             onAddPhoto: (chapterId) async {
               await navigator.push(
                 MaterialPageRoute(
                   builder: (_) =>
-                      AddRelationshipPhotoScreen(chapterId: chapterId),
+                      AddRelationshipPhotoScreen(
+                    chapterId: chapterId,
+                  ),
                 ),
               );
             },
-            onAddReflection: (chapterId) async {
-              final controller = TextEditingController();
-              final text = await showDialog<String>(
+            onAddReflection:
+                (chapterId) async {
+              final controller =
+                  TextEditingController();
+
+              final text =
+                  await showDialog<String>(
                 context: context,
-                builder: (dialogContext) => AlertDialog(
-                  title: const Text('Tvůj vzkaz'),
+                builder:
+                    (dialogContext) =>
+                        AlertDialog(
+                  title:
+                      const Text(
+                    'Tvůj vzkaz',
+                  ),
                   content: TextField(
-                    controller: controller,
+                    controller:
+                        controller,
                     maxLines: 4,
-                    decoration: const InputDecoration(
+                    decoration:
+                        const InputDecoration(
                       hintText:
                           'Napiš, jak jsi tento okamžik prožíval/a ty...',
-                      border: OutlineInputBorder(),
+                      border:
+                          OutlineInputBorder(),
                     ),
                   ),
                   actions: [
                     TextButton(
-                      onPressed: () => Navigator.pop(dialogContext),
-                      child: const Text('Zrušit'),
+                      onPressed: () =>
+                          Navigator.pop(
+                        dialogContext,
+                      ),
+                      child:
+                          const Text(
+                        'Zrušit',
+                      ),
                     ),
                     FilledButton(
                       onPressed: () =>
-                          Navigator.pop(dialogContext, controller.text),
-                      child: const Text('Uložit'),
+                          Navigator.pop(
+                        dialogContext,
+                        controller.text,
+                      ),
+                      child:
+                          const Text(
+                        'Uložit',
+                      ),
                     ),
                   ],
                 ),
               );
 
-              if (text != null && text.trim().isNotEmpty) {
-                final now = DateTime.now();
-                final currentUserId =
-                    FirebaseAuth.instance.currentUser?.uid ?? '';
+              controller.dispose();
 
-                final reflection = RelationshipReflection(
-                  id: now.millisecondsSinceEpoch.toString(),
-                  chapterId: chapterId,
-                  authorId: currentUserId,
-                  text: text.trim(),
-                  createdAt: now,
-                  updatedAt: now,
-                );
-
-                await widget.reflectionService.saveReflection(reflection);
-                if (!mounted) return;
-                _refreshMemories();
+              if (text == null ||
+                  text.trim().isEmpty) {
+                return;
               }
+
+              final now =
+                  DateTime.now();
+
+              final currentUserId =
+                  FirebaseAuth
+                          .instance
+                          .currentUser
+                          ?.uid ??
+                      '';
+
+              final reflection =
+                  RelationshipReflection(
+                id: now
+                    .millisecondsSinceEpoch
+                    .toString(),
+                chapterId:
+                    chapterId,
+                authorId:
+                    currentUserId,
+                text: text.trim(),
+                createdAt: now,
+                updatedAt: now,
+              );
+
+              await widget
+                  .reflectionService
+                  .saveReflection(
+                reflection,
+              );
+
+              if (!mounted) {
+                return;
+              }
+
+              _refreshMemories();
             },
           ),
           chapters: allChapters,
@@ -146,7 +250,12 @@ class _RelationshipBookScreenState extends State<RelationshipBookScreen> {
       ),
     );
 
-    if (!mounted) return;
+    pageController.dispose();
+
+    if (!mounted) {
+      return;
+    }
+
     _refreshMemories();
   }
 
@@ -154,31 +263,44 @@ class _RelationshipBookScreenState extends State<RelationshipBookScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Relationship Book'),
+        title:
+            const Text('Relationship Book'),
         actions: [
           IconButton(
             tooltip: 'Koš',
-            icon: const Icon(Icons.delete_outline),
+            icon: const Icon(
+              Icons.delete_outline,
+            ),
             onPressed: () async {
-              final navigator = Navigator.of(context);
+              final navigator =
+                  Navigator.of(context);
+
               await navigator.push(
                 MaterialPageRoute(
-                  builder: (_) => const RelationshipTrashScreen(),
+                  builder: (_) =>
+                      const RelationshipTrashScreen(),
                 ),
               );
 
-              if (!mounted) return;
+              if (!mounted) {
+                return;
+              }
+
               _refreshMemories();
             },
           ),
         ],
       ),
-      body: FutureBuilder<List<RelationshipChapter>>(
+      body: FutureBuilder<
+          List<RelationshipChapter>>(
         future: _memoriesFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+        builder:
+            (context, snapshot) {
+          if (snapshot.connectionState ==
+              ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child:
+                  CircularProgressIndicator(),
             );
           }
 
@@ -190,7 +312,8 @@ class _RelationshipBookScreenState extends State<RelationshipBookScreen> {
             );
           }
 
-          final chapters = snapshot.data ?? [];
+          final chapters =
+              snapshot.data ?? [];
 
           if (chapters.isEmpty) {
             return const Center(
@@ -201,19 +324,33 @@ class _RelationshipBookScreenState extends State<RelationshipBookScreen> {
           }
 
           return ListView.builder(
-            itemCount: chapters.length,
-            itemBuilder: (context, index) {
-              final chapter = chapters[index];
+            itemCount:
+                chapters.length,
+            itemBuilder:
+                (context, index) {
+              final chapter =
+                  chapters[index];
 
               return ListTile(
-                title: Text(chapter.chapterTitle),
+                title: Text(
+                  chapter.chapterTitle,
+                ),
                 subtitle: Text(
                   chapter.introduction,
                   maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                  overflow:
+                      TextOverflow.ellipsis,
                 ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => _onChapterTapped(context, chapter, chapters),
+                trailing:
+                    const Icon(
+                  Icons.chevron_right,
+                ),
+                onTap: () =>
+                    _onChapterTapped(
+                  context,
+                  chapter,
+                  chapters,
+                ),
               );
             },
           );

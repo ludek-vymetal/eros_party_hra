@@ -1,159 +1,378 @@
 import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/scenario_record.dart';
 import '../models/reaction.dart';
+import 'relationship_service.dart';
 
 class ScenarioRecordStorage {
-  static const _key = 'scenario_records';
+  // ==========================================================
+  // LEGACY
+  // ==========================================================
 
-  // =========================
-  // 📥 LOAD
-  // =========================
-  static Future<List<ScenarioRecord>> load() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_key);
+  /// Starý globální klíč.
+  ///
+  /// Záměrně ho nemažeme.
+  /// Staré záznamy zůstávají v zařízení, ale nový systém
+  /// je už nebude používat.
+  
 
-    if (raw == null || raw.isEmpty) return [];
+  /// Nová verze úložiště.
+  ///
+  /// Každý účet + Relationship má vlastní prostor.
+  static const _keyPrefix = 'scenario_records_v2';
 
-    final decoded = jsonDecode(raw) as List;
-    return decoded
-        .map((e) => ScenarioRecord.fromJson(
-              Map<String, dynamic>.from(e),
-            ))
-        .toList();
+  // ==========================================================
+  // CURRENT STORAGE KEY
+  // ==========================================================
+
+  /// Vytvoří unikátní SharedPreferences klíč pro aktuálního
+  /// uživatele a jeho aktivní Relationship.
+  ///
+  /// Příklady:
+  ///
+  /// scenario_records_v2_UID_RELATIONSHIP_ID
+  ///
+  /// Pokud uživatel zatím nemá Relationship:
+  ///
+  /// scenario_records_v2_UID_personal
+  static Future<String?> _currentKey() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    // Bez přihlášeného uživatele nemáme kam bezpečně ukládat.
+    if (user == null) {
+      return null;
+    }
+
+    final relationshipId =
+        await RelationshipService.getActiveRelationshipId();
+
+    final scope =
+        relationshipId == null || relationshipId.isEmpty
+            ? 'personal'
+            : relationshipId;
+
+    return '${_keyPrefix}_${user.uid}_$scope';
   }
 
-  // =========================
-  // 💾 SAVE
-  // =========================
-  static Future<void> save(List<ScenarioRecord> list) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-      _key,
-      jsonEncode(list.map((e) => e.toJson()).toList()),
-    );
-  }
+  // ==========================================================
+  // INTERNAL LOAD
+  // ==========================================================
 
-  // =========================
-  // ➕ ADD RECORD
-  // =========================
-  static Future<void> add(
-    ScenarioRecord record,
+  static Future<List<ScenarioRecord>> _loadFromKey(
+    String key,
   ) async {
-    final all = await load();
+    final prefs =
+        await SharedPreferences.getInstance();
 
-    final exists = all.any(
-      (r) => r.id == record.id,
-    );
+    final raw =
+        prefs.getString(key);
 
-    if (!exists) {
-      all.add(record);
-      await save(all);
+    if (raw == null ||
+        raw.isEmpty) {
+      return [];
+    }
+
+    try {
+      final decoded =
+          jsonDecode(raw);
+
+      if (decoded is! List) {
+        return [];
+      }
+
+      return decoded
+          .map(
+            (e) => ScenarioRecord.fromJson(
+              Map<String, dynamic>.from(e),
+            ),
+          )
+          .toList();
+    } catch (_) {
+      // Pokud by byla data poškozená,
+      // aplikace nesmí spadnout.
+      return [];
     }
   }
 
-  // =========================
-  // ✏️ UPDATE RECORD
-  // =========================
-  static Future<void> update(ScenarioRecord record) async {
-    final all = await load();
-    final index = all.indexWhere((r) => r.id == record.id);
-    if (index == -1) return;
+  // ==========================================================
+  // INTERNAL SAVE
+  // ==========================================================
 
-    all[index] = record;
-    await save(all);
-  }
-
-  // =========================
-  // 🗑️ DELETE RECORD
-  // =========================
-  static Future<void> delete(String id) async {
-    final all = await load();
-    all.removeWhere((r) => r.id == id);
-    await save(all);
-  }
-
-    // =========================
-  // ➕ ADD REACTION
-  // =========================
-  static Future<void> addReaction(
-    String recordId,
-    Reaction reaction,
+  static Future<void> _saveToKey(
+    String key,
+    List<ScenarioRecord> list,
   ) async {
-    final all = await load();
+    final prefs =
+        await SharedPreferences.getInstance();
 
-    final index = all.indexWhere(
-      (r) => r.parentScenarioId == recordId,
+    await prefs.setString(
+      key,
+      jsonEncode(
+        list
+            .map(
+              (e) => e.toJson(),
+            )
+            .toList(),
+      ),
     );
+  }
 
-    if (index == -1) return;
+  // ==========================================================
+  // LOAD
+  // ==========================================================
 
-    final record = all[index];
+  /// Načte historii pouze aktuálního uživatele
+  /// a jeho aktivního Relationship.
+  ///
+  /// Starý globální seznam `scenario_records`
+  /// se již nepoužívá.
+  static Future<List<ScenarioRecord>> load() async {
+    final key =
+        await _currentKey();
 
-    // ochrana proti duplicitám z Firebase
-    final exists = record.reactions.any(
-      (r) =>
-          r.remoteId != null &&
-          r.remoteId == reaction.remoteId,
+    if (key == null) {
+      return [];
+    }
+
+    return _loadFromKey(key);
+  }
+
+  // ==========================================================
+  // SAVE
+  // ==========================================================
+
+  static Future<void> save(
+    List<ScenarioRecord> list,
+  ) async {
+    final key =
+        await _currentKey();
+
+    if (key == null) {
+      return;
+    }
+
+    await _saveToKey(
+      key,
+      list,
+    );
+  }
+
+  // ==========================================================
+  // ADD RECORD
+  // ==========================================================
+
+  static Future<void> add(
+    ScenarioRecord record,
+  ) async {
+    final key =
+        await _currentKey();
+
+    if (key == null) {
+      return;
+    }
+
+    final all =
+        await _loadFromKey(key);
+
+    final exists = all.any(
+      (r) => r.id == record.id,
     );
 
     if (exists) {
       return;
     }
 
-    all[index] = record.copyWith(
+    all.add(record);
+
+    await _saveToKey(
+      key,
+      all,
+    );
+  }
+
+  // ==========================================================
+  // UPDATE RECORD
+  // ==========================================================
+
+  static Future<void> update(
+    ScenarioRecord record,
+  ) async {
+    final key =
+        await _currentKey();
+
+    if (key == null) {
+      return;
+    }
+
+    final all =
+        await _loadFromKey(key);
+
+    final index =
+        all.indexWhere(
+      (r) => r.id == record.id,
+    );
+
+    if (index == -1) {
+      return;
+    }
+
+    all[index] =
+        record;
+
+    await _saveToKey(
+      key,
+      all,
+    );
+  }
+
+  // ==========================================================
+  // DELETE RECORD
+  // ==========================================================
+
+  static Future<void> delete(
+    String id,
+  ) async {
+    final key =
+        await _currentKey();
+
+    if (key == null) {
+      return;
+    }
+
+    final all =
+        await _loadFromKey(key);
+
+    all.removeWhere(
+      (r) => r.id == id,
+    );
+
+    await _saveToKey(
+      key,
+      all,
+    );
+  }
+
+  // ==========================================================
+  // ADD REACTION
+  // ==========================================================
+
+  static Future<void> addReaction(
+    String recordId,
+    Reaction reaction,
+  ) async {
+    final key =
+        await _currentKey();
+
+    if (key == null) {
+      return;
+    }
+
+    final all =
+        await _loadFromKey(key);
+
+    final index =
+        all.indexWhere(
+      (r) =>
+          r.parentScenarioId ==
+          recordId,
+    );
+
+    if (index == -1) {
+      return;
+    }
+
+    final record =
+        all[index];
+
+    // Ochrana proti duplicitám
+    // z Firebase.
+    final exists =
+        record.reactions.any(
+      (r) =>
+          r.remoteId != null &&
+          r.remoteId ==
+              reaction.remoteId,
+    );
+
+    if (exists) {
+      return;
+    }
+
+    all[index] =
+        record.copyWith(
       reactions: [
         ...record.reactions,
         reaction,
       ],
     );
 
-    await save(all);
+    await _saveToKey(
+      key,
+      all,
+    );
   }
 
-  // =========================
-  // 🔎 GET BY ID
-  // =========================
+  // ==========================================================
+  // GET BY ID
+  // ==========================================================
+
   static Future<ScenarioRecord?> getById(
     String id,
   ) async {
-    final all = await load();
+    final all =
+        await load();
 
     try {
       return all.firstWhere(
         (r) =>
             r.id == id ||
-            r.parentScenarioId == id,
+            r.parentScenarioId ==
+                id,
       );
     } catch (_) {
       return null;
     }
   }
 
-  // =========================
-  // 📚 GET ALL ATTEMPTS
-  // =========================
-  static Future<List<ScenarioRecord>> getByParentScenarioId(
-  String parentScenarioId,
-) async {
-  final all = await load();
+  // ==========================================================
+  // GET ALL ATTEMPTS
+  // ==========================================================
 
-  final list = all
-      .where((r) => r.parentScenarioId == parentScenarioId)
-      .toList();
+  static Future<List<ScenarioRecord>>
+      getByParentScenarioId(
+    String parentScenarioId,
+  ) async {
+    final all =
+        await load();
 
-  list.sort(
-    (a, b) => a.createdAt.compareTo(b.createdAt),
-  );
+    final list =
+        all
+            .where(
+              (r) =>
+                  r.parentScenarioId ==
+                  parentScenarioId,
+            )
+            .toList();
 
-  return list;
-}
+    list.sort(
+      (a, b) =>
+          a.createdAt.compareTo(
+        b.createdAt,
+      ),
+    );
 
-// =========================
-// 📊 GET ALL RECORDS
-// =========================
-static Future<List<ScenarioRecord>> getAll() async {
-  return await load();
+    return list;
+  }
+
+  // ==========================================================
+  // GET ALL RECORDS
+  // ==========================================================
+
+  static Future<List<ScenarioRecord>>
+      getAll() async {
+    return load();
   }
 }

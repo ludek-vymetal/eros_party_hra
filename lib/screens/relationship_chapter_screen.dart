@@ -15,7 +15,7 @@ class RelationshipChapterScreen extends StatelessWidget {
     required this.chapter,
     required this.chapterNumber,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -30,7 +30,7 @@ class RelationshipChapterScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () async {
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -59,9 +59,8 @@ class RelationshipChapterScreen extends StatelessWidget {
                 chapter: chapter,
                 chapterNumber: chapterNumber,
               ),
-              const SizedBox(height: 20),
 
-                           
+              const SizedBox(height: 20),
 
               if (chapter.introduction.isNotEmpty) ...[
                 Row(
@@ -99,6 +98,7 @@ class RelationshipChapterScreen extends StatelessWidget {
               const BookDivider(
                 icon: Icons.menu_book,
               ),
+
               const SizedBox(height: 18),
 
               Text(

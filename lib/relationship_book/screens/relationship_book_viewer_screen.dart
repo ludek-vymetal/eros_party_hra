@@ -11,6 +11,7 @@ class RelationshipBookViewerScreen extends StatefulWidget {
   final List<RelationshipChapter> chapters;
   final RelationshipBookRepository repository;
   final int initialIndex;
+  final PageController pageController;
 
   const RelationshipBookViewerScreen({
     super.key,
@@ -18,6 +19,7 @@ class RelationshipBookViewerScreen extends StatefulWidget {
     required this.chapters,
     required this.repository,
     required this.initialIndex,
+    required this.pageController,
   });
 
   @override
@@ -46,6 +48,32 @@ class _RelationshipBookViewerScreenState
     _chapterEngine = ChapterEngine(
       repository: widget.repository,
     );
+
+    widget.pageController.addListener(_onPageChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.pageController.removeListener(_onPageChanged);
+    super.dispose();
+  }
+
+  void _onPageChanged() {
+    final page = widget.pageController.page;
+
+    if (page == null) {
+      return;
+    }
+
+    final index = page.round();
+
+    if (index != currentSpread &&
+        index >= 0 &&
+        index < widget.spreads.length) {
+      setState(() {
+        currentSpread = index;
+      });
+    }
   }
 
   // ==========================================================
@@ -57,9 +85,10 @@ class _RelationshipBookViewerScreenState
       return;
     }
 
-    setState(() {
-      currentSpread++;
-    });
+    widget.pageController.nextPage(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
   }
 
   void previousSpread() {
@@ -67,28 +96,10 @@ class _RelationshipBookViewerScreenState
       return;
     }
 
-    setState(() {
-      currentSpread--;
-    });
-  }
-
-  // ==========================================================
-  // GESTA
-  // ==========================================================
-
-  void _handleHorizontalDragEnd(DragEndDetails details) {
-    final velocity = details.primaryVelocity ?? 0;
-
-    // Přejetí zprava doleva = další kapitola
-    if (velocity < -300) {
-      nextSpread();
-      return;
-    }
-
-    // Přejetí zleva doprava = předchozí kapitola
-    if (velocity > 300) {
-      previousSpread();
-    }
+    widget.pageController.previousPage(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
   }
 
   // ==========================================================
@@ -106,6 +117,7 @@ class _RelationshipBookViewerScreenState
     final result = await ChapterOptionsSheet.show(
       context,
       chapter: currentChapter,
+      repository: widget.repository,
     );
 
     if (result == null || !mounted) {
@@ -139,8 +151,7 @@ class _RelationshipBookViewerScreenState
 
         if (updated != null && mounted) {
           setState(() {
-            widget.chapters[currentSpread] =
-                updated;
+            widget.chapters[currentSpread] = updated;
           });
         }
 
@@ -223,7 +234,7 @@ class _RelationshipBookViewerScreenState
       // ======================================================
 
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color(0xFFD9C3A0),
         elevation: 0,
         centerTitle: true,
 
@@ -238,7 +249,6 @@ class _RelationshipBookViewerScreenState
               ),
               const SizedBox(width: 8),
             ],
-
             Flexible(
               child: Text(
                 currentChapter.chapterTitle,
@@ -255,6 +265,7 @@ class _RelationshipBookViewerScreenState
           IconButton(
             icon: const Icon(
               Icons.more_vert,
+              size: 28,
             ),
             tooltip: 'Možnosti kapitoly',
             onPressed: _handleOptionsSheet,
@@ -263,7 +274,7 @@ class _RelationshipBookViewerScreenState
       ),
 
       // ======================================================
-      // KNIHA
+      // JEDNA STRÁNKA KNIHY
       // ======================================================
 
       body: SafeArea(
@@ -276,46 +287,23 @@ class _RelationshipBookViewerScreenState
                 constraints.maxHeight >
                     constraints.maxWidth;
 
-            final double bookWidth;
-
-            if (isPortrait) {
-              bookWidth =
-                  constraints.maxWidth * 0.96;
-            } else {
-              bookWidth =
-                  constraints.maxWidth * 0.88;
-            }
+            final bookWidth = isPortrait
+                ? constraints.maxWidth * 0.96
+                : constraints.maxWidth * 0.88;
 
             return Center(
               child: SizedBox(
                 width: bookWidth,
-                child: AnimatedSwitcher(
-                  duration:
-                      const Duration(
-                    milliseconds: 350,
-                  ),
-                  switchInCurve:
-                      Curves.easeOutCubic,
-                  switchOutCurve:
-                      Curves.easeInCubic,
-                  transitionBuilder:
-                      (
-                    child,
-                    animation,
+                child: PageView.builder(
+                  controller: widget.pageController,
+                  itemCount: widget.spreads.length,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (
+                    context,
+                    index,
                   ) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    );
+                    return widget.spreads[index];
                   },
-                  child: KeyedSubtree(
-                    key: ValueKey(
-                      currentSpread,
-                    ),
-                    child:
-                        widget.spreads[
-                            currentSpread],
-                  ),
                 ),
               ),
             );
@@ -324,65 +312,54 @@ class _RelationshipBookViewerScreenState
       ),
 
       // ======================================================
-      // MALÁ NAVIGAČNÍ NÁPOVĚDA
+      // NAVIGACE
       // ======================================================
 
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding:
-              const EdgeInsets.only(
+          padding: const EdgeInsets.only(
             left: 20,
             right: 20,
             bottom: 8,
             top: 4,
           ),
-
           child: Row(
             mainAxisAlignment:
                 MainAxisAlignment.center,
             children: [
               IconButton(
-                onPressed:
-                    currentSpread > 0
-                        ? previousSpread
-                        : null,
+                onPressed: currentSpread > 0
+                    ? previousSpread
+                    : null,
                 icon: const Icon(
                   Icons.chevron_left,
                 ),
                 iconSize: 32,
-                tooltip:
-                    'Předchozí kapitola',
+                tooltip: 'Předchozí kapitola',
               ),
 
-              const SizedBox(
-                width: 20,
-              ),
+              const SizedBox(width: 20),
 
               Text(
                 '${currentSpread + 1} / ${widget.spreads.length}',
                 style: const TextStyle(
-                  fontWeight:
-                      FontWeight.w600,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
 
-              const SizedBox(
-                width: 20,
-              ),
+              const SizedBox(width: 20),
 
               IconButton(
                 onPressed:
                     currentSpread <
-                            widget.spreads.length -
-                                1
+                            widget.spreads.length - 1
                         ? nextSpread
                         : null,
                 icon: const Icon(
                   Icons.chevron_right,
                 ),
                 iconSize: 32,
-                tooltip:
-                    'Další kapitola',
+                tooltip: 'Další kapitola',
               ),
             ],
           ),
