@@ -60,8 +60,7 @@ class _RelationshipChapterScreenState
   final RelationshipChapterService _chapterService =
       RelationshipChapterService();
 
-  RelationshipReflection? _myReflection;
-  RelationshipReflection? _partnerReflection;
+  late RelationshipChapter _currentChapter;
 
   List<RelationshipPhoto> _photos = [];
 
@@ -78,6 +77,8 @@ class _RelationshipChapterScreenState
   @override
   void initState() {
     super.initState();
+
+    _currentChapter = widget.chapter;
 
     _pageController = PageController(
       initialPage: widget.currentIndex,
@@ -161,26 +162,22 @@ class _RelationshipChapterScreenState
         ..addAll(partnerReflectionsMap);
 
       _photos =
-          photosMap[widget.chapter.id] ?? [];
-
-      _myReflection =
-          myReflectionsMap[widget.chapter.id];
-
-      _partnerReflection =
-          partnerReflectionsMap[widget.chapter.id];
+          photosMap[_currentChapter.id] ?? [];
 
       _loadingBookData = false;
     });
   }
 
   // ==========================================================
-  // OBNOVENÍ REFLEXE
+  // OBNOVENÍ REFLEXE KONKRÉTNÍ KAPITOLY
   // ==========================================================
 
-  Future<void> _loadReflection() async {
+  Future<void> _loadReflection(
+    String chapterId,
+  ) async {
     final reflections =
         await _reflectionService.getReflections(
-      widget.chapter.id,
+      chapterId,
     );
 
     if (!mounted) {
@@ -201,25 +198,24 @@ class _RelationshipChapterScreenState
     }
 
     setState(() {
-      _myReflection = myReflection;
-      _partnerReflection = partnerReflection;
-
-      _myReflectionsByChapter[widget.chapter.id] =
+      _myReflectionsByChapter[chapterId] =
           myReflection;
 
-      _partnerReflectionsByChapter[
-          widget.chapter.id] = partnerReflection;
+      _partnerReflectionsByChapter[chapterId] =
+          partnerReflection;
     });
   }
 
   // ==========================================================
-  // OBNOVENÍ FOTOGRAFIÍ
+  // OBNOVENÍ FOTOGRAFIÍ KONKRÉTNÍ KAPITOLY
   // ==========================================================
 
-  Future<void> _loadPhotos() async {
+  Future<void> _loadPhotos(
+    String chapterId,
+  ) async {
     final photos =
         await _photoService.getPhotos(
-      widget.chapter.id,
+      chapterId,
     );
 
     if (!mounted) {
@@ -227,10 +223,11 @@ class _RelationshipChapterScreenState
     }
 
     setState(() {
-      _photos = photos;
+      _photosByChapter[chapterId] = photos;
 
-      _photosByChapter[widget.chapter.id] =
-          photos;
+      if (chapterId == _currentChapter.id) {
+        _photos = photos;
+      }
     });
   }
 
@@ -290,7 +287,9 @@ class _RelationshipChapterScreenState
       photo.id,
     );
 
-    await _loadPhotos();
+    await _loadPhotos(
+      photo.chapterId,
+    );
   }
 
   // ==========================================================
@@ -327,7 +326,7 @@ class _RelationshipChapterScreenState
   }
 
   // ==========================================================
-  // PŘIDÁNÍ REFLEXE
+  // PŘIDÁNÍ / ÚPRAVA REFLEXE
   // ==========================================================
 
   Future<void> _addReflection(
@@ -423,7 +422,9 @@ class _RelationshipChapterScreenState
       reflection,
     );
 
-    await _loadReflection();
+    await _loadReflection(
+      chapterId,
+    );
   }
 
   // ==========================================================
@@ -447,7 +448,9 @@ class _RelationshipChapterScreenState
     );
 
     if (saved == true) {
-      await _loadPhotos();
+      await _loadPhotos(
+        chapterId,
+      );
     }
   }
 
@@ -463,12 +466,12 @@ class _RelationshipChapterScreenState
         AppLocalizations.of(context);
 
     final mottoText =
-        (widget.chapter.customMotto !=
+        (_currentChapter.customMotto !=
                     null &&
-                widget.chapter.customMotto!
+                _currentChapter.customMotto!
                     .trim()
                     .isNotEmpty)
-            ? widget.chapter.customMotto!
+            ? _currentChapter.customMotto!
             : "Tak co... čím ho nebo ji překvapíš příště?";
 
     return Scaffold(
@@ -507,32 +510,60 @@ class _RelationshipChapterScreenState
                 await _chapterEngine
                     .updateMotto(
                   chapterId:
-                      widget.chapter.id,
+                      _currentChapter.id,
                   customMotto: motto,
                 );
 
-                if (!mounted) {
+                final updatedChapter =
+                    await _chapterEngine
+                        .getChapter(
+                  _currentChapter.id,
+                );
+
+                if (!mounted ||
+                    updatedChapter == null) {
                   return;
                 }
 
-                setState(() {});
+                setState(() {
+                  _currentChapter =
+                      updatedChapter;
+
+                  widget.chapters[
+                          widget.currentIndex] =
+                      updatedChapter;
+                });
               } else if (value ==
                   'favorite') {
                 await _chapterService
                     .toggleFavorite(
-                  widget.chapter,
+                  _currentChapter,
                 );
 
-                if (!mounted) {
+                final updatedChapter =
+                    await _chapterEngine
+                        .getChapter(
+                  _currentChapter.id,
+                );
+
+                if (!mounted ||
+                    updatedChapter == null) {
                   return;
                 }
 
-                setState(() {});
+                setState(() {
+                  _currentChapter =
+                      updatedChapter;
+
+                  widget.chapters[
+                          widget.currentIndex] =
+                      updatedChapter;
+                });
               } else if (value ==
                   'archive') {
                 await _chapterService
                     .archiveChapter(
-                  widget.chapter,
+                  _currentChapter,
                 );
 
                 if (!mounted) {
@@ -587,7 +618,7 @@ class _RelationshipChapterScreenState
 
                 await _chapterService
                     .deleteChapter(
-                  widget.chapter.id,
+                  _currentChapter.id,
                 );
 
                 if (!context.mounted) {
