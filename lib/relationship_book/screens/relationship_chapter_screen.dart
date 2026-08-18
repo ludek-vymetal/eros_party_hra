@@ -41,7 +41,6 @@ class RelationshipChapterScreen extends StatefulWidget {
 
 class _RelationshipChapterScreenState
     extends State<RelationshipChapterScreen> {
-  // Přidán PageController pro ovládání přetáčení stránek
   late final PageController _pageController;
 
   final RelationshipReflectionService _reflectionService =
@@ -49,27 +48,42 @@ class _RelationshipChapterScreenState
     repository: CloudRelationshipReflectionRepository(),
   );
 
-  RelationshipReflection? _myReflection;
-  RelationshipReflection? _partnerReflection;
-
-  final RelationshipPhotoService _photoService = RelationshipPhotoService(
+  final RelationshipPhotoService _photoService =
+      RelationshipPhotoService(
     repository: LocalRelationshipPhotoRepository(),
   );
-
-  List<RelationshipPhoto> _photos = [];
 
   final ChapterEngine _chapterEngine = ChapterEngine(
     repository: FirestoreRelationshipBookRepository(),
   );
+
   final RelationshipChapterService _chapterService =
       RelationshipChapterService();
+
+  RelationshipReflection? _myReflection;
+  RelationshipReflection? _partnerReflection;
+
+  List<RelationshipPhoto> _photos = [];
+
+  final Map<String, List<RelationshipPhoto>> _photosByChapter = {};
+
+  final Map<String, RelationshipReflection?>
+      _myReflectionsByChapter = {};
+
+  final Map<String, RelationshipReflection?>
+      _partnerReflectionsByChapter = {};
+
+  bool _loadingBookData = true;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: widget.currentIndex);
-    _loadReflection();
-    _loadPhotos();
+
+    _pageController = PageController(
+      initialPage: widget.currentIndex,
+    );
+
+    _loadBookData();
   }
 
   @override
@@ -78,58 +92,191 @@ class _RelationshipChapterScreenState
     super.dispose();
   }
 
-  Future<void> _loadReflection() async {
-    final reflections = await _reflectionService.getReflections(
-      widget.chapter.id,
-    );
+  // ==========================================================
+  // NAČTENÍ DAT CELÉ KNIHY
+  // ==========================================================
 
-    if (!mounted) return;
-
+  Future<void> _loadBookData() async {
     setState(() {
-      _myReflection = reflections.cast<RelationshipReflection?>().firstWhere(
-            (item) => item != null && PartnerService.isMine(item.authorId),
-            orElse: () => null,
-          );
-
-      _partnerReflection =
-          reflections.cast<RelationshipReflection?>().firstWhere(
-                (item) =>
-                    item != null && !PartnerService.isMine(item.authorId),
-                orElse: () => null,
-              );
+      _loadingBookData = true;
     });
-  }
 
-  Future<void> _loadPhotos() async {
-    final photos = await _photoService.getPhotos(
-      widget.chapter.id,
-    );
+    final photosMap =
+        <String, List<RelationshipPhoto>>{};
 
-    if (!mounted) return;
+    final myReflectionsMap =
+        <String, RelationshipReflection?>{};
 
-    setState(() {
-      _photos = photos;
-    });
-  }
+    final partnerReflectionsMap =
+        <String, RelationshipReflection?>{};
 
-  Future<void> _deletePhoto(RelationshipPhoto photo) async {
-    if (!PermissionService.canDeletePhoto(photo)) {
+    for (final currentChapter in widget.chapters) {
+      final photos =
+          await _photoService.getPhotos(
+        currentChapter.id,
+      );
+
+      photosMap[currentChapter.id] = photos;
+
+      final reflections =
+          await _reflectionService.getReflections(
+        currentChapter.id,
+      );
+
+      RelationshipReflection? myReflection;
+      RelationshipReflection? partnerReflection;
+
+      for (final reflection in reflections) {
+        if (PartnerService.isMine(
+          reflection.authorId,
+        )) {
+          myReflection ??= reflection;
+        } else {
+          partnerReflection ??= reflection;
+        }
+      }
+
+      myReflectionsMap[currentChapter.id] =
+          myReflection;
+
+      partnerReflectionsMap[currentChapter.id] =
+          partnerReflection;
+    }
+
+    if (!mounted) {
       return;
     }
 
-    final delete = await showDialog<bool>(
+    setState(() {
+      _photosByChapter
+        ..clear()
+        ..addAll(photosMap);
+
+      _myReflectionsByChapter
+        ..clear()
+        ..addAll(myReflectionsMap);
+
+      _partnerReflectionsByChapter
+        ..clear()
+        ..addAll(partnerReflectionsMap);
+
+      _photos =
+          photosMap[widget.chapter.id] ?? [];
+
+      _myReflection =
+          myReflectionsMap[widget.chapter.id];
+
+      _partnerReflection =
+          partnerReflectionsMap[widget.chapter.id];
+
+      _loadingBookData = false;
+    });
+  }
+
+  // ==========================================================
+  // OBNOVENÍ REFLEXE
+  // ==========================================================
+
+  Future<void> _loadReflection() async {
+    final reflections =
+        await _reflectionService.getReflections(
+      widget.chapter.id,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    RelationshipReflection? myReflection;
+    RelationshipReflection? partnerReflection;
+
+    for (final reflection in reflections) {
+      if (PartnerService.isMine(
+        reflection.authorId,
+      )) {
+        myReflection ??= reflection;
+      } else {
+        partnerReflection ??= reflection;
+      }
+    }
+
+    setState(() {
+      _myReflection = myReflection;
+      _partnerReflection = partnerReflection;
+
+      _myReflectionsByChapter[widget.chapter.id] =
+          myReflection;
+
+      _partnerReflectionsByChapter[
+          widget.chapter.id] = partnerReflection;
+    });
+  }
+
+  // ==========================================================
+  // OBNOVENÍ FOTOGRAFIÍ
+  // ==========================================================
+
+  Future<void> _loadPhotos() async {
+    final photos =
+        await _photoService.getPhotos(
+      widget.chapter.id,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _photos = photos;
+
+      _photosByChapter[widget.chapter.id] =
+          photos;
+    });
+  }
+
+  // ==========================================================
+  // SMAZÁNÍ FOTOGRAFIE
+  // ==========================================================
+
+  Future<void> _deletePhoto(
+    RelationshipPhoto photo,
+  ) async {
+    if (!PermissionService.canDeletePhoto(
+      photo,
+    )) {
+      return;
+    }
+
+    final delete =
+        await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Smazat fotografii?'),
-        content: const Text('Opravdu chcete tuto fotografii odstranit?'),
+        title: const Text(
+          'Smazat fotografii?',
+        ),
+        content: const Text(
+          'Opravdu chcete tuto fotografii odstranit?',
+        ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Zrušit'),
+            onPressed: () =>
+                Navigator.pop(
+              context,
+              false,
+            ),
+            child: const Text(
+              'Zrušit',
+            ),
           ),
           FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Smazat'),
+            onPressed: () =>
+                Navigator.pop(
+              context,
+              true,
+            ),
+            child: const Text(
+              'Smazat',
+            ),
           ),
         ],
       ),
@@ -139,17 +286,33 @@ class _RelationshipChapterScreenState
       return;
     }
 
-    await _photoService.deletePhoto(photo.id);
+    await _photoService.deletePhoto(
+      photo.id,
+    );
+
     await _loadPhotos();
   }
 
-  Widget _buildMottoWhisper(String motto) {
+  // ==========================================================
+  // MOTTO
+  // ==========================================================
+
+  Widget _buildMottoWhisper(
+    String motto,
+  ) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding:
+          const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 10,
+      ),
       decoration: BoxDecoration(
         color: Colors.brown.shade50,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.brown.shade200),
+        borderRadius:
+            BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.brown.shade200,
+        ),
       ),
       child: Text(
         "✨ $motto",
@@ -163,181 +326,363 @@ class _RelationshipChapterScreenState
     );
   }
 
+  // ==========================================================
+  // PŘIDÁNÍ REFLEXE
+  // ==========================================================
+
+  Future<void> _addReflection(
+    String chapterId,
+  ) async {
+    final controller =
+        TextEditingController(
+      text: _myReflectionsByChapter[
+              chapterId]
+          ?.text ??
+          '',
+    );
+
+    final text =
+        await showDialog<String>(
+      context: context,
+      builder: (dialogContext) =>
+          AlertDialog(
+        title: const Text(
+          'Tvůj vzkaz',
+        ),
+        content: TextField(
+          controller: controller,
+          maxLines: 4,
+          decoration:
+              const InputDecoration(
+            hintText:
+                'Napiš, jak jsi tento okamžik prožíval/a ty...',
+            border:
+                OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(
+              dialogContext,
+            ),
+            child: const Text(
+              'Zrušit',
+            ),
+          ),
+          FilledButton(
+            onPressed: () =>
+                Navigator.pop(
+              dialogContext,
+              controller.text,
+            ),
+            child: const Text(
+              'Uložit',
+            ),
+          ),
+        ],
+      ),
+    );
+
+    controller.dispose();
+
+    if (text == null ||
+        text.trim().isEmpty) {
+      return;
+    }
+
+    final now = DateTime.now();
+
+    final currentUserId =
+        FirebaseAuth
+                .instance
+                .currentUser
+                ?.uid ??
+            '';
+
+    final existingReflection =
+        _myReflectionsByChapter[
+            chapterId];
+
+    final reflection =
+        RelationshipReflection(
+      id: existingReflection?.id ??
+          now.millisecondsSinceEpoch
+              .toString(),
+      chapterId: chapterId,
+      authorId: currentUserId,
+      text: text.trim(),
+      createdAt:
+          existingReflection?.createdAt ??
+              now,
+      updatedAt: now,
+    );
+
+    await _reflectionService
+        .saveReflection(
+      reflection,
+    );
+
+    await _loadReflection();
+  }
+
+  // ==========================================================
+  // PŘIDÁNÍ FOTOGRAFIE
+  // ==========================================================
+
+  Future<void> _addPhoto(
+    String chapterId,
+  ) async {
+    final navigator =
+        Navigator.of(context);
+
+    final saved =
+        await navigator.push<bool>(
+      MaterialPageRoute(
+        builder: (_) =>
+            AddRelationshipPhotoScreen(
+          chapterId: chapterId,
+        ),
+      ),
+    );
+
+    if (saved == true) {
+      await _loadPhotos();
+    }
+  }
+
+  // ==========================================================
+  // BUILD
+  // ==========================================================
+
   @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final mottoText = (widget.chapter.customMotto != null &&
-            widget.chapter.customMotto!.trim().isNotEmpty)
-        ? widget.chapter.customMotto!
-        : "Tak co... čím ho nebo ji překvapíš příště?";
+  Widget build(
+    BuildContext context,
+  ) {
+    final l10n =
+        AppLocalizations.of(context);
+
+    final mottoText =
+        (widget.chapter.customMotto !=
+                    null &&
+                widget.chapter.customMotto!
+                    .trim()
+                    .isNotEmpty)
+            ? widget.chapter.customMotto!
+            : "Tak co... čím ho nebo ji překvapíš příště?";
 
     return Scaffold(
-      backgroundColor: BookTheme.background,
+      backgroundColor:
+          BookTheme.background,
+
+      // ======================================================
+      // APP BAR
+      // ======================================================
+
       appBar: AppBar(
-        backgroundColor: BookTheme.background,
+        backgroundColor:
+            BookTheme.background,
         elevation: 0,
-        title: Text(l10n.relationshipBook),
+        title: Text(
+          l10n.relationshipBook,
+        ),
         actions: [
           PopupMenuButton<String>(
-            onSelected: (value) async {
-              if (value == 'motto') {
-                final motto = await showDialog<String>(
+            onSelected:
+                (value) async {
+              if (value ==
+                  'motto') {
+                final motto =
+                    await showDialog<
+                        String>(
                   context: context,
-                  builder: (_) => const ChapterMottoDialog(),
+                  builder: (_) =>
+                      const ChapterMottoDialog(),
                 );
 
-                if (motto == null) return;
+                if (motto == null) {
+                  return;
+                }
 
-                await _chapterEngine.updateMotto(
-                  chapterId: widget.chapter.id,
+                await _chapterEngine
+                    .updateMotto(
+                  chapterId:
+                      widget.chapter.id,
                   customMotto: motto,
                 );
 
-                if (!mounted) return;
+                if (!mounted) {
+                  return;
+                }
 
                 setState(() {});
-              } else if (value == 'delete') {
-                final confirm = await showDialog<bool>(
+              } else if (value ==
+                  'favorite') {
+                await _chapterService
+                    .toggleFavorite(
+                  widget.chapter,
+                );
+
+                if (!mounted) {
+                  return;
+                }
+
+                setState(() {});
+              } else if (value ==
+                  'archive') {
+                await _chapterService
+                    .archiveChapter(
+                  widget.chapter,
+                );
+
+                if (!mounted) {
+                  return;
+                }
+
+                Navigator.pop(context);
+              } else if (value ==
+                  'delete') {
+                final confirm =
+                    await showDialog<bool>(
                   context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text('Smazat kapitolu?'),
-                    content: const Text(
-                        'Opravdu chcete odstranit tuto kapitolu?'),
+                  builder: (_) =>
+                      AlertDialog(
+                    title: const Text(
+                      'Smazat kapitolu?',
+                    ),
+                    content:
+                        const Text(
+                      'Opravdu chcete odstranit tuto kapitolu?',
+                    ),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: const Text('Zrušit'),
+                        onPressed: () =>
+                            Navigator.pop(
+                          context,
+                          false,
+                        ),
+                        child:
+                            const Text(
+                          'Zrušit',
+                        ),
                       ),
                       FilledButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        child: const Text('Smazat'),
+                        onPressed: () =>
+                            Navigator.pop(
+                          context,
+                          true,
+                        ),
+                        child:
+                            const Text(
+                          'Smazat',
+                        ),
                       ),
                     ],
                   ),
                 );
 
-                if (confirm != true) return;
+                if (confirm != true) {
+                  return;
+                }
 
-                await _chapterService.deleteChapter(widget.chapter.id);
+                await _chapterService
+                    .deleteChapter(
+                  widget.chapter.id,
+                );
 
-                if (!context.mounted) return;
+                if (!context.mounted) {
+                  return;
+                }
 
                 Navigator.pop(context);
               }
             },
-            itemBuilder: (context) => [
+            itemBuilder:
+                (context) => [
               const PopupMenuItem(
                 value: 'motto',
-                child: Text('✨ Přidat motto'),
+                child: Text(
+                  '✨ Přidat motto',
+                ),
               ),
               const PopupMenuDivider(),
               const PopupMenuItem(
                 value: 'favorite',
-                child: Text('❤️ Oblíbená'),
+                child: Text(
+                  '❤️ Oblíbená',
+                ),
               ),
               const PopupMenuItem(
                 value: 'archive',
-                child: Text('📦 Archivovat'),
+                child: Text(
+                  '📦 Archivovat',
+                ),
               ),
               const PopupMenuDivider(),
               const PopupMenuItem(
                 value: 'delete',
-                child: Text('🗑 Smazat kapitolu'),
+                child: Text(
+                  '🗑 Smazat kapitolu',
+                ),
               ),
             ],
           ),
         ],
       ),
+
+      // ======================================================
+      // BODY
+      // ======================================================
+
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding:
+                const EdgeInsets.all(24),
             child: Column(
               children: [
-                _buildMottoWhisper(mottoText),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: BookPager(
-                    // Pokud má váš BookPager parametr controller, předáme ho zde
-                     
-                    spreads: BookBuilder.build(
-                      chapters: widget.chapters,
-                      photos: _photos,
-                      myReflection: _myReflection,
-                      partnerReflection: _partnerReflection,
-                      pageController: _pageController, // Předáno do BookBuilderu
-                      onAddReflection: (chapterId) async {
-                        final controller = TextEditingController(
-                          text: _myReflection?.text ?? '',
-                        );
-
-                        final text = await showDialog<String>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Tvůj vzkaz'),
-                            content: TextField(
-                              controller: controller,
-                              maxLines: 4,
-                              decoration: const InputDecoration(
-                                hintText:
-                                    'Napiš, jak jsi tento okamžik prožíval/a ty...',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Zrušit'),
-                              ),
-                              FilledButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, controller.text),
-                                child: const Text('Uložit'),
-                              ),
-                            ],
-                          ),
-                        );
-
-                        if (text != null && text.trim().isNotEmpty) {
-                          final now = DateTime.now();
-                          final currentUserId =
-                              FirebaseAuth.instance.currentUser?.uid ?? '';
-
-                          final reflection = RelationshipReflection(
-                            id: now.millisecondsSinceEpoch.toString(),
-                            chapterId: chapterId,
-                            authorId: currentUserId,
-                            text: text.trim(),
-                            createdAt: now,
-                            updatedAt: now,
-                          );
-
-                          await _reflectionService
-                              .saveReflection(reflection);
-                          await _loadReflection();
-                        }
-                      },
-                      onAddPhoto: (chapterId) async {
-                        final navigator = Navigator.of(context);
-                        final saved = await navigator.push<bool>(
-                          MaterialPageRoute(
-                            builder: (_) => AddRelationshipPhotoScreen(
-                              chapterId: chapterId,
-                            ),
-                          ),
-                        );
-
-                        if (saved == true) {
-                          await _loadPhotos();
-                        }
-                      },
-                    ),
-                  ),
+                _buildMottoWhisper(
+                  mottoText,
                 ),
+
+                const SizedBox(
+                  height: 16,
+                ),
+
+                Expanded(
+                  child:
+                      _loadingBookData
+                          ? const Center(
+                              child:
+                                  CircularProgressIndicator(),
+                            )
+                          : BookPager(
+                              spreads: BookBuilder.build(
+                                chapters: widget.chapters,
+                                photosByChapter: _photosByChapter,
+                                myReflectionsByChapter:
+                                    _myReflectionsByChapter,
+                                partnerReflectionsByChapter:
+                                    _partnerReflectionsByChapter,
+                                pageController: _pageController,
+                                onAddReflection: _addReflection,
+                                onAddPhoto: _addPhoto,
+                              ),
+                            ),
+                ),
+
                 if (_photos.isNotEmpty)
                   IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () => _deletePhoto(_photos.first),
+                    icon:
+                        const Icon(
+                      Icons.delete,
+                      color:
+                          Colors.red,
+                    ),
+                    onPressed:
+                        () => _deletePhoto(
+                      _photos.first,
+                    ),
                   ),
               ],
             ),
