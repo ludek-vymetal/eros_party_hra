@@ -6,7 +6,6 @@ import '../relationship_reflection_repository.dart';
 
 class CloudRelationshipReflectionRepository
     implements RelationshipReflectionRepository {
-
   @override
   Future<List<RelationshipReflection>> getReflections(
     String chapterId,
@@ -26,6 +25,30 @@ class CloudRelationshipReflectionRepository
           ),
         )
         .toList();
+  }
+
+  @override
+  Stream<List<RelationshipReflection>> watchReflections(
+    String chapterId,
+  ) async* {
+    final relationshipBook =
+        await RelationshipService.relationshipBook();
+
+    yield* relationshipBook
+        .doc(chapterId)
+        .collection('reflections')
+        .snapshots()
+        .map(
+          (snapshot) {
+            return snapshot.docs
+                .map(
+                  (doc) => RelationshipReflection.fromJson(
+                    doc.data(),
+                  ),
+                )
+                .toList();
+          },
+        );
   }
 
   @override

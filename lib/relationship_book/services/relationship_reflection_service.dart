@@ -11,24 +11,24 @@ class RelationshipReflectionService {
   Future<List<RelationshipReflection>> getReflections(
     String chapterId,
   ) {
-    return repository.getReflections(
-      chapterId,
-    );
+    return repository.getReflections(chapterId);
+  }
+
+  Stream<List<RelationshipReflection>> watchReflections(
+    String chapterId,
+  ) {
+    return repository.watchReflections(chapterId);
   }
 
   Future<void> saveReflection(
     RelationshipReflection reflection,
   ) {
-    return repository.saveReflection(
-      reflection,
-    );
+    return repository.saveReflection(reflection);
   }
 
   Future<void> deleteReflection(
     String reflectionId,
   ) {
-    return repository.deleteReflection(
-      reflectionId,
-    );
+    return repository.deleteReflection(reflectionId);
   }
 }

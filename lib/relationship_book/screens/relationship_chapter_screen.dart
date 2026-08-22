@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +50,8 @@ class _RelationshipChapterScreenState
     repository: CloudRelationshipReflectionRepository(),
   );
 
-  final RelationshipPhotoService _photoService = RelationshipPhotoService(
+  final RelationshipPhotoService _photoService =
+      RelationshipPhotoService(
     repository: LocalRelationshipPhotoRepository(),
   );
 
@@ -65,9 +68,16 @@ class _RelationshipChapterScreenState
 
   final Map<String, List<RelationshipPhoto>> _photosByChapter = {};
 
-  final Map<String, RelationshipReflection?> _myReflectionsByChapter = {};
+  final Map<String, RelationshipReflection?>
+      _myReflectionsByChapter = {};
 
-  final Map<String, RelationshipReflection?> _partnerReflectionsByChapter = {};
+  final Map<String, RelationshipReflection?>
+      _partnerReflectionsByChapter = {};
+
+  final Map<
+      String,
+      StreamSubscription<List<RelationshipReflection>>>
+      _reflectionSubscriptions = {};
 
   bool _loadingBookData = true;
 
@@ -81,12 +91,70 @@ class _RelationshipChapterScreenState
       initialPage: widget.currentIndex,
     );
 
-    _loadBookData();
+    _initializeBook();
+  }
+
+  Future<void> _initializeBook() async {
+    await _loadBookData();
+
+    if (!mounted) {
+      return;
+    }
+
+    _startReflectionListeners();
+  }
+
+  // ==========================================================
+  // REALTIME LISTENERY REFLEXÍ
+  // ==========================================================
+
+  void _startReflectionListeners() {
+    for (final chapter in widget.chapters) {
+      _reflectionSubscriptions[chapter.id]?.cancel();
+
+      _reflectionSubscriptions[chapter.id] =
+          _reflectionService
+              .watchReflections(chapter.id)
+              .listen((reflections) {
+        RelationshipReflection? myReflection;
+        RelationshipReflection? partnerReflection;
+
+        for (final reflection in reflections) {
+          if (PartnerService.isMine(
+            reflection.authorId,
+          )) {
+            myReflection ??= reflection;
+          } else {
+            partnerReflection ??= reflection;
+          }
+        }
+
+        if (!mounted) {
+          return;
+        }
+
+        setState(() {
+          _myReflectionsByChapter[chapter.id] =
+              myReflection;
+
+          _partnerReflectionsByChapter[chapter.id] =
+              partnerReflection;
+        });
+      });
+    }
   }
 
   @override
   void dispose() {
+    for (final subscription
+        in _reflectionSubscriptions.values) {
+      subscription.cancel();
+    }
+
+    _reflectionSubscriptions.clear();
+
     _pageController.dispose();
+
     super.dispose();
   }
 
@@ -95,15 +163,20 @@ class _RelationshipChapterScreenState
   // ==========================================================
 
   Future<void> _loadBookData() async {
-    setState(() {
-      _loadingBookData = true;
-    });
+    if (mounted) {
+      setState(() {
+        _loadingBookData = true;
+      });
+    }
 
-    final photosMap = <String, List<RelationshipPhoto>>{};
+    final photosMap =
+        <String, List<RelationshipPhoto>>{};
 
-    final myReflectionsMap = <String, RelationshipReflection?>{};
+    final myReflectionsMap =
+        <String, RelationshipReflection?>{};
 
-    final partnerReflectionsMap = <String, RelationshipReflection?>{};
+    final partnerReflectionsMap =
+        <String, RelationshipReflection?>{};
 
     for (final currentChapter in widget.chapters) {
       final photos = await _photoService.getPhotos(
@@ -112,7 +185,8 @@ class _RelationshipChapterScreenState
 
       photosMap[currentChapter.id] = photos;
 
-      final reflections = await _reflectionService.getReflections(
+      final reflections =
+          await _reflectionService.getReflections(
         currentChapter.id,
       );
 
@@ -129,9 +203,11 @@ class _RelationshipChapterScreenState
         }
       }
 
-      myReflectionsMap[currentChapter.id] = myReflection;
+      myReflectionsMap[currentChapter.id] =
+          myReflection;
 
-      partnerReflectionsMap[currentChapter.id] = partnerReflection;
+      partnerReflectionsMap[currentChapter.id] =
+          partnerReflection;
     }
 
     if (!mounted) {
@@ -151,44 +227,10 @@ class _RelationshipChapterScreenState
         ..clear()
         ..addAll(partnerReflectionsMap);
 
-      _photos = photosMap[_currentChapter.id] ?? [];
+      _photos =
+          photosMap[_currentChapter.id] ?? [];
 
       _loadingBookData = false;
-    });
-  }
-
-  // ==========================================================
-  // OBNOVENÍ REFLEXE KONKRÉTNÍ KAPITOLY
-  // ==========================================================
-
-  Future<void> _loadReflection(
-    String chapterId,
-  ) async {
-    final reflections = await _reflectionService.getReflections(
-      chapterId,
-    );
-
-    if (!mounted) {
-      return;
-    }
-
-    RelationshipReflection? myReflection;
-    RelationshipReflection? partnerReflection;
-
-    for (final reflection in reflections) {
-      if (PartnerService.isMine(
-        reflection.authorId,
-      )) {
-        myReflection ??= reflection;
-      } else {
-        partnerReflection ??= reflection;
-      }
-    }
-
-    setState(() {
-      _myReflectionsByChapter[chapterId] = myReflection;
-
-      _partnerReflectionsByChapter[chapterId] = partnerReflection;
     });
   }
 
@@ -199,7 +241,8 @@ class _RelationshipChapterScreenState
   Future<void> _loadPhotos(
     String chapterId,
   ) async {
-    final photos = await _photoService.getPhotos(
+    final photos =
+        await _photoService.getPhotos(
       chapterId,
     );
 
@@ -208,9 +251,11 @@ class _RelationshipChapterScreenState
     }
 
     setState(() {
-      _photosByChapter[chapterId] = photos;
+      _photosByChapter[chapterId] =
+          photos;
 
-      if (chapterId == _currentChapter.id) {
+      if (chapterId ==
+          _currentChapter.id) {
         _photos = photos;
       }
     });
@@ -229,7 +274,8 @@ class _RelationshipChapterScreenState
       return;
     }
 
-    final delete = await showDialog<bool>(
+    final delete =
+        await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text(
@@ -240,7 +286,8 @@ class _RelationshipChapterScreenState
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(
+            onPressed: () =>
+                Navigator.pop(
               context,
               false,
             ),
@@ -249,7 +296,8 @@ class _RelationshipChapterScreenState
             ),
           ),
           FilledButton(
-            onPressed: () => Navigator.pop(
+            onPressed: () =>
+                Navigator.pop(
               context,
               true,
             ),
@@ -282,13 +330,15 @@ class _RelationshipChapterScreenState
     String motto,
   ) {
     return Container(
-      padding: const EdgeInsets.symmetric(
+      padding:
+          const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 10,
       ),
       decoration: BoxDecoration(
         color: Colors.brown.shade50,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius:
+            BorderRadius.circular(12),
         border: Border.all(
           color: Colors.brown.shade200,
         ),
@@ -312,27 +362,37 @@ class _RelationshipChapterScreenState
   Future<void> _addReflection(
     String chapterId,
   ) async {
-    final controller = TextEditingController(
-      text: _myReflectionsByChapter[chapterId]?.text ?? '',
+    final controller =
+        TextEditingController(
+      text:
+          _myReflectionsByChapter[
+              chapterId]?.text ??
+          '',
     );
 
-    final text = await showDialog<String>(
+    final text =
+        await showDialog<String>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
+      builder: (dialogContext) =>
+          AlertDialog(
         title: const Text(
           'Tvůj vzkaz',
         ),
         content: TextField(
           controller: controller,
           maxLines: 4,
-          decoration: const InputDecoration(
-            hintText: 'Napiš, jak jsi tento okamžik prožíval/a ty...',
-            border: OutlineInputBorder(),
+          decoration:
+              const InputDecoration(
+            hintText:
+                'Napiš, jak jsi tento okamžik prožíval/a ty...',
+            border:
+                OutlineInputBorder(),
           ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(
+            onPressed: () =>
+                Navigator.pop(
               dialogContext,
             ),
             child: const Text(
@@ -340,7 +400,8 @@ class _RelationshipChapterScreenState
             ),
           ),
           FilledButton(
-            onPressed: () => Navigator.pop(
+            onPressed: () =>
+                Navigator.pop(
               dialogContext,
               controller.text,
             ),
@@ -354,32 +415,49 @@ class _RelationshipChapterScreenState
 
     controller.dispose();
 
-    if (text == null || text.trim().isEmpty) {
+    if (text == null ||
+        text.trim().isEmpty) {
       return;
     }
 
     final now = DateTime.now();
 
-    final currentUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    final currentUserId =
+        FirebaseAuth.instance
+                .currentUser
+                ?.uid ??
+            '';
 
-    final existingReflection = _myReflectionsByChapter[chapterId];
+    final existingReflection =
+        _myReflectionsByChapter[
+            chapterId];
 
-    final reflection = RelationshipReflection(
-      id: existingReflection?.id ?? now.millisecondsSinceEpoch.toString(),
+    final reflection =
+        RelationshipReflection(
+      id: existingReflection?.id ??
+          now.millisecondsSinceEpoch
+              .toString(),
       chapterId: chapterId,
       authorId: currentUserId,
       text: text.trim(),
-      createdAt: existingReflection?.createdAt ?? now,
+      createdAt:
+          existingReflection?.createdAt ??
+              now,
       updatedAt: now,
     );
 
-    await _reflectionService.saveReflection(
+    await _reflectionService
+        .saveReflection(
       reflection,
     );
 
-    await _loadReflection(
-      chapterId,
-    );
+    // ========================================================
+    // DŮLEŽITÉ:
+    // Zde už NEVOLÁME _loadReflection().
+    //
+    // Firestore snapshots() přes watchReflections()
+    // změnu zachytí automaticky a setState() překreslí knihu.
+    // ========================================================
   }
 
   // ==========================================================
@@ -389,11 +467,14 @@ class _RelationshipChapterScreenState
   Future<void> _addPhoto(
     String chapterId,
   ) async {
-    final navigator = Navigator.of(context);
+    final navigator =
+        Navigator.of(context);
 
-    final saved = await navigator.push<bool>(
+    final saved =
+        await navigator.push<bool>(
       MaterialPageRoute(
-        builder: (_) => AddRelationshipPhotoScreen(
+        builder: (_) =>
+            AddRelationshipPhotoScreen(
           chapterId: chapterId,
         ),
       ),
@@ -414,75 +495,110 @@ class _RelationshipChapterScreenState
   Widget build(
     BuildContext context,
   ) {
-    final l10n = AppLocalizations.of(context);
+    final l10n =
+        AppLocalizations.of(context);
 
-    final mottoText = (_currentChapter.customMotto != null &&
-            _currentChapter.customMotto!.trim().isNotEmpty)
-        ? _currentChapter.customMotto!
-        : "Tak co... čím ho nebo ji překvapíš příště?";
+    final mottoText =
+        (_currentChapter.customMotto !=
+                    null &&
+                _currentChapter
+                    .customMotto!
+                    .trim()
+                    .isNotEmpty)
+            ? _currentChapter
+                .customMotto!
+            : "Tak co... čím ho nebo ji překvapíš příště?";
 
     return Scaffold(
-      backgroundColor: BookTheme.background,
+      backgroundColor:
+          BookTheme.background,
 
       // ======================================================
       // APP BAR
       // ======================================================
 
       appBar: AppBar(
-        backgroundColor: BookTheme.background,
+        backgroundColor:
+            BookTheme.background,
         elevation: 0,
         title: Text(
           l10n.relationshipBook,
         ),
         actions: [
           PopupMenuButton<String>(
-            onSelected: (value) async {
+            onSelected:
+                (value) async {
               if (value == 'motto') {
-                final motto = await showDialog<String>(
+                final motto =
+                    await showDialog<
+                        String>(
                   context: context,
-                  builder: (_) => const ChapterMottoDialog(),
+                  builder: (_) =>
+                      const ChapterMottoDialog(),
                 );
 
                 if (motto == null) {
                   return;
                 }
 
-                await _chapterEngine.updateMotto(
-                  chapterId: _currentChapter.id,
+                await _chapterEngine
+                    .updateMotto(
+                  chapterId:
+                      _currentChapter.id,
                   customMotto: motto,
                 );
 
-                final updatedChapter = await _chapterEngine.getChapter(
+                final updatedChapter =
+                    await _chapterEngine
+                        .getChapter(
                   _currentChapter.id,
                 );
 
-                if (!mounted || updatedChapter == null) {
+                if (!mounted ||
+                    updatedChapter ==
+                        null) {
                   return;
                 }
 
                 setState(() {
-                  _currentChapter = updatedChapter;
-                  widget.chapters[widget.currentIndex] = updatedChapter;
+                  _currentChapter =
+                      updatedChapter;
+
+                  widget.chapters[
+                          widget.currentIndex] =
+                      updatedChapter;
                 });
-              } else if (value == 'favorite') {
-                await _chapterService.toggleFavorite(
+              } else if (value ==
+                  'favorite') {
+                await _chapterService
+                    .toggleFavorite(
                   _currentChapter,
                 );
 
-                final updatedChapter = await _chapterEngine.getChapter(
+                final updatedChapter =
+                    await _chapterEngine
+                        .getChapter(
                   _currentChapter.id,
                 );
 
-                if (!mounted || updatedChapter == null) {
+                if (!mounted ||
+                    updatedChapter ==
+                        null) {
                   return;
                 }
 
                 setState(() {
-                  _currentChapter = updatedChapter;
-                  widget.chapters[widget.currentIndex] = updatedChapter;
+                  _currentChapter =
+                      updatedChapter;
+
+                  widget.chapters[
+                          widget.currentIndex] =
+                      updatedChapter;
                 });
-              } else if (value == 'archive') {
-                await _chapterService.archiveChapter(
+              } else if (value ==
+                  'archive') {
+                await _chapterService
+                    .archiveChapter(
                   _currentChapter,
                 );
 
@@ -490,33 +606,44 @@ class _RelationshipChapterScreenState
                   return;
                 }
 
-                Navigator.pop(context);
-              } else if (value == 'delete') {
-                final confirm = await showDialog<bool>(
+                Navigator.pop(
+                  context,
+                );
+              } else if (value ==
+                  'delete') {
+                final confirm =
+                    await showDialog<
+                        bool>(
                   context: context,
-                  builder: (_) => AlertDialog(
+                  builder: (_) =>
+                      AlertDialog(
                     title: const Text(
                       'Smazat kapitolu?',
                     ),
-                    content: const Text(
+                    content:
+                        const Text(
                       'Opravdu chcete odstranit tuto kapitolu?',
                     ),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.pop(
+                        onPressed: () =>
+                            Navigator.pop(
                           context,
                           false,
                         ),
-                        child: const Text(
+                        child:
+                            const Text(
                           'Zrušit',
                         ),
                       ),
                       FilledButton(
-                        onPressed: () => Navigator.pop(
+                        onPressed: () =>
+                            Navigator.pop(
                           context,
                           true,
                         ),
-                        child: const Text(
+                        child:
+                            const Text(
                           'Smazat',
                         ),
                       ),
@@ -528,7 +655,8 @@ class _RelationshipChapterScreenState
                   return;
                 }
 
-                await _chapterService.deleteChapter(
+                await _chapterService
+                    .deleteChapter(
                   _currentChapter.id,
                 );
 
@@ -536,10 +664,13 @@ class _RelationshipChapterScreenState
                   return;
                 }
 
-                Navigator.pop(context);
+                Navigator.pop(
+                  context,
+                );
               }
             },
-            itemBuilder: (context) => [
+            itemBuilder:
+                (context) => [
               const PopupMenuItem(
                 value: 'motto',
                 child: Text(
@@ -578,40 +709,56 @@ class _RelationshipChapterScreenState
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding:
+                const EdgeInsets.all(24),
             child: Column(
               children: [
                 _buildMottoWhisper(
                   mottoText,
                 ),
+
                 const SizedBox(
                   height: 16,
                 ),
+
                 Expanded(
                   child: _loadingBookData
                       ? const Center(
-                          child: CircularProgressIndicator(),
+                          child:
+                              CircularProgressIndicator(),
                         )
                       : BookPager(
-                          spreads: BookBuilder.build(
-                            chapters: widget.chapters,
-                            photosByChapter: _photosByChapter,
-                            myReflectionsByChapter: _myReflectionsByChapter,
+                          spreads:
+                              BookBuilder
+                                  .build(
+                            chapters:
+                                widget.chapters,
+                            photosByChapter:
+                                _photosByChapter,
+                            myReflectionsByChapter:
+                                _myReflectionsByChapter,
                             partnerReflectionsByChapter:
                                 _partnerReflectionsByChapter,
-                            pageController: _pageController,
-                            onAddReflection: _addReflection,
-                            onAddPhoto: _addPhoto,
+                            pageController:
+                                _pageController,
+                            onAddReflection:
+                                _addReflection,
+                            onAddPhoto:
+                                _addPhoto,
                           ),
                         ),
                 ),
+
                 if (_photos.isNotEmpty)
                   IconButton(
-                    icon: const Icon(
+                    icon:
+                        const Icon(
                       Icons.delete,
-                      color: Colors.red,
+                      color:
+                          Colors.red,
                     ),
-                    onPressed: () => _deletePhoto(
+                    onPressed: () =>
+                        _deletePhoto(
                       _photos.first,
                     ),
                   ),

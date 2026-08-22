@@ -5,6 +5,10 @@ abstract class RelationshipReflectionRepository {
     String chapterId,
   );
 
+  Stream<List<RelationshipReflection>> watchReflections(
+    String chapterId,
+  );
+
   Future<void> saveReflection(
     RelationshipReflection reflection,
   );

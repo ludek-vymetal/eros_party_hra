@@ -15,6 +15,20 @@ class BookPager extends StatefulWidget {
 class _BookPagerState extends State<BookPager> {
   int currentSpread = 0;
 
+  @override
+  void didUpdateWidget(covariant BookPager oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Pokud se změnil počet stran, zajistíme,
+    // aby index stále ukazoval na existující stránku.
+    if (currentSpread >= widget.spreads.length) {
+      currentSpread =
+          widget.spreads.isEmpty
+              ? 0
+              : widget.spreads.length - 1;
+    }
+  }
+
   void nextSpread() {
     if (currentSpread >= widget.spreads.length - 1) {
       return;
@@ -37,14 +51,26 @@ class _BookPagerState extends State<BookPager> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("BOOK PAGER BUILD");
+    debugPrint(
+      'BOOK PAGER BUILD - spread: $currentSpread',
+    );
+
+    if (widget.spreads.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Stack(
       children: [
         AnimatedSwitcher(
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(
+            milliseconds: 500,
+          ),
           switchInCurve: Curves.easeOutCubic,
           switchOutCurve: Curves.easeInCubic,
-          transitionBuilder: (child, animation) {
+          transitionBuilder: (
+            child,
+            animation,
+          ) {
             final slide = Tween<Offset>(
               begin: const Offset(0.08, 0),
               end: Offset.zero,
@@ -58,13 +84,18 @@ class _BookPagerState extends State<BookPager> {
               ),
             );
           },
+
+          // DŮLEŽITÉ:
+          // stránka dostane novou Key při změně
+          // obsahu BookPageru.
           child: KeyedSubtree(
-            key: ValueKey(currentSpread),
+            key: ValueKey(
+              'spread_${currentSpread}_${widget.spreads[currentSpread].hashCode}',
+            ),
             child: widget.spreads[currentSpread],
           ),
         ),
 
-        // Levá šipka
         Positioned(
           left: 10,
           top: 10,
@@ -81,7 +112,6 @@ class _BookPagerState extends State<BookPager> {
           ),
         ),
 
-        // Pravá šipka
         Positioned(
           right: 10,
           top: 10,

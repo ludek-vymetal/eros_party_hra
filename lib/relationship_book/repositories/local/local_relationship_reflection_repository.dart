@@ -3,7 +3,6 @@ import '../../models/relationship_reflection.dart';
 
 class LocalRelationshipReflectionRepository
     implements RelationshipReflectionRepository {
-
   static final List<RelationshipReflection> _reflections = [];
 
   @override
@@ -19,6 +18,15 @@ class LocalRelationshipReflectionRepository
   }
 
   @override
+  Stream<List<RelationshipReflection>> watchReflections(
+    String chapterId,
+  ) async* {
+    yield await getReflections(
+      chapterId,
+    );
+  }
+
+  @override
   Future<void> saveReflection(
     RelationshipReflection reflection,
   ) async {
@@ -26,7 +34,9 @@ class LocalRelationshipReflectionRepository
       (item) => item.id == reflection.id,
     );
 
-    _reflections.add(reflection);
+    _reflections.add(
+      reflection,
+    );
   }
 
   @override
