@@ -5,6 +5,7 @@ import '../models/relationship_chapter.dart';
 import '../models/relationship_event.dart';
 import '../models/relationship_scenario.dart';
 import '../repositories/relationship_book_repository.dart';
+import 'package:flutter/foundation.dart';
 
 class ChapterEngine {
   final RelationshipBookRepository repository;
@@ -44,7 +45,13 @@ class ChapterEngine {
         ),
       ],
     );
-
+    debugPrint('=================================');
+    debugPrint('CREATE CHAPTER');
+    debugPrint('Scenario title: ${scenario.title}');
+    debugPrint('Chapter title : $chapterTitle');
+    debugPrint('Intro         : $introduction');
+    debugPrint('Scenario ID   : ${scenario.scenarioId}');
+    debugPrint('=================================');
     await repository.saveMemory(chapter);
   }
 

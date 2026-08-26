@@ -1,17 +1,52 @@
 import 'package:flutter/material.dart';
 
-import '../engine/chapter_engine.dart';
+import '../book_builder.dart';
 import '../models/relationship_chapter.dart';
+import '../models/relationship_photo.dart';
+import '../models/relationship_reflection.dart';
+
 import '../repositories/relationship_book_repository.dart';
 import '../services/relationship_chapter_service.dart';
 import '../widgets/chapter_options_sheet.dart';
 
-class RelationshipBookViewerScreen extends StatefulWidget {
+class BookViewerRefreshData {
+  final List<RelationshipChapter> chapters;
+
+  final Map<String, List<RelationshipPhoto>>
+      photosByChapter;
+
+  final Map<String, RelationshipReflection?>
+      myReflectionsByChapter;
+
+  final Map<String, RelationshipReflection?>
+      partnerReflectionsByChapter;
+
+  const BookViewerRefreshData({
+    required this.chapters,
+    required this.photosByChapter,
+    required this.myReflectionsByChapter,
+    required this.partnerReflectionsByChapter,
+  });
+}
+
+class RelationshipBookViewerScreen
+    extends StatefulWidget {
   final List<Widget> spreads;
   final List<RelationshipChapter> chapters;
   final RelationshipBookRepository repository;
   final int initialIndex;
   final PageController pageController;
+
+  final Future<BookViewerRefreshData>
+      Function() onRefreshBook;
+
+  final Future<void> Function(
+    String chapterId,
+  ) onAddPhoto;
+
+  final Future<void> Function(
+    String chapterId,
+  ) onAddReflection;
 
   const RelationshipBookViewerScreen({
     super.key,
@@ -20,46 +55,77 @@ class RelationshipBookViewerScreen extends StatefulWidget {
     required this.repository,
     required this.initialIndex,
     required this.pageController,
+    required this.onRefreshBook,
+    required this.onAddPhoto,
+    required this.onAddReflection,
   });
 
   @override
-  State<RelationshipBookViewerScreen> createState() =>
-      _RelationshipBookViewerScreenState();
+  State<RelationshipBookViewerScreen>
+      createState() =>
+          _RelationshipBookViewerScreenState();
 }
 
 class _RelationshipBookViewerScreenState
     extends State<RelationshipBookViewerScreen> {
   late int currentSpread;
 
-  final RelationshipChapterService _chapterService =
+  late List<RelationshipChapter>
+      _chapters;
+
+  late List<Widget> _spreads;
+
+  final RelationshipChapterService
+      _chapterService =
       RelationshipChapterService();
 
-  late final ChapterEngine _chapterEngine;
+  
 
   @override
   void initState() {
     super.initState();
 
-    currentSpread = widget.initialIndex.clamp(
+    _chapters =
+        List<RelationshipChapter>.from(
+      widget.chapters,
+    );
+
+    _spreads =
+        List<Widget>.from(
+      widget.spreads,
+    );
+
+    currentSpread =
+        widget.initialIndex.clamp(
       0,
-      widget.spreads.length - 1,
+      _spreads.length - 1,
     );
 
-    _chapterEngine = ChapterEngine(
-      repository: widget.repository,
-    );
+    
 
-    widget.pageController.addListener(_onPageChanged);
+    widget.pageController
+        .addListener(
+      _onPageChanged,
+    );
   }
 
   @override
   void dispose() {
-    widget.pageController.removeListener(_onPageChanged);
+    widget.pageController
+        .removeListener(
+      _onPageChanged,
+    );
+
     super.dispose();
   }
 
+  // ==========================================================
+  // PAGE CHANGE
+  // ==========================================================
+
   void _onPageChanged() {
-    final page = widget.pageController.page;
+    final page =
+        widget.pageController.page;
 
     if (page == null) {
       return;
@@ -69,7 +135,7 @@ class _RelationshipBookViewerScreenState
 
     if (index != currentSpread &&
         index >= 0 &&
-        index < widget.spreads.length) {
+        index < _spreads.length) {
       setState(() {
         currentSpread = index;
       });
@@ -77,17 +143,99 @@ class _RelationshipBookViewerScreenState
   }
 
   // ==========================================================
+  // REBUILD KNIHY
+  // ==========================================================
+
+  Future<void> _refreshBook() async {
+    final data =
+        await widget.onRefreshBook();
+
+    if (!mounted) {
+      return;
+    }
+
+    final newSpreads =
+        BookBuilder.build(
+      chapters:
+          data.chapters,
+
+      photosByChapter:
+          data.photosByChapter,
+
+      myReflectionsByChapter:
+          data.myReflectionsByChapter,
+
+      partnerReflectionsByChapter:
+          data.partnerReflectionsByChapter,
+
+      pageController:
+          widget.pageController,
+
+      onAddPhoto:
+          widget.onAddPhoto,
+
+      onAddReflection:
+          widget.onAddReflection,
+    );
+
+    final newIndex =
+        currentSpread.clamp(
+      0,
+      newSpreads.length - 1,
+    );
+
+    setState(() {
+      _chapters =
+          List<RelationshipChapter>.from(
+        data.chapters,
+      );
+
+      _spreads =
+          newSpreads;
+
+      currentSpread =
+          newIndex;
+    });
+
+    // --------------------------------------------------------
+    // Po překreslení zajistíme, aby PageView zůstala
+    // na stejné kapitole.
+    // --------------------------------------------------------
+
+    WidgetsBinding.instance
+        .addPostFrameCallback(
+      (_) {
+        if (!mounted) {
+          return;
+        }
+
+        if (widget.pageController
+            .hasClients) {
+          widget.pageController.jumpToPage(
+            currentSpread,
+          );
+        }
+      },
+    );
+  }
+
+  // ==========================================================
   // NAVIGACE
   // ==========================================================
 
   void nextSpread() {
-    if (currentSpread >= widget.spreads.length - 1) {
+    if (currentSpread >=
+        _spreads.length - 1) {
       return;
     }
 
     widget.pageController.nextPage(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
+      duration:
+          const Duration(
+        milliseconds: 400,
+      ),
+      curve:
+          Curves.easeInOut,
     );
   }
 
@@ -97,36 +245,61 @@ class _RelationshipBookViewerScreenState
     }
 
     widget.pageController.previousPage(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
+      duration:
+          const Duration(
+        milliseconds: 400,
+      ),
+      curve:
+          Curves.easeInOut,
     );
   }
+
+  
+  
+
+  // ==========================================================
+  // POZNÁMKA
+  // ==========================================================
+
+  
 
   // ==========================================================
   // MENU KAPITOLY
   // ==========================================================
 
-  Future<void> _handleOptionsSheet() async {
-    if (currentSpread >= widget.chapters.length) {
+  Future<void>
+      _handleOptionsSheet() async {
+    if (currentSpread >=
+        _chapters.length) {
       return;
     }
 
     final currentChapter =
-        widget.chapters[currentSpread];
+        _chapters[currentSpread];
 
-    final result = await ChapterOptionsSheet.show(
+    final result =
+        await ChapterOptionsSheet.show(
       context,
-      chapter: currentChapter,
-      repository: widget.repository,
+      chapter:
+          currentChapter,
+      repository:
+          widget.repository,
     );
 
-    if (result == null || !mounted) {
+    if (result == null ||
+        !mounted) {
       return;
     }
 
     switch (result) {
-      case ChapterOptionResult.favoriteToggled:
-        await _chapterService.toggleFavorite(
+      // ------------------------------------------------------
+      // OBLÍBENÁ
+      // ------------------------------------------------------
+
+      case ChapterOptionResult
+          .favoriteToggled:
+        await _chapterService
+            .toggleFavorite(
           currentChapter,
         );
 
@@ -134,31 +307,26 @@ class _RelationshipBookViewerScreenState
           return;
         }
 
-        setState(() {
-          widget.chapters[currentSpread] =
-              currentChapter.copyWith(
-            favorite: !currentChapter.favorite,
-          );
-        });
-
+        await _refreshBook();
         break;
 
-      case ChapterOptionResult.mottoUpdated:
-        final updated =
-            await _chapterEngine.getChapter(
-          currentChapter.id,
-        );
+      // ------------------------------------------------------
+      // MOTTO
+      // ------------------------------------------------------
 
-        if (updated != null && mounted) {
-          setState(() {
-            widget.chapters[currentSpread] = updated;
-          });
-        }
-
+      case ChapterOptionResult
+          .mottoUpdated:
+        await _refreshBook();
         break;
 
-      case ChapterOptionResult.archived:
-        await _chapterService.archiveChapter(
+      // ------------------------------------------------------
+      // ARCHIVACE
+      // ------------------------------------------------------
+
+      case ChapterOptionResult
+          .archived:
+        await _chapterService
+            .archiveChapter(
           currentChapter,
         );
 
@@ -166,7 +334,8 @@ class _RelationshipBookViewerScreenState
           return;
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
           const SnackBar(
             content: Text(
               'Kapitola byla archivována.',
@@ -174,10 +343,17 @@ class _RelationshipBookViewerScreenState
           ),
         );
 
+        await _refreshBook();
         break;
 
-      case ChapterOptionResult.deleted:
-        await _chapterService.deleteChapter(
+      // ------------------------------------------------------
+      // SMAZÁNÍ
+      // ------------------------------------------------------
+
+      case ChapterOptionResult
+          .deleted:
+        await _chapterService
+            .deleteChapter(
           currentChapter.id,
         );
 
@@ -185,7 +361,8 @@ class _RelationshipBookViewerScreenState
           return;
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
           const SnackBar(
             content: Text(
               'Kapitola byla přesunuta do koše.',
@@ -193,6 +370,7 @@ class _RelationshipBookViewerScreenState
           ),
         );
 
+        await _refreshBook();
         break;
     }
   }
@@ -202,9 +380,11 @@ class _RelationshipBookViewerScreenState
   // ==========================================================
 
   @override
-  Widget build(BuildContext context) {
-    if (widget.spreads.isEmpty ||
-        widget.chapters.isEmpty) {
+  Widget build(
+    BuildContext context,
+  ) {
+    if (_spreads.isEmpty ||
+        _chapters.isEmpty) {
       return const Scaffold(
         body: Center(
           child: Text(
@@ -214,47 +394,60 @@ class _RelationshipBookViewerScreenState
       );
     }
 
-    final safeIndex = currentSpread.clamp(
+    final safeIndex =
+        currentSpread.clamp(
       0,
-      widget.spreads.length - 1,
+      _spreads.length - 1,
     );
 
     final currentChapter =
-        widget.chapters[
-            safeIndex.clamp(
-              0,
-              widget.chapters.length - 1,
-            )];
+        _chapters[
+          safeIndex.clamp(
+            0,
+            _chapters.length - 1,
+          )
+        ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFD9C3A0),
+      backgroundColor:
+          const Color(0xFFD9C3A0),
 
       // ======================================================
       // APP BAR
       // ======================================================
 
       appBar: AppBar(
-        backgroundColor: const Color(0xFFD9C3A0),
+        backgroundColor:
+            const Color(0xFFD9C3A0),
         elevation: 0,
         centerTitle: true,
 
         title: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize:
+              MainAxisSize.min,
           children: [
             if (currentChapter.favorite) ...[
               const Icon(
                 Icons.favorite,
-                color: Color(0xFFC84B31),
+                color:
+                    Color(0xFFC84B31),
                 size: 20,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(
+                width: 8,
+              ),
             ],
+
             Flexible(
               child: Text(
-                currentChapter.chapterTitle,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+                currentChapter
+                    .chapterTitle,
+                overflow:
+                    TextOverflow.ellipsis,
+                style:
+                    const TextStyle(
+                  fontWeight:
+                      FontWeight.bold,
                 ),
               ),
             ),
@@ -264,21 +457,26 @@ class _RelationshipBookViewerScreenState
         actions: [
           IconButton(
             icon: const Icon(
-              Icons.more_vert,
-              size: 28,
+              Icons.bookmark_border,
+              color:
+                  Color(0xFF5A342B),
+              size: 25,
             ),
-            tooltip: 'Možnosti kapitoly',
-            onPressed: _handleOptionsSheet,
+            tooltip:
+                'Možnosti kapitoly',
+            onPressed:
+                _handleOptionsSheet,
           ),
         ],
       ),
 
       // ======================================================
-      // JEDNA STRÁNKA KNIHY
+      // KNIHA
       // ======================================================
 
       body: SafeArea(
-        child: LayoutBuilder(
+        child:
+            LayoutBuilder(
           builder: (
             context,
             constraints,
@@ -287,22 +485,34 @@ class _RelationshipBookViewerScreenState
                 constraints.maxHeight >
                     constraints.maxWidth;
 
-            final bookWidth = isPortrait
-                ? constraints.maxWidth * 0.96
-                : constraints.maxWidth * 0.88;
+            final bookWidth =
+                isPortrait
+                    ? constraints.maxWidth *
+                        0.96
+                    : constraints.maxWidth *
+                        0.88;
 
             return Center(
               child: SizedBox(
-                width: bookWidth,
-                child: PageView.builder(
-                  controller: widget.pageController,
-                  itemCount: widget.spreads.length,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (
+                width:
+                    bookWidth,
+                child:
+                    PageView.builder(
+                  controller:
+                      widget.pageController,
+
+                  itemCount:
+                      _spreads.length,
+
+                  physics:
+                      const BouncingScrollPhysics(),
+
+                  itemBuilder:
+                      (
                     context,
                     index,
                   ) {
-                    return widget.spreads[index];
+                    return _spreads[index];
                   },
                 ),
               ),
@@ -315,9 +525,11 @@ class _RelationshipBookViewerScreenState
       // NAVIGACE
       // ======================================================
 
-      bottomNavigationBar: SafeArea(
+      bottomNavigationBar:
+          SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(
+          padding:
+              const EdgeInsets.only(
             left: 20,
             right: 20,
             bottom: 8,
@@ -328,38 +540,50 @@ class _RelationshipBookViewerScreenState
                 MainAxisAlignment.center,
             children: [
               IconButton(
-                onPressed: currentSpread > 0
-                    ? previousSpread
-                    : null,
-                icon: const Icon(
+                onPressed:
+                    currentSpread > 0
+                        ? previousSpread
+                        : null,
+                icon:
+                    const Icon(
                   Icons.chevron_left,
                 ),
                 iconSize: 32,
-                tooltip: 'Předchozí kapitola',
+                tooltip:
+                    'Předchozí kapitola',
               ),
 
-              const SizedBox(width: 20),
+              const SizedBox(
+                width: 20,
+              ),
 
               Text(
-                '${currentSpread + 1} / ${widget.spreads.length}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
+                '${currentSpread + 1} / ${_spreads.length}',
+                style:
+                    const TextStyle(
+                  fontWeight:
+                      FontWeight.w600,
                 ),
               ),
 
-              const SizedBox(width: 20),
+              const SizedBox(
+                width: 20,
+              ),
 
               IconButton(
                 onPressed:
                     currentSpread <
-                            widget.spreads.length - 1
+                            _spreads.length -
+                                1
                         ? nextSpread
                         : null,
-                icon: const Icon(
+                icon:
+                    const Icon(
                   Icons.chevron_right,
                 ),
                 iconSize: 32,
-                tooltip: 'Další kapitola',
+                tooltip:
+                    'Další kapitola',
               ),
             ],
           ),

@@ -148,9 +148,7 @@ class CloudPartnerReactionsScreen
                       reaction.senderUid ==
                           myUid;
 
-                  final isAuthor =
-                      reaction.receiverUid ==
-                          myUid;
+                  
 
                   return Card(
                     margin:

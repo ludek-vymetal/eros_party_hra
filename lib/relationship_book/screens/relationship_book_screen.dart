@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import '../../screens/add_relationship_photo_screen.dart';
 import '../book_builder.dart';
@@ -32,7 +32,8 @@ class RelationshipBookScreen extends StatefulWidget {
             ),
         reflectionService = reflectionService ??
             RelationshipReflectionService(
-              repository: CloudRelationshipReflectionRepository(),
+              repository:
+                  CloudRelationshipReflectionRepository(),
             );
 
   @override
@@ -56,24 +57,22 @@ class _RelationshipBookScreenState
   }
 
   void _refreshMemories() {
+    if (!mounted) {
+      return;
+    }
+
     setState(() {
       _loadMemories();
     });
   }
 
-  Future<void> _onChapterTapped(
-    BuildContext context,
-    RelationshipChapter chapter,
-    List<RelationshipChapter> allChapters,
-  ) async {
-    final initialIndex =
-        allChapters.indexOf(chapter);
+  // ==========================================================
+  // DATA PRO KNIHU
+  // ==========================================================
 
-    final pageController = PageController(
-      initialPage: initialIndex,
-    );
-
-    final navigator = Navigator.of(context);
+  Future<BookViewerRefreshData> _loadBookData() async {
+    final allChapters =
+        await widget.repository.getAllMemories();
 
     final photosByChapter =
         <String, List<RelationshipPhoto>>{};
@@ -84,187 +83,261 @@ class _RelationshipBookScreenState
     final partnerReflectionsByChapter =
         <String, RelationshipReflection?>{};
 
-    // ----------------------------------------------------------
-    // Načteme data pro všechny kapitoly
-    // ----------------------------------------------------------
+    final currentUserId =
+        FirebaseAuth.instance.currentUser?.uid ?? '';
 
-    for (final currentChapter in allChapters) {
-      final chapterPhotos =
+    for (final chapter in allChapters) {
+      // ------------------------------------------------------
+      // FOTOGRAFIE
+      // ------------------------------------------------------
+
+      final photos =
           await widget.photoService.getPhotos(
-        currentChapter.id,
+        chapter.id,
       );
 
-      photosByChapter[currentChapter.id] =
-          chapterPhotos;
+      photosByChapter[chapter.id] = photos;
+
+      // ------------------------------------------------------
+      // REFLEXE / POZNÁMKY
+      // ------------------------------------------------------
 
       final reflections =
-          await widget.reflectionService
-              .getReflections(
-        currentChapter.id,
+          await widget.reflectionService.getReflections(
+        chapter.id,
       );
 
-      myReflectionsByChapter[
-          currentChapter.id] =
-          reflections.isNotEmpty
-              ? reflections.first
-              : null;
+      RelationshipReflection? myReflection;
+      RelationshipReflection? partnerReflection;
 
-      partnerReflectionsByChapter[
-          currentChapter.id] =
-          reflections.length > 1
-              ? reflections[1]
-              : null;
+      for (final reflection in reflections) {
+        if (reflection.authorId == currentUserId) {
+          myReflection = reflection;
+        } else {
+          partnerReflection = reflection;
+        }
+      }
+
+      myReflectionsByChapter[chapter.id] =
+          myReflection;
+
+      partnerReflectionsByChapter[chapter.id] =
+          partnerReflection;
     }
 
-    if (!mounted) {
-      pageController.dispose();
-      return;
-    }
+    return BookViewerRefreshData(
+      chapters: allChapters,
+      photosByChapter: photosByChapter,
+      myReflectionsByChapter:
+          myReflectionsByChapter,
+      partnerReflectionsByChapter:
+          partnerReflectionsByChapter,
+    );
+  }
 
-    await navigator.push(
+  // ==========================================================
+  // PŘIDÁNÍ FOTOGRAFIE
+  // ==========================================================
+
+  Future<void> _addPhoto(
+    String chapterId,
+  ) async {
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) =>
-            RelationshipBookViewerScreen(
-          repository: widget.repository,
-          initialIndex: initialIndex,
-          pageController: pageController,
-          spreads: BookBuilder.build(
-            chapters: allChapters,
-            photosByChapter:
-                photosByChapter,
-            myReflectionsByChapter:
-                myReflectionsByChapter,
-            partnerReflectionsByChapter:
-                partnerReflectionsByChapter,
-            pageController:
-                pageController,
-            onAddPhoto: (chapterId) async {
-              await navigator.push(
-                MaterialPageRoute(
-                  builder: (_) =>
-                      AddRelationshipPhotoScreen(
-                    chapterId: chapterId,
-                  ),
-                ),
-              );
-            },
-            onAddReflection:
-                (chapterId) async {
-              final controller =
-                  TextEditingController();
-
-              final text =
-                  await showDialog<String>(
-                context: context,
-                builder:
-                    (dialogContext) =>
-                        AlertDialog(
-                  title:
-                      const Text(
-                    'Tvůj vzkaz',
-                  ),
-                  content: TextField(
-                    controller:
-                        controller,
-                    maxLines: 4,
-                    decoration:
-                        const InputDecoration(
-                      hintText:
-                          'Napiš, jak jsi tento okamžik prožíval/a ty...',
-                      border:
-                          OutlineInputBorder(),
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () =>
-                          Navigator.pop(
-                        dialogContext,
-                      ),
-                      child:
-                          const Text(
-                        'Zrušit',
-                      ),
-                    ),
-                    FilledButton(
-                      onPressed: () =>
-                          Navigator.pop(
-                        dialogContext,
-                        controller.text,
-                      ),
-                      child:
-                          const Text(
-                        'Uložit',
-                      ),
-                    ),
-                  ],
-                ),
-              );
-
-              controller.dispose();
-
-              if (text == null ||
-                  text.trim().isEmpty) {
-                return;
-              }
-
-              final now =
-                  DateTime.now();
-
-              final currentUserId =
-                  FirebaseAuth
-                          .instance
-                          .currentUser
-                          ?.uid ??
-                      '';
-
-              final reflection =
-                  RelationshipReflection(
-                id: now
-                    .millisecondsSinceEpoch
-                    .toString(),
-                chapterId:
-                    chapterId,
-                authorId:
-                    currentUserId,
-                text: text.trim(),
-                createdAt: now,
-                updatedAt: now,
-              );
-
-              await widget
-                  .reflectionService
-                  .saveReflection(
-                reflection,
-              );
-
-              if (!mounted) {
-                return;
-              }
-
-              _refreshMemories();
-            },
-          ),
-          chapters: allChapters,
+            AddRelationshipPhotoScreen(
+          chapterId: chapterId,
         ),
       ),
     );
-
-    pageController.dispose();
-
-    if (!mounted) {
-      return;
-    }
-
-    _refreshMemories();
   }
 
+  // ==========================================================
+  // PŘIDÁNÍ KOMENTÁŘE
+  // ==========================================================
+
+  Future<void> _addReflection(
+    String chapterId,
+  ) async {
+    final controller =
+        TextEditingController();
+
+    try {
+      final text =
+          await showDialog<String>(
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            title: const Text(
+              'Tvůj vzkaz',
+            ),
+            content: TextField(
+              controller: controller,
+              maxLines: 4,
+              decoration:
+                  const InputDecoration(
+                hintText:
+                    'Napiš, jak jsi tento okamžik prožíval/a ty...',
+                border:
+                    OutlineInputBorder(),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(
+                    dialogContext,
+                  );
+                },
+                child:
+                    const Text('Zrušit'),
+              ),
+              FilledButton(
+                onPressed: () {
+                  Navigator.pop(
+                    dialogContext,
+                    controller.text,
+                  );
+                },
+                child:
+                    const Text('Uložit'),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (text == null ||
+          text.trim().isEmpty) {
+        return;
+      }
+
+      final now = DateTime.now();
+
+      final currentUserId =
+          FirebaseAuth
+                  .instance
+                  .currentUser
+                  ?.uid ??
+              '';
+
+      final reflection =
+          RelationshipReflection(
+        id: now
+            .millisecondsSinceEpoch
+            .toString(),
+        chapterId: chapterId,
+        authorId: currentUserId,
+        text: text.trim(),
+        createdAt: now,
+        updatedAt: now,
+      );
+
+      await widget.reflectionService
+          .saveReflection(
+        reflection,
+      );
+    } finally {
+      controller.dispose();
+    }
+  }
+
+  // ==========================================================
+  // OTEVŘENÍ KNIHY
+  // ==========================================================
+
+  Future<void> _onChapterTapped(
+    BuildContext context,
+    RelationshipChapter chapter,
+    List<RelationshipChapter> allChapters,
+  ) async {
+    final initialIndex =
+        allChapters.indexOf(chapter);
+
+    final pageController =
+        PageController(
+      initialPage: initialIndex,
+    );
+
+    try {
+      final initialData =
+          await _loadBookData();
+
+      if (!mounted) {
+        return;
+      }
+
+      final spreads =
+          BookBuilder.build(
+        chapters:
+            initialData.chapters,
+        photosByChapter:
+            initialData.photosByChapter,
+        myReflectionsByChapter:
+            initialData.myReflectionsByChapter,
+        partnerReflectionsByChapter:
+            initialData
+                .partnerReflectionsByChapter,
+        pageController:
+            pageController,
+        onAddPhoto:
+            _addPhoto,
+        onAddReflection:
+            _addReflection,
+      );
+
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) =>
+              RelationshipBookViewerScreen(
+            repository:
+                widget.repository,
+
+            initialIndex:
+                initialIndex,
+
+            pageController:
+                pageController,
+
+            spreads:
+                spreads,
+
+            chapters:
+                initialData.chapters,
+
+            onRefreshBook:
+                _loadBookData,
+
+            onAddPhoto:
+                _addPhoto,
+
+            onAddReflection:
+                _addReflection,
+          ),
+        ),
+      );
+    } finally {
+      pageController.dispose();
+
+      if (mounted) {
+        _refreshMemories();
+      }
+    }
+  }
+
+  // ==========================================================
+  // BUILD
+  // ==========================================================
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            const Text('Relationship Book'),
+        title: const Text(
+          'Relationship Book',
+        ),
         actions: [
           IconButton(
             tooltip: 'Koš',
@@ -272,10 +345,8 @@ class _RelationshipBookScreenState
               Icons.delete_outline,
             ),
             onPressed: () async {
-              final navigator =
-                  Navigator.of(context);
-
-              await navigator.push(
+              await Navigator.of(context)
+                  .push(
                 MaterialPageRoute(
                   builder: (_) =>
                       const RelationshipTrashScreen(),
@@ -291,11 +362,14 @@ class _RelationshipBookScreenState
           ),
         ],
       ),
+
       body: FutureBuilder<
           List<RelationshipChapter>>(
         future: _memoriesFuture,
-        builder:
-            (context, snapshot) {
+        builder: (
+          context,
+          snapshot,
+        ) {
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
             return const Center(
@@ -326,8 +400,10 @@ class _RelationshipBookScreenState
           return ListView.builder(
             itemCount:
                 chapters.length,
-            itemBuilder:
-                (context, index) {
+            itemBuilder: (
+              context,
+              index,
+            ) {
               final chapter =
                   chapters[index];
 
