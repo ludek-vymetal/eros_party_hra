@@ -40,7 +40,9 @@ class CloudRelationshipBookService {
     final collection =
         await RelationshipService.relationshipBook();
 
-    return await collection.get();
+    return await collection
+        .orderBy('createdAt', descending: false)
+        .get();
   }
 
   static Future<void> deleteChapter(

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -54,10 +53,9 @@ class _CloudPartnerInboxScreenState
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : StreamBuilder(
+          : StreamBuilder<List<dynamic>>(
               stream:
-                  CloudPartnerScenarioService
-                      .incomingScenarios(
+                  CloudPartnerScenarioService.incomingScenarios(
                 relationshipId!,
               ),
               builder: (
@@ -107,8 +105,7 @@ class _CloudPartnerInboxScreenState
                 return Column(
                   children: [
                     SingleChildScrollView(
-                      scrollDirection:
-                          Axis.horizontal,
+                      scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
                           _buildFilterButton(
@@ -130,6 +127,7 @@ class _CloudPartnerInboxScreenState
                         ],
                       ),
                     ),
+
                     Expanded(
                       child: scenarios.isEmpty
                           ? Center(
@@ -170,8 +168,7 @@ class _CloudPartnerInboxScreenState
                                       scenario.text,
                                       maxLines: 2,
                                       overflow:
-                                          TextOverflow
-                                              .ellipsis,
+                                          TextOverflow.ellipsis,
                                     ),
                                   ),
                                 );

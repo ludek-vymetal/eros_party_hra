@@ -27,7 +27,7 @@ class FirestoreRelationshipBookRepository
     final snapshot =
         await CloudRelationshipBookService.getAllChapters();
 
-    return snapshot.docs
+    final chapters = snapshot.docs
         .map(
           (doc) => RelationshipChapter.fromJson(
             doc.data(),
@@ -37,8 +37,13 @@ class FirestoreRelationshipBookRepository
           (chapter) => !chapter.isDeleted,
         )
         .toList();
-      }
-  
+
+    chapters.sort(
+      (a, b) => a.createdAt.compareTo(b.createdAt),
+    );
+
+    return chapters;
+  }
 
   @override
   Future<RelationshipChapter?> getMemory(
@@ -67,6 +72,7 @@ class FirestoreRelationshipBookRepository
       chapter,
     );
   }
+
   @override
   Future<RelationshipChapter?> findByScenarioId(
     String scenarioId,
@@ -75,19 +81,20 @@ class FirestoreRelationshipBookRepository
 
     try {
       return chapters.firstWhere(
-        (chapter) => chapter.scenario.scenarioId == scenarioId,
+        (chapter) =>
+            chapter.scenario.scenarioId == scenarioId,
       );
     } catch (_) {
       return null;
     }
-
   }
+
   @override
   Future<List<RelationshipChapter>> getDeletedMemories() async {
     final snapshot =
         await CloudRelationshipBookService.getAllChapters();
 
-    return snapshot.docs
+    final chapters = snapshot.docs
         .map(
           (doc) => RelationshipChapter.fromJson(
             doc.data(),
@@ -97,5 +104,11 @@ class FirestoreRelationshipBookRepository
           (chapter) => chapter.isDeleted,
         )
         .toList();
-  } 
+
+    chapters.sort(
+      (a, b) => a.createdAt.compareTo(b.createdAt),
+    );
+
+    return chapters;
+  }
 }

@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'dart:io';
+import 'package:flutter/services.dart' show SystemNavigator;
+
 import 'age_gate_controller.dart';
 
 class AgeGateScreen extends StatelessWidget {
@@ -11,6 +13,23 @@ class AgeGateScreen extends StatelessWidget {
     required this.controller,
     required this.onConfirmed,
   });
+
+  /// Uživatel odmítl potvrdit věk.
+  /// Na mobilu/desktopu appku ukončíme, na webu appku "opustit" nejde
+  /// (prohlížeč to nedovolí ovlivnit spolehlivě), takže místo toho
+  /// zobrazíme blokující obrazovku, ze které se nelze dostat dál.
+  void _handleDecline(BuildContext context) {
+    if (kIsWeb) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => const _AgeGateBlockedScreen(),
+        ),
+        (route) => false,
+      );
+    } else {
+      SystemNavigator.pop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +65,36 @@ class AgeGateScreen extends StatelessWidget {
 
               /// ODMÍTNUTÍ
               TextButton(
-                onPressed: () {
-                  exit(0);
-                },
+                onPressed: () => _handleDecline(context),
                 child: const Text('Nejsem starší 18 let'),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Zobrazí se na webu, když uživatel odmítne potvrdit věk.
+/// Appku nelze na webu programově zavřít, takže místo toho
+/// jen zablokujeme přístup k dalšímu obsahu.
+class _AgeGateBlockedScreen extends StatelessWidget {
+  const _AgeGateBlockedScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text(
+              'Přístup byl zamítnut, protože jste nepotvrdili, že jste starší 18 let.\n\n'
+              'Pro pokračování prosím zavřete tuto kartu prohlížeče.',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
         ),
       ),
