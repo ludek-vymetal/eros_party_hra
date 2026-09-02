@@ -217,8 +217,13 @@ class CloudPartnerScenarioDetailScreen extends StatelessWidget {
         return;
       }
 
+      debugPrint('========== SEND REACTION ==========');
+      debugPrint('MY UID = ${FirebaseAuth.instance.currentUser?.uid}');
+      debugPrint('SCENARIO SENDER UID = ${scenario.senderUid}');
+      debugPrint('SCENARIO RECEIVER UID = ${scenario.receiverUid}');
+
       await CloudPartnerReactionService.sendReaction(
-        receiverUid: partnerUid,
+        receiverUid: scenario.senderUid,
         scenarioName: scenario.nazev,
         scenarioId: scenario.id,
         message: message.trim(),

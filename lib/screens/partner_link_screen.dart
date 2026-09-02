@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../services/cloud_partner_service.dart';
@@ -104,13 +105,25 @@ class _PartnerLinkScreenState
     });
 
     try {
+      // --- DEBUG ---------------------------------------------
+      debugPrint(
+        '🔵 [LINK] start, my uid = '
+        '${FirebaseAuth.instance.currentUser?.uid}, '
+        'zadaný kód partnera = $code',
+      );
+      // ---------------------------------------------------------
+
       // ------------------------------------------------------
       // 1. Najdeme Firebase UID partnera
       // ------------------------------------------------------
 
+      debugPrint('🔵 [LINK] volám findPartnerUid($code)');
       final partnerUid =
           await CloudPartnerService
               .findPartnerUid(code);
+      debugPrint(
+        '🟢 [LINK] findPartnerUid OK, partnerUid = $partnerUid',
+      );
 
       if (partnerUid == null) {
         if (!mounted) return;
@@ -130,37 +143,55 @@ class _PartnerLinkScreenState
       // 2. Vytvoříme / najdeme Relationship
       // ------------------------------------------------------
 
+      debugPrint(
+        '🔵 [LINK] volám getOrCreateRelationship('
+        'partnerUid: $partnerUid)',
+      );
       final relationship =
           await RelationshipService
               .getOrCreateRelationship(
         partnerUid: partnerUid,
+      );
+      debugPrint(
+        '🟢 [LINK] getOrCreateRelationship OK, '
+        'id = ${relationship.id}',
       );
 
       // ------------------------------------------------------
       // 3. Nastavíme aktivní Relationship
       // ------------------------------------------------------
 
+      debugPrint('🔵 [LINK] volám setActiveRelationship');
       await RelationshipService
           .setActiveRelationship(
         relationship.id,
       );
+      debugPrint('🟢 [LINK] setActiveRelationship OK');
 
       // ------------------------------------------------------
       // 4. Starší lokální cache
       // ------------------------------------------------------
 
+      debugPrint('🔵 [LINK] volám savePartnerCode');
       await PartnerLinkService.savePartnerCode(
         code,
       );
+      debugPrint('🟢 [LINK] savePartnerCode OK');
 
+      debugPrint('🔵 [LINK] volám savePartnerUid (local)');
       await PartnerLinkService.savePartnerUid(
         partnerUid,
       );
+      debugPrint('🟢 [LINK] savePartnerUid (local) OK');
 
       // Cloud cache partnera
+      debugPrint('🔵 [LINK] volám savePartnerUid (cloud)');
       await CloudPartnerService.savePartnerUid(
         partnerUid,
       );
+      debugPrint('🟢 [LINK] savePartnerUid (cloud) OK');
+
+      debugPrint('🟢 [LINK] HOTOVO — propojení proběhlo celé.');
 
       if (!mounted) return;
 
@@ -178,6 +209,8 @@ class _PartnerLinkScreenState
         ),
       );
     } catch (e) {
+      debugPrint('🔴 [LINK] CHYBA: $e');
+
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(

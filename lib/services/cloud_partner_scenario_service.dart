@@ -18,6 +18,10 @@ class CloudPartnerScenarioService {
             'partner_scenarios',
           );
 
+  // ==========================================================
+  // SEND SCENARIO
+  // ==========================================================
+
   static Future<void> sendScenario({
     required String receiverUid,
     required String parentScenarioId,
@@ -27,7 +31,7 @@ class CloudPartnerScenarioService {
     final user = _auth.currentUser;
 
     if (user == null) {
-      return;
+      throw Exception('User not logged in.');
     }
 
     final relationship =
@@ -39,33 +43,53 @@ class CloudPartnerScenarioService {
       );
     }
 
-    final scenario = CloudPartnerScenario(
-      id: '',
-      relationshipId: relationship.id,
-      senderUid: user.uid,
-      receiverUid: receiverUid,
-      parentScenarioId: parentScenarioId,
-      nazev: nazev,
-      text: text,
-      status: 'received',
-      createdAt: DateTime.now(),
-    );
+    debugPrint('========== SEND SCENARIO ==========');
+    debugPrint('SENDER UID = ${user.uid}');
+    debugPrint('RECEIVER UID = $receiverUid');
+    debugPrint('RELATIONSHIP ID = ${relationship.id}');
 
-    await _scenarios.add(
-      scenario.toMap(),
-    );
+    // DŮLEŽITÉ:
+    // Mapu vytváříme přímo zde, aby bylo ve Firebase
+    // opravdu pole "receiverUid" a ne omylem "receiveUid".
+    await _scenarios.add({
+      'relationshipId': relationship.id,
+
+      'senderUid': user.uid,
+
+      // MUSÍ být přesně receiverUid
+      'receiverUid': receiverUid,
+
+      'parentScenarioId': parentScenarioId,
+
+      'nazev': nazev,
+
+      'text': text,
+
+      'status': 'received',
+
+      'createdAt':
+          FieldValue.serverTimestamp(),
+    });
+
+    debugPrint('🟢 SCENARIO SEND DONE');
   }
+
+  // ==========================================================
+  // UPDATE STATUS
+  // ==========================================================
 
   static Future<void> updateScenarioStatus(
     String scenarioId,
     String status,
   ) async {
     debugPrint(
-      '========== UPDATE SCENARIO =========='
+      '========== UPDATE SCENARIO ==========',
     );
+
     debugPrint(
       'DOC ID = $scenarioId',
     );
+
     debugPrint(
       'STATUS = $status',
     );
@@ -81,21 +105,86 @@ class CloudPartnerScenarioService {
     );
   }
 
+  // ==========================================================
+  // INCOMING SCENARIOS
+  // ==========================================================
+
   static Stream<List<CloudPartnerScenario>>
       incomingScenarios(
     String relationshipId,
   ) {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      return Stream.value([]);
+    }
+
+    debugPrint(
+      '========== INCOMING SCENARIOS ==========',
+    );
+
+    debugPrint(
+      'MY UID = ${user.uid}',
+    );
+
+    debugPrint(
+      'RELATIONSHIP ID = $relationshipId',
+    );
+
     return _scenarios
         .where(
           'relationshipId',
           isEqualTo: relationshipId,
         )
+        .where(
+          'receiverUid',
+          isEqualTo: user.uid,
+        )
+        .snapshots()
+        .map(
+          (snapshot) {
+            debugPrint(
+              '🟢 RECEIVED SCENARIOS: '
+              '${snapshot.docs.length}',
+            );
+
+            return snapshot.docs
+                .map(
+                  CloudPartnerScenario.fromFirestore,
+                )
+                .toList();
+          },
+        );
+  }
+
+  // ==========================================================
+  // SENT SCENARIOS
+  // ==========================================================
+
+  static Stream<List<CloudPartnerScenario>>
+      sentScenarios(
+    String relationshipId,
+  ) {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      return Stream.value([]);
+    }
+
+    return _scenarios
+        .where(
+          'relationshipId',
+          isEqualTo: relationshipId,
+        )
+        .where(
+          'senderUid',
+          isEqualTo: user.uid,
+        )
         .snapshots()
         .map(
           (snapshot) => snapshot.docs
               .map(
-                CloudPartnerScenario
-                    .fromFirestore,
+                CloudPartnerScenario.fromFirestore,
               )
               .toList(),
         );

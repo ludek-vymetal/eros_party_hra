@@ -1,1 +1,28 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"eros-party-game","appId":"1:956940813038:android:4bd128926a99b9203ee9ff","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"eros-party-game","configurations":{"android":"1:956940813038:android:4bd128926a99b9203ee9ff","ios":"1:956940813038:ios:f8f34f2b43f8eb533ee9ff","macos":"1:956940813038:ios:f8f34f2b43f8eb533ee9ff","web":"1:956940813038:web:242c7232c92a4c833ee9ff","windows":"1:956940813038:web:1e15d0f22559eaba3ee9ff"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "eros-party-game",
+          "appId": "1:956940813038:android:4bd128926a99b9203ee9ff",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "eros-party-game",
+          "configurations": {
+            "android": "1:956940813038:android:4bd128926a99b9203ee9ff",
+            "ios": "1:956940813038:ios:f8f34f2b43f8eb533ee9ff",
+            "macos": "1:956940813038:ios:f8f34f2b43f8eb533ee9ff",
+            "web": "1:956940813038:web:242c7232c92a4c833ee9ff",
+            "windows": "1:956940813038:web:1e15d0f22559eaba3ee9ff"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}

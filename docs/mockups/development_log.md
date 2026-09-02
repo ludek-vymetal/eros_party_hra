@@ -1995,3 +1995,5 @@ Oblíbené
 Archiv
 
 pretaceni stranek git  42f3a88 commit -m "oprava relationship book pager"
+
+git po uklidu 3366edc "Fix Cloud Partner Scenario model"

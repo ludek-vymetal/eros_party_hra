@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../l10n/app_localizations.dart';
 
+import '../models/cloud_partner_reaction.dart';
 import '../services/cloud_partner_reaction_service.dart';
 import '../services/relationship_service.dart';
 
@@ -28,9 +29,9 @@ class CloudPartnerReactionsScreen
         ),
       ),
 
-      body: FutureBuilder<String?>(
+      body: FutureBuilder(
         future:
-            RelationshipService.getActiveRelationshipId(),
+            RelationshipService.getActiveRelationship(),
 
         builder: (
           context,
@@ -38,7 +39,8 @@ class CloudPartnerReactionsScreen
         ) {
           if (relationshipSnapshot.hasError) {
             debugPrint(
-              'RELATIONSHIP ERROR: ${relationshipSnapshot.error}',
+              'RELATIONSHIP ERROR: '
+              '${relationshipSnapshot.error}',
             );
 
             return Center(
@@ -56,14 +58,10 @@ class CloudPartnerReactionsScreen
             );
           }
 
-          final relationshipId =
+          final relationship =
               relationshipSnapshot.data;
 
-          debugPrint(
-            'RELATIONSHIP ID = $relationshipId',
-          );
-
-          if (relationshipId == null) {
+          if (relationship == null) {
             return const Center(
               child: Text(
                 'Není aktivní vztah.',
@@ -71,7 +69,25 @@ class CloudPartnerReactionsScreen
             );
           }
 
-          return StreamBuilder(
+          final relationshipId =
+              relationship.id;
+
+          debugPrint(
+            '🔵 REACTIONS SCREEN',
+          );
+
+          debugPrint(
+            '🔵 RELATIONSHIP ID = '
+            '$relationshipId',
+          );
+
+          debugPrint(
+            '🔵 MY UID = '
+            '${FirebaseAuth.instance.currentUser?.uid}',
+          );
+
+          return StreamBuilder<
+              List<CloudPartnerReaction>>(
             stream:
                 CloudPartnerReactionService
                     .incomingReactions(
@@ -84,7 +100,8 @@ class CloudPartnerReactionsScreen
             ) {
               if (snapshot.hasError) {
                 debugPrint(
-                  'REACTION ERROR: ${snapshot.error}',
+                  '🔴 REACTION ERROR: '
+                  '${snapshot.error}',
                 );
 
                 return Center(
@@ -102,19 +119,18 @@ class CloudPartnerReactionsScreen
                 );
               }
 
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: Text(
-                    'NO DATA',
-                  ),
-                );
-              }
-
               final reactions =
-                  List.of(snapshot.data!);
+                  snapshot.data ??
+                      <CloudPartnerReaction>[];
+
+              debugPrint(
+                '🟢 REACTIONS COUNT = '
+                '${reactions.length}',
+              );
 
               reactions.sort(
-                (a, b) => b.createdAt.compareTo(
+                (a, b) =>
+                    b.createdAt.compareTo(
                   a.createdAt,
                 ),
               );
@@ -141,14 +157,12 @@ class CloudPartnerReactionsScreen
                   final myUid =
                       FirebaseAuth
                           .instance
-                          .currentUser!
-                          .uid;
+                          .currentUser
+                          ?.uid;
 
                   final isCompleter =
                       reaction.senderUid ==
                           myUid;
-
-                  
 
                   return Card(
                     margin:
@@ -161,6 +175,7 @@ class CloudPartnerReactionsScreen
                         reaction.completed
                             ? Icons.check_circle
                             : Icons.cancel,
+
                         color:
                             reaction.completed
                                 ? Colors.green
@@ -177,6 +192,7 @@ class CloudPartnerReactionsScreen
                         crossAxisAlignment:
                             CrossAxisAlignment
                                 .start,
+
                         children: [
                           Text(
                             reaction.completed
@@ -190,8 +206,7 @@ class CloudPartnerReactionsScreen
                             ),
                           ),
 
-                          if (reaction
-                              .proofAccepted)
+                          if (reaction.proofAccepted)
                             Text(
                               isCompleter
                                   ? l10n
@@ -199,12 +214,10 @@ class CloudPartnerReactionsScreen
                                   : l10n
                                       .proofConfirmed,
                             )
-                          else if (reaction
-                              .proofSent)
+                          else if (reaction.proofSent)
                             Text(
                               isCompleter
-                                  ? l10n
-                                      .proofSent
+                                  ? l10n.proofSent
                                   : l10n
                                       .waitingProofConfirmation,
                             ),
@@ -216,7 +229,9 @@ class CloudPartnerReactionsScreen
                               l10n.messageLabel(
                                 reaction.message,
                               ),
+
                               maxLines: 1,
+
                               overflow:
                                   TextOverflow
                                       .ellipsis,
@@ -227,6 +242,7 @@ class CloudPartnerReactionsScreen
                       onTap: () {
                         Navigator.push(
                           context,
+
                           MaterialPageRoute(
                             builder: (_) =>
                                 CloudPartnerReactionDetailScreen(

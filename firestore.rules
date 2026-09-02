@@ -1,0 +1,275 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================
+    // POMOCNÉ FUNKCE
+    // =========================================================
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isRelationshipMember(relationshipId) {
+      return signedIn() &&
+        (
+          get(
+            /databases/$(database)/documents/relationships/$(relationshipId)
+          ).data.user1Uid == request.auth.uid
+          ||
+          get(
+            /databases/$(database)/documents/relationships/$(relationshipId)
+          ).data.user2Uid == request.auth.uid
+        );
+    }
+
+    function isRelationshipMemberFromResource() {
+      return signedIn() &&
+        (
+          resource.data.user1Uid == request.auth.uid ||
+          resource.data.user2Uid == request.auth.uid
+        );
+    }
+
+    function isRelationshipMemberFromRequest() {
+      return signedIn() &&
+        (
+          request.resource.data.user1Uid == request.auth.uid ||
+          request.resource.data.user2Uid == request.auth.uid
+        );
+    }
+
+    // =========================================================
+    // COMMUNITY TASKS
+    // =========================================================
+
+    match /community_tasks/{taskId} {
+
+      allow read: if true;
+
+      allow create:
+        if signedIn() &&
+        request.resource.data.authorUid == request.auth.uid;
+
+      allow update:
+        if signedIn() &&
+        (
+          request.auth.uid == resource.data.authorUid
+          ||
+          (
+            request.resource.data
+              .diff(resource.data)
+              .affectedKeys()
+              .hasOnly(['likes'])
+            &&
+            request.resource.data.likes ==
+              resource.data.likes + 1
+          )
+        );
+
+      allow delete:
+        if signedIn() &&
+        request.auth.uid == resource.data.authorUid;
+    }
+
+    // =========================================================
+    // COMMUNITY SCENARIOS
+    // =========================================================
+
+    match /community_scenarios/{scenarioId} {
+
+      allow read: if true;
+
+      allow create:
+        if signedIn() &&
+        request.resource.data.authorUid == request.auth.uid;
+
+      allow update:
+        if signedIn() &&
+        (
+          request.auth.uid == resource.data.authorUid
+          ||
+          (
+            request.resource.data
+              .diff(resource.data)
+              .affectedKeys()
+              .hasOnly(['likes'])
+            &&
+            request.resource.data.likes ==
+              resource.data.likes + 1
+          )
+        );
+
+      allow delete:
+        if signedIn() &&
+        request.auth.uid == resource.data.authorUid;
+    }
+
+    // =========================================================
+    // PARTNER SCENARIOS
+    // =========================================================
+
+    match /partner_scenarios/{scenarioId} {
+
+      allow create:
+        if signedIn() &&
+        request.resource.data.senderUid == request.auth.uid;
+
+      allow read:
+        if signedIn() &&
+        (
+          resource.data.senderUid == request.auth.uid ||
+          resource.data.receiverUid == request.auth.uid
+        );
+
+      allow update:
+        if signedIn() &&
+        (
+          resource.data.senderUid == request.auth.uid ||
+          resource.data.receiverUid == request.auth.uid
+        ) &&
+        request.resource.data.senderUid ==
+          resource.data.senderUid &&
+        request.resource.data.receiverUid ==
+          resource.data.receiverUid;
+
+      allow delete:
+        if signedIn() &&
+        (
+          resource.data.senderUid == request.auth.uid ||
+          resource.data.receiverUid == request.auth.uid
+        );
+    }
+
+    // =========================================================
+    // PARTNER REACTIONS
+    // =========================================================
+
+    match /partner_reactions/{reactionId} {
+
+      allow create:
+        if signedIn() &&
+        request.resource.data.senderUid == request.auth.uid &&
+        isRelationshipMember(
+          request.resource.data.relationshipId
+        );
+
+      allow read:
+        if signedIn() &&
+        isRelationshipMember(
+          resource.data.relationshipId
+        );
+
+      allow update:
+        if signedIn() &&
+        isRelationshipMember(
+          resource.data.relationshipId
+        ) &&
+        request.resource.data.relationshipId ==
+          resource.data.relationshipId &&
+        request.resource.data.senderUid ==
+          resource.data.senderUid &&
+        request.resource.data.receiverUid ==
+          resource.data.receiverUid;
+
+      allow delete:
+        if signedIn() &&
+        isRelationshipMember(
+          resource.data.relationshipId
+        );
+    }
+
+    // =========================================================
+    // PARTNER LINKS
+    // =========================================================
+
+    match /partner_links/{linkId} {
+
+      allow read: if signedIn();
+
+      allow create:
+        if signedIn() &&
+        request.resource.data.uid == request.auth.uid;
+
+      allow update:
+        if signedIn() &&
+        resource.data.uid == request.auth.uid &&
+        request.resource.data.uid == resource.data.uid;
+
+      allow delete:
+        if signedIn() &&
+        resource.data.uid == request.auth.uid;
+    }
+
+    // =========================================================
+    // REPORTED TASKS
+    // =========================================================
+
+    match /reported_tasks/{reportId} {
+
+      allow create: if signedIn();
+      allow read: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // =========================================================
+    // REPORTED SCENARIOS
+    // =========================================================
+
+    match /reported_scenarios/{reportId} {
+
+      allow create: if signedIn();
+      allow read: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // =========================================================
+    // RELATIONSHIPS
+    // =========================================================
+
+    match /relationships/{relationshipId} {
+
+      allow read:
+        if isRelationshipMemberFromResource();
+
+      allow create:
+        if isRelationshipMemberFromRequest();
+
+      allow update:
+        if isRelationshipMemberFromResource() &&
+        request.resource.data.user1Uid ==
+          resource.data.user1Uid &&
+        request.resource.data.user2Uid ==
+          resource.data.user2Uid;
+
+      allow delete:
+        if isRelationshipMemberFromResource();
+
+      match /relationship_book/{chapterId} {
+
+        allow read, write:
+          if isRelationshipMember(relationshipId);
+
+        match /{document=**} {
+
+          allow read, write:
+            if isRelationshipMember(relationshipId);
+        }
+      }
+    }
+
+    // =========================================================
+    // USERS
+    // =========================================================
+
+    match /users/{userId} {
+
+      allow read, write:
+        if signedIn() &&
+        request.auth.uid == userId;
+    }
+  }
+}
