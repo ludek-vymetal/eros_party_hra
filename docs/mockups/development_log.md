@@ -1997,3 +1997,5 @@ Archiv
 pretaceni stranek git  42f3a88 commit -m "oprava relationship book pager"
 
 git po uklidu 3366edc "Fix Cloud Partner Scenario model"
+
+oprava reakcich  git  f6f05ca  commit -m "fix: restore partner reactions and proof flow"
