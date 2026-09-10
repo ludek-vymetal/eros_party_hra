@@ -79,6 +79,7 @@ class BookBuilder {
         // ======================================================
         // KAPITOLA
         // ======================================================
+        final chapterNumber = chapters.length - index;
 
         return OpenBook(
           leftPageNumber: leftNumber,
@@ -86,33 +87,21 @@ class BookBuilder {
           onPrevious: goToPrevious,
           onNext: goToNext,
 
-          // ====================================================
-          // LEVÁ STRÁNKA
-          // ====================================================
-
           leftPage: BookLeftPage(
             chapter: chapter,
-            chapterNumber: index + 1,
+            chapterNumber: chapterNumber,
             pageNumber: leftNumber,
             motto: chapter.customMotto ?? chapter.motto,
             partnerReflection: partnerReflection,
             onPreviousPage: goToPrevious,
           ),
 
-          // ====================================================
-          // PRAVÁ STRÁNKA
-          // ====================================================
-
           rightPage: BookRightPage(
             photos: chapterPhotos,
             myReflection: myReflection,
             pageNumber: rightNumber,
-            onAddPhoto: () => onAddPhoto(
-              chapter.id,
-            ),
-            onAddReflection: () => onAddReflection(
-              chapter.id,
-            ),
+            onAddPhoto: () => onAddPhoto(chapter.id),
+            onAddReflection: () => onAddReflection(chapter.id),
             onNextPage: goToNext,
           ),
         );

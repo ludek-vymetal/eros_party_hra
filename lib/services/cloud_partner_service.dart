@@ -17,6 +17,71 @@ class CloudPartnerService {
           _firestore.collection('users');
 
   // ==========================================================
+  // DISPLAY NAME
+  // ==========================================================
+
+  /// Uloží zobrazované jméno aktuálního uživatele.
+  static Future<void> saveDisplayName(
+    String displayName,
+  ) async {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      return;
+    }
+
+    final cleanName = displayName.trim();
+
+    if (cleanName.isEmpty) {
+      return;
+    }
+
+    await _users.doc(user.uid).set(
+      {
+        'displayName': cleanName,
+        'email': user.email,
+      },
+      SetOptions(merge: true),
+    );
+  }
+
+  /// Vrátí zobrazované jméno aktuálně přihlášeného uživatele.
+  static Future<String?> getMyDisplayName() async {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      return null;
+    }
+
+    return getUserDisplayName(user.uid);
+  }
+
+  /// Vrátí zobrazované jméno libovolného uživatele podle UID.
+  ///
+  /// Toto využijeme například pro zobrazení jmen obou partnerů
+  /// na obálce Relationship Book.
+  static Future<String?> getUserDisplayName(
+    String uid,
+  ) async {
+    final snapshot =
+        await _users.doc(uid).get();
+
+    if (!snapshot.exists) {
+      return null;
+    }
+
+    final displayName =
+        snapshot.data()?['displayName'];
+
+    if (displayName is String &&
+        displayName.trim().isNotEmpty) {
+      return displayName.trim();
+    }
+
+    return null;
+  }
+
+  // ==========================================================
   // REGISTRACE / ZÍSKÁNÍ VLASTNÍHO KÓDU
   // ==========================================================
 
@@ -54,7 +119,6 @@ class CloudPartnerService {
 
       if (existingCode is String &&
           existingCode.isNotEmpty) {
-        // Uložíme také do users jako zálohu/cache.
         await _users.doc(user.uid).set(
           {
             'myCode': existingCode,
@@ -82,7 +146,6 @@ class CloudPartnerService {
 
     if (storedCode is String &&
         storedCode.isNotEmpty) {
-      // Znovu zaregistrujeme existující kód.
       await _links.doc(storedCode).set(
         {
           'uid': user.uid,
@@ -114,7 +177,6 @@ class CloudPartnerService {
       }
     }
 
-    // Uložíme kód do partner_links.
     await _links.doc(newCode).set(
       {
         'uid': user.uid,
@@ -125,7 +187,6 @@ class CloudPartnerService {
       },
     );
 
-    // Uložíme také do users/{uid}.
     await _users.doc(user.uid).set(
       {
         'myCode': newCode,
@@ -141,9 +202,7 @@ class CloudPartnerService {
   // STARŠÍ API
   // ==========================================================
 
-  /// Registruje existující kód.
-  ///
-  /// Pokud už dokument existuje, pouze ho aktualizuje.
+  /// Registruje existující partnerský kód.
   static Future<void> registerMyCode(
     String code,
   ) async {
@@ -177,7 +236,7 @@ class CloudPartnerService {
   // PARTNER
   // ==========================================================
 
-  /// Najde UID partnera podle jeho kódu.
+  /// Najde UID partnera podle jeho partnerského kódu.
   static Future<String?> findPartnerUid(
     String code,
   ) async {
@@ -191,13 +250,16 @@ class CloudPartnerService {
     final data =
         doc.data();
 
-    return data?['uid'];
+    final uid = data?['uid'];
+
+    return uid is String ? uid : null;
   }
 
   // ==========================================================
   // USER DOCUMENT
   // ==========================================================
 
+  /// Zajistí existenci users/{uid}.
   static Future<void> ensureUserDocument() async {
     final user = _auth.currentUser;
 
@@ -228,6 +290,7 @@ class CloudPartnerService {
   // PARTNER UID
   // ==========================================================
 
+  /// Uloží UID partnera aktuálního uživatele.
   static Future<void> savePartnerUid(
     String partnerUid,
   ) async {
@@ -245,6 +308,7 @@ class CloudPartnerService {
     );
   }
 
+  /// Vrátí UID partnera aktuálního uživatele.
   static Future<String?> getPartnerUid() async {
     final user = _auth.currentUser;
 
@@ -255,13 +319,19 @@ class CloudPartnerService {
     final snapshot =
         await _users.doc(user.uid).get();
 
-    return snapshot.data()?['partnerUid'];
+    final partnerUid =
+        snapshot.data()?['partnerUid'];
+
+    return partnerUid is String
+        ? partnerUid
+        : null;
   }
 
   // ==========================================================
   // MY CODE
   // ==========================================================
 
+  /// Uloží partnerský kód aktuálního uživatele.
   static Future<void> saveMyCode(
     String code,
   ) async {

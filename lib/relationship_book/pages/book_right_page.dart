@@ -13,6 +13,7 @@ class BookRightPage extends StatefulWidget {
   final List<RelationshipPhoto> photos;
   final RelationshipReflection? myReflection;
   final int pageNumber;
+
   final VoidCallback onAddPhoto;
   final VoidCallback? onAddReflection;
   final VoidCallback? onNextPage;
@@ -28,50 +29,68 @@ class BookRightPage extends StatefulWidget {
   });
 
   @override
-  State<BookRightPage> createState() => _BookRightPageState();
+  State<BookRightPage> createState() =>
+      _BookRightPageState();
 }
 
-class _BookRightPageState extends State<BookRightPage> {
+class _BookRightPageState
+    extends State<BookRightPage> {
+
   int _selectedPhoto = 0;
 
-  late final RelationshipPhotoService _photoService;
+  late final RelationshipPhotoService
+      _photoService;
 
   @override
   void initState() {
     super.initState();
 
-    _photoService = RelationshipPhotoService(
-      repository: LocalRelationshipPhotoRepository(),
+    _photoService =
+        RelationshipPhotoService(
+      repository:
+          LocalRelationshipPhotoRepository(),
     );
   }
 
   // ==========================================================
-  // 🗑 SMAZÁNÍ FOTOGRAFIE
+  // SMAZÁNÍ FOTOGRAFIE
   // ==========================================================
 
-  Future<void> _deleteSelectedPhoto() async {
+  Future<void>
+      _deleteSelectedPhoto() async {
+
     if (widget.photos.isEmpty) {
       return;
     }
 
     if (_selectedPhoto < 0 ||
-        _selectedPhoto >= widget.photos.length) {
+        _selectedPhoto >=
+            widget.photos.length) {
       return;
     }
 
-    final photo = widget.photos[_selectedPhoto];
+    final photo =
+        widget.photos[_selectedPhoto];
 
-    final confirmed = await showDialog<bool>(
+    final confirmed =
+        await showDialog<bool>(
       context: context,
-      builder: (dialogContext) {
+
+      builder: (
+        dialogContext,
+      ) {
         return AlertDialog(
-          title: const Text(
+          title:
+              const Text(
             'Smazat fotografii?',
           ),
-          content: const Text(
+
+          content:
+              const Text(
             'Tato fotografie bude odstraněna z této vzpomínky.\n\n'
             'Tuto akci již nelze vrátit zpět.',
           ),
+
           actions: [
             TextButton(
               onPressed: () {
@@ -80,10 +99,13 @@ class _BookRightPageState extends State<BookRightPage> {
                   false,
                 );
               },
-              child: const Text(
+
+              child:
+                  const Text(
                 'Zrušit',
               ),
             ),
+
             FilledButton(
               onPressed: () {
                 Navigator.pop(
@@ -91,7 +113,9 @@ class _BookRightPageState extends State<BookRightPage> {
                   true,
                 );
               },
-              child: const Text(
+
+              child:
+                  const Text(
                 'Smazat',
               ),
             ),
@@ -105,10 +129,6 @@ class _BookRightPageState extends State<BookRightPage> {
     }
 
     try {
-      // Skutečné odstranění fotografie:
-      //
-      // 1. smaže soubor z disku
-      // 2. odstraní záznam ze SharedPreferences
       await _photoService.deletePhoto(
         photo.id,
       );
@@ -118,34 +138,31 @@ class _BookRightPageState extends State<BookRightPage> {
       }
 
       setState(() {
-        // Odstraníme fotografii také z aktuálního seznamu,
-        // aby okamžitě zmizela z knihy.
         widget.photos.removeWhere(
-          (item) => item.id == photo.id,
+          (item) =>
+              item.id == photo.id,
         );
 
-        // Pokud jsme smazali poslední fotografii,
-        // vrátíme výběr na začátek.
         if (widget.photos.isEmpty) {
           _selectedPhoto = 0;
           return;
         }
 
-        // Pokud jsme byli na poslední fotografii,
-        // posuneme výběr na novou poslední fotografii.
-        if (_selectedPhoto >= widget.photos.length) {
-          _selectedPhoto = widget.photos.length - 1;
+        if (_selectedPhoto >=
+            widget.photos.length) {
+          _selectedPhoto =
+              widget.photos.length - 1;
         }
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
         const SnackBar(
           content: Text(
             'Fotografie byla odstraněna.',
           ),
-          duration: Duration(
-            seconds: 2,
-          ),
+          duration:
+              Duration(seconds: 2),
         ),
       );
     } catch (e) {
@@ -153,7 +170,8 @@ class _BookRightPageState extends State<BookRightPage> {
         return;
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
         const SnackBar(
           content: Text(
             'Fotografii se nepodařilo odstranit.',
@@ -168,159 +186,246 @@ class _BookRightPageState extends State<BookRightPage> {
   // ==========================================================
 
   @override
-  Widget build(BuildContext context) {
-    final hasPhotos = widget.photos.isNotEmpty;
+  Widget build(
+    BuildContext context,
+  ) {
+    final hasPhotos =
+        widget.photos.isNotEmpty;
 
-    final safeSelectedPhoto = hasPhotos
-        ? _selectedPhoto.clamp(
-            0,
-            widget.photos.length - 1,
-          )
-        : 0;
+    final safeSelectedPhoto =
+        hasPhotos
+            ? _selectedPhoto.clamp(
+                0,
+                widget.photos.length - 1,
+              )
+            : 0;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        28,
-        14,
-        28,
-        22,
-      ),
-      child: Column(
-        children: [
-          // ====================================================
-          // 📷 HLAVNÍ FOTOGRAFIE
-          // ====================================================
+    return LayoutBuilder(
+      builder: (
+        context,
+        constraints,
+      ) {
+        final width =
+            constraints.maxWidth;
 
-          PhotoFrame(
-            image: hasPhotos
-                ? FileImage(
-                    File(
-                      widget
-                          .photos[safeSelectedPhoto]
-                          .storagePath,
-                    ),
-                  )
-                : null,
+        final height =
+            constraints.maxHeight;
 
-            // Klepnutí na fotografii stále znamená
-            // přidání/vložení fotografie.
-            onTap: widget.onAddPhoto,
-
-            // Tlačítko se zobrazí pouze tehdy,
-            // když fotografie skutečně existuje.
-            onDelete: hasPhotos
-                ? _deleteSelectedPhoto
-                : null,
+        return Padding(
+          padding:
+              EdgeInsets.fromLTRB(
+            width * 0.095,
+            height * 0.025,
+            width * 0.095,
+            height * 0.035,
           ),
 
-          // ====================================================
-          // 🖼 NÁHLEDY OSTATNÍCH FOTOGRAFIÍ
-          // ====================================================
+          child: Column(
+            children: [
 
-          if (widget.photos.length > 1) ...[
-            const SizedBox(
-              height: 3,
-            ),
-            SizedBox(
-              height: 56,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    for (
-                      int i = 0;
-                      i < widget.photos.length;
-                      i++
-                    )
-                      if (i != safeSelectedPhoto)
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            right: 6,
+              // ==================================================
+              // HLAVNÍ FOTOGRAFIE
+              // ==================================================
+
+              SizedBox(
+                width:
+                    double.infinity,
+
+                child: PhotoFrame(
+                  image: hasPhotos
+                      ? FileImage(
+                          File(
+                            widget
+                                .photos[
+                                    safeSelectedPhoto]
+                                .storagePath,
                           ),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedPhoto = i;
-                              });
-                            },
-                            child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(5),
-                              child: Image.file(
-                                File(
-                                  widget
-                                      .photos[i]
-                                      .storagePath,
+                        )
+                      : null,
+
+                  onTap:
+                      widget.onAddPhoto,
+
+                  onDelete:
+                      hasPhotos
+                          ? _deleteSelectedPhoto
+                          : null,
+                ),
+              ),
+
+              // ==================================================
+              // OSTATNÍ FOTOGRAFIE
+              // ==================================================
+
+              if (widget.photos.length > 1) ...[
+                const SizedBox(
+                  height: 4,
+                ),
+
+                SizedBox(
+                  height: 48,
+
+                  child:
+                      SingleChildScrollView(
+                    scrollDirection:
+                        Axis.horizontal,
+
+                    child: Row(
+                      children: [
+                        for (
+                          int i = 0;
+                          i <
+                              widget
+                                  .photos
+                                  .length;
+                          i++
+                        )
+
+                          if (
+                              i !=
+                                  safeSelectedPhoto)
+
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(
+                                right: 5,
+                              ),
+
+                              child:
+                                  GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedPhoto =
+                                        i;
+                                  });
+                                },
+
+                                child:
+                                    ClipRRect(
+                                  borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                    5,
+                                  ),
+
+                                  child:
+                                      Image.file(
+                                    File(
+                                      widget
+                                          .photos[
+                                              i]
+                                          .storagePath,
+                                    ),
+
+                                    width:
+                                        48,
+
+                                    height:
+                                        48,
+
+                                    fit:
+                                        BoxFit.cover,
+                                  ),
                                 ),
-                                width: 56,
-                                height: 56,
-                                fit: BoxFit.cover,
                               ),
                             ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+
+              SizedBox(
+                height:
+                    height * 0.018,
+              ),
+
+              // ==================================================
+              // REFLEXE
+              // ==================================================
+
+              Expanded(
+                child:
+                    SingleChildScrollView(
+                  physics:
+                      const BouncingScrollPhysics(),
+
+                  child:
+                      InkWell(
+                    onTap:
+                        widget.onAddReflection,
+
+                    borderRadius:
+                        BorderRadius.circular(
+                      10,
+                    ),
+
+                    child:
+                        MemoryBlock(
+                      author:
+                          'Já',
+
+                      text:
+                          widget.myReflection
+                                  ?.text ??
+                              'Klepnutím sem přidej svůj vzkaz...',
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(
+                height:
+                    height * 0.018,
+              ),
+
+              // ==================================================
+              // ČÍSLO STRÁNKY
+              // ==================================================
+
+              Center(
+                child: GestureDetector(
+                  onTap:
+                      widget.onNextPage,
+
+                  child: MouseRegion(
+                    cursor:
+                        SystemMouseCursors.click,
+
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.all(
+                        4,
+                      ),
+
+                      child: Text(
+                        '— ${widget.pageNumber} —',
+
+                        style:
+                            TextStyle(
+                          color:
+                              const Color(
+                            0xFF5D4037,
                           ),
+
+                          fontSize:
+                              width * 0.050,
+
+                          fontStyle:
+                              FontStyle.italic,
+
+                          fontWeight:
+                              FontWeight.w500,
                         ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-
-          const SizedBox(
-            height: 8,
-          ),
-
-          // ====================================================
-          // 💭 REFLEXE
-          // ====================================================
-
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  InkWell(
-                    onTap: widget.onAddReflection,
-                    borderRadius: BorderRadius.circular(8),
-                    child: MemoryBlock(
-                      author: "Já",
-                      text: widget.myReflection?.text ??
-                          "Klepnutím sem přidej svůj vzkaz...",
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(
-            height: 20,
-          ),
-
-          // ====================================================
-          // 📖 ČÍSLO STRÁNKY
-          // ====================================================
-
-          Center(
-            child: GestureDetector(
-              onTap: widget.onNextPage,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    "— ${widget.pageNumber} —",
-                    style: TextStyle(
-                      color: Colors.brown.shade800,
-                      fontSize: 18,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -41,6 +41,20 @@ service cloud.firestore {
     }
 
     // =========================================================
+    // OPRÁVNĚNÍ KE ČTENÍ PROFILU PARTNERA
+    // =========================================================
+
+    function isMyPartner(userId) {
+      return signedIn() &&
+        exists(
+          /databases/$(database)/documents/users/$(request.auth.uid)
+        ) &&
+        get(
+          /databases/$(database)/documents/users/$(request.auth.uid)
+        ).data.partnerUid == userId;
+    }
+
+    // =========================================================
     // COMMUNITY TASKS
     // =========================================================
 
@@ -267,7 +281,39 @@ service cloud.firestore {
 
     match /users/{userId} {
 
-      allow read, write:
+      // -------------------------------------------------------
+      // ČTENÍ
+      //
+      // Uživatel může načíst:
+      // 1. svůj vlastní profil
+      // 2. profil svého propojeného partnera
+      // -------------------------------------------------------
+
+      allow get:
+        if signedIn() &&
+        (
+          request.auth.uid == userId ||
+          isMyPartner(userId)
+        );
+
+      // Neumožňujeme hromadné procházení uživatelů.
+      allow list: if false;
+
+      // -------------------------------------------------------
+      // ZÁPIS
+      //
+      // Každý může upravovat pouze svůj vlastní profil.
+      // -------------------------------------------------------
+
+      allow create:
+        if signedIn() &&
+        request.auth.uid == userId;
+
+      allow update:
+        if signedIn() &&
+        request.auth.uid == userId;
+
+      allow delete:
         if signedIn() &&
         request.auth.uid == userId;
     }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
+import '../../services/cloud_partner_service.dart';
 
 import '../book_builder.dart';
 import '../models/relationship_chapter.dart';
@@ -32,9 +34,13 @@ class BookViewerRefreshData {
 class RelationshipBookViewerScreen
     extends StatefulWidget {
   final List<Widget> spreads;
+
   final List<RelationshipChapter> chapters;
+
   final RelationshipBookRepository repository;
+
   final int initialIndex;
+
   final PageController pageController;
 
   final Future<BookViewerRefreshData>
@@ -73,13 +79,30 @@ class _RelationshipBookViewerScreenState
   late List<RelationshipChapter>
       _chapters;
 
-  late List<Widget> _spreads;
+  /// Pouze kapitoly vytvořené BookBuilderem.
+  late List<Widget> _chapterSpreads;
+
+  /// Celá kniha:
+  /// index 0 = OBÁLKA
+  /// index 1+ = kapitoly
+  late List<Widget> _bookPages;
 
   final RelationshipChapterService
       _chapterService =
       RelationshipChapterService();
 
-  
+  String _myName = 'Já';
+
+  String _partnerName = 'Partner';
+
+  bool _namesLoaded = false;
+
+  bool get _isCover =>
+      currentSpread == 0;
+
+  // ==========================================================
+  // INIT
+  // ==========================================================
 
   @override
   void initState() {
@@ -90,33 +113,118 @@ class _RelationshipBookViewerScreenState
       widget.chapters,
     );
 
-    _spreads =
+    _chapterSpreads =
         List<Widget>.from(
       widget.spreads,
     );
 
-    currentSpread =
-        widget.initialIndex.clamp(
-      0,
-      _spreads.length - 1,
-    );
+    // Vytvoříme knihu:
+    // OBÁLKA + všechny kapitoly.
+    _rebuildBookPages();
 
-    
+    // Začínáme na obálce.
+    currentSpread = 0;
 
-    widget.pageController
-        .addListener(
+    widget.pageController.addListener(
       _onPageChanged,
     );
+
+    _loadNames();
   }
 
   @override
   void dispose() {
-    widget.pageController
-        .removeListener(
+    widget.pageController.removeListener(
       _onPageChanged,
     );
 
     super.dispose();
+  }
+
+  // ==========================================================
+  // JMÉNA
+  // ==========================================================
+
+  Future<void> _loadNames() async {
+    try {
+      // ------------------------------------------------------
+      // MOJE JMÉNO
+      // ------------------------------------------------------
+
+      final myName =
+          await CloudPartnerService
+              .getMyDisplayName();
+
+      // ------------------------------------------------------
+      // PARTNER
+      // ------------------------------------------------------
+
+      final partnerUid =
+          await CloudPartnerService
+              .getPartnerUid();
+
+      String? partnerName;
+
+      if (partnerUid != null &&
+          partnerUid.isNotEmpty) {
+        partnerName =
+            await CloudPartnerService
+                .getUserDisplayName(
+          partnerUid,
+        );
+      }
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        if (myName != null &&
+            myName.trim().isNotEmpty) {
+          _myName = myName.trim();
+        }
+
+        if (partnerName != null &&
+            partnerName.trim().isNotEmpty) {
+          _partnerName =
+              partnerName.trim();
+        }
+
+        _namesLoaded = true;
+
+        _rebuildBookPages();
+      });
+    } catch (e) {
+      debugPrint(
+        'CHYBA PRI NAČÍTÁNÍ JMEN: $e',
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _namesLoaded = true;
+
+        _rebuildBookPages();
+      });
+    }
+  }
+
+  // ==========================================================
+  // VYTVOŘENÍ CELÉ KNIHY
+  // ==========================================================
+
+  void _rebuildBookPages() {
+    _bookPages = [
+      _RelationshipBookCover(
+        myName: _myName,
+        partnerName: _partnerName,
+        namesLoaded: _namesLoaded,
+      ),
+
+      ..._chapterSpreads,
+    ];
   }
 
   // ==========================================================
@@ -131,11 +239,12 @@ class _RelationshipBookViewerScreenState
       return;
     }
 
-    final index = page.round();
+    final index =
+        page.round();
 
     if (index != currentSpread &&
         index >= 0 &&
-        index < _spreads.length) {
+        index < _bookPages.length) {
       setState(() {
         currentSpread = index;
       });
@@ -154,7 +263,7 @@ class _RelationshipBookViewerScreenState
       return;
     }
 
-    final newSpreads =
+    final newChapterSpreads =
         BookBuilder.build(
       chapters:
           data.chapters,
@@ -181,7 +290,7 @@ class _RelationshipBookViewerScreenState
     final newIndex =
         currentSpread.clamp(
       0,
-      newSpreads.length - 1,
+      newChapterSpreads.length,
     );
 
     setState(() {
@@ -190,17 +299,14 @@ class _RelationshipBookViewerScreenState
         data.chapters,
       );
 
-      _spreads =
-          newSpreads;
+      _chapterSpreads =
+          newChapterSpreads;
+
+      _rebuildBookPages();
 
       currentSpread =
           newIndex;
     });
-
-    // --------------------------------------------------------
-    // Po překreslení zajistíme, aby PageView zůstala
-    // na stejné kapitole.
-    // --------------------------------------------------------
 
     WidgetsBinding.instance
         .addPostFrameCallback(
@@ -225,7 +331,7 @@ class _RelationshipBookViewerScreenState
 
   void nextSpread() {
     if (currentSpread >=
-        _spreads.length - 1) {
+        _bookPages.length - 1) {
       return;
     }
 
@@ -254,28 +360,30 @@ class _RelationshipBookViewerScreenState
     );
   }
 
-  
-  
-
-  // ==========================================================
-  // POZNÁMKA
-  // ==========================================================
-
-  
-
   // ==========================================================
   // MENU KAPITOLY
   // ==========================================================
 
   Future<void>
       _handleOptionsSheet() async {
-    if (currentSpread >=
-        _chapters.length) {
+    // Na obálce není menu kapitoly.
+    if (_isCover) {
+      return;
+    }
+
+    // Protože index 0 je obálka,
+    // kapitoly začínají od indexu 1.
+    final chapterIndex =
+        currentSpread - 1;
+
+    if (chapterIndex < 0 ||
+        chapterIndex >=
+            _chapters.length) {
       return;
     }
 
     final currentChapter =
-        _chapters[currentSpread];
+        _chapters[chapterIndex];
 
     final result =
         await ChapterOptionsSheet.show(
@@ -292,10 +400,6 @@ class _RelationshipBookViewerScreenState
     }
 
     switch (result) {
-      // ------------------------------------------------------
-      // OBLÍBENÁ
-      // ------------------------------------------------------
-
       case ChapterOptionResult
           .favoriteToggled:
         await _chapterService
@@ -308,20 +412,14 @@ class _RelationshipBookViewerScreenState
         }
 
         await _refreshBook();
-        break;
 
-      // ------------------------------------------------------
-      // MOTTO
-      // ------------------------------------------------------
+        break;
 
       case ChapterOptionResult
           .mottoUpdated:
         await _refreshBook();
-        break;
 
-      // ------------------------------------------------------
-      // ARCHIVACE
-      // ------------------------------------------------------
+        break;
 
       case ChapterOptionResult
           .archived:
@@ -344,11 +442,8 @@ class _RelationshipBookViewerScreenState
         );
 
         await _refreshBook();
-        break;
 
-      // ------------------------------------------------------
-      // SMAZÁNÍ
-      // ------------------------------------------------------
+        break;
 
       case ChapterOptionResult
           .deleted:
@@ -371,6 +466,7 @@ class _RelationshipBookViewerScreenState
         );
 
         await _refreshBook();
+
         break;
     }
   }
@@ -383,30 +479,28 @@ class _RelationshipBookViewerScreenState
   Widget build(
     BuildContext context,
   ) {
-    if (_spreads.isEmpty ||
-        _chapters.isEmpty) {
+    if (_bookPages.isEmpty) {
       return const Scaffold(
         body: Center(
-          child: Text(
-            'Kniha zatím nemá žádné kapitoly.',
-          ),
+          child: CircularProgressIndicator(),
         ),
       );
     }
 
-    final safeIndex =
-        currentSpread.clamp(
-      0,
-      _spreads.length - 1,
-    );
+    RelationshipChapter?
+        currentChapter;
 
-    final currentChapter =
-        _chapters[
-          safeIndex.clamp(
-            0,
-            _chapters.length - 1,
-          )
-        ];
+    if (!_isCover &&
+        _chapters.isNotEmpty) {
+      final chapterIndex =
+          (currentSpread - 1).clamp(
+        0,
+        _chapters.length - 1,
+      );
+
+      currentChapter =
+          _chapters[chapterIndex];
+    }
 
     return Scaffold(
       backgroundColor:
@@ -419,54 +513,81 @@ class _RelationshipBookViewerScreenState
       appBar: AppBar(
         backgroundColor:
             const Color(0xFFD9C3A0),
+
         elevation: 0,
+
         centerTitle: true,
 
-        title: Row(
-          mainAxisSize:
-              MainAxisSize.min,
-          children: [
-            if (currentChapter.favorite) ...[
-              const Icon(
-                Icons.favorite,
-                color:
-                    Color(0xFFC84B31),
-                size: 20,
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-            ],
+        title: _isCover
 
-            Flexible(
-              child: Text(
-                currentChapter
-                    .chapterTitle,
-                overflow:
-                    TextOverflow.ellipsis,
-                style:
-                    const TextStyle(
+            // ------------------------------------------------
+            // OBÁLKA
+            // ------------------------------------------------
+
+            ? const Text(
+                'Naše vzpomínky',
+                style: TextStyle(
                   fontWeight:
                       FontWeight.bold,
                 ),
+              )
+
+            // ------------------------------------------------
+            // KAPITOLA
+            // ------------------------------------------------
+
+            : Row(
+                mainAxisSize:
+                    MainAxisSize.min,
+                children: [
+                  if (currentChapter
+                          ?.favorite ==
+                      true) ...[
+                    const Icon(
+                      Icons.favorite,
+                      color:
+                          Color(0xFFC84B31),
+                      size: 20,
+                    ),
+
+                    const SizedBox(
+                      width: 8,
+                    ),
+                  ],
+
+                  Flexible(
+                    child: Text(
+                      currentChapter
+                              ?.chapterTitle ??
+                          'Kapitola',
+                      overflow:
+                          TextOverflow.ellipsis,
+                      style:
+                          const TextStyle(
+                        fontWeight:
+                            FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
 
         actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.bookmark_border,
-              color:
-                  Color(0xFF5A342B),
-              size: 25,
+          if (!_isCover)
+            IconButton(
+              icon: const Icon(
+                Icons.bookmark_border,
+                color:
+                    Color(0xFF5A342B),
+                size: 25,
+              ),
+
+              tooltip:
+                  'Možnosti kapitoly',
+
+              onPressed:
+                  _handleOptionsSheet,
             ),
-            tooltip:
-                'Možnosti kapitoly',
-            onPressed:
-                _handleOptionsSheet,
-          ),
         ],
       ),
 
@@ -496,13 +617,14 @@ class _RelationshipBookViewerScreenState
               child: SizedBox(
                 width:
                     bookWidth,
+
                 child:
                     PageView.builder(
                   controller:
                       widget.pageController,
 
                   itemCount:
-                      _spreads.length,
+                      _bookPages.length,
 
                   physics:
                       const BouncingScrollPhysics(),
@@ -512,7 +634,7 @@ class _RelationshipBookViewerScreenState
                     context,
                     index,
                   ) {
-                    return _spreads[index];
+                    return _bookPages[index];
                   },
                 ),
               ),
@@ -535,22 +657,27 @@ class _RelationshipBookViewerScreenState
             bottom: 8,
             top: 4,
           ),
+
           child: Row(
             mainAxisAlignment:
                 MainAxisAlignment.center,
+
             children: [
               IconButton(
                 onPressed:
                     currentSpread > 0
                         ? previousSpread
                         : null,
+
                 icon:
                     const Icon(
                   Icons.chevron_left,
                 ),
+
                 iconSize: 32,
+
                 tooltip:
-                    'Předchozí kapitola',
+                    'Předchozí stránka',
               ),
 
               const SizedBox(
@@ -558,7 +685,7 @@ class _RelationshipBookViewerScreenState
               ),
 
               Text(
-                '${currentSpread + 1} / ${_spreads.length}',
+                '${currentSpread + 1} / ${_bookPages.length}',
                 style:
                     const TextStyle(
                   fontWeight:
@@ -573,22 +700,485 @@ class _RelationshipBookViewerScreenState
               IconButton(
                 onPressed:
                     currentSpread <
-                            _spreads.length -
+                            _bookPages.length -
                                 1
                         ? nextSpread
                         : null,
+
                 icon:
                     const Icon(
                   Icons.chevron_right,
                 ),
+
                 iconSize: 32,
+
                 tooltip:
-                    'Další kapitola',
+                    'Další stránka',
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+// ============================================================
+// STARÁ KOŽENÁ OBÁLKA KNIHY
+// ============================================================
+
+class _RelationshipBookCover extends StatelessWidget {
+  final String myName;
+  final String partnerName;
+  final bool namesLoaded;
+
+  const _RelationshipBookCover({
+    required this.myName,
+    required this.partnerName,
+    required this.namesLoaded,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isPortrait =
+            constraints.maxHeight > constraints.maxWidth;
+
+        // ======================================================
+        // ROZMĚRY OBÁLKY
+        // ======================================================
+
+        final double maxHeight =
+            constraints.maxHeight * 0.92;
+
+        final double maxWidth =
+            constraints.maxWidth * 0.88;
+
+        // Poměr obálky – tento už neměníme.
+        final double bookHeight =
+            isPortrait
+                ? constraints.maxHeight * 0.90
+                : maxHeight;
+
+        final double bookWidth =
+            math.min(
+              bookHeight * 0.77,
+              maxWidth,
+            );
+
+        return Center(
+          child: SizedBox(
+            width: bookWidth,
+            height: bookHeight,
+
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+
+                // ==================================================
+                // TEXTURA STARÉ KŮŽE
+                // ==================================================
+
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(16),
+
+                    child: Image.asset(
+                      'assets/images/book_cover_texture.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+
+                // ==================================================
+                // JEMNÉ ZATMAVENÍ
+                // ==================================================
+
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(16),
+
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin:
+                              Alignment.topLeft,
+                          end:
+                              Alignment.bottomRight,
+
+                          colors: [
+                            Colors.black.withValues(
+                              alpha: 0.08,
+                            ),
+
+                            Colors.transparent,
+
+                            Colors.black.withValues(
+                              alpha: 0.36,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // ==================================================
+                // VNĚJŠÍ KOŽENÝ OKRAJ
+                // ==================================================
+
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(16),
+
+                      border: Border.all(
+                        color:
+                            const Color(0xFF9E7A42),
+                        width: 2,
+                      ),
+
+                      boxShadow: [
+                        BoxShadow(
+                          color:
+                              Colors.black.withValues(
+                            alpha: 0.60,
+                          ),
+
+                          blurRadius: 28,
+                          spreadRadius: 2,
+
+                          offset:
+                              const Offset(
+                            0,
+                            16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // ==================================================
+                // VNITŘNÍ ZLATÝ RÁMEČEK
+                // ==================================================
+
+                Positioned(
+                  left:
+                      bookWidth * 0.08,
+
+                  right:
+                      bookWidth * 0.08,
+
+                  top:
+                      bookHeight * 0.075,
+
+                  bottom:
+                      bookHeight * 0.075,
+
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(8),
+
+                      border: Border.all(
+                        color:
+                            const Color(0xFFB99555),
+
+                        width: 1.2,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // ==================================================
+                // VNITŘNÍ OBSAH
+                //
+                // DŮLEŽITÉ:
+                //
+                // Nepoužíváme zde Column s výškou obálky.
+                // Máme pevnou "návrhovou" velikost a FittedBox
+                // ji celou přizpůsobí dostupnému prostoru.
+                //
+                // Díky tomu nemůže vzniknout RenderFlex overflow.
+                // ==================================================
+
+                Positioned(
+                  left:
+                      bookWidth * 0.13,
+
+                  right:
+                      bookWidth * 0.13,
+
+                  top:
+                      bookHeight * 0.085,
+
+                  bottom:
+                      bookHeight * 0.085,
+
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+
+                    alignment:
+                        Alignment.center,
+
+                    child: SizedBox(
+                      width: 360,
+                      height: 620,
+
+                      child: Column(
+                        mainAxisAlignment:
+                            MainAxisAlignment.center,
+
+                        crossAxisAlignment:
+                            CrossAxisAlignment.center,
+
+                        children: [
+
+                          // ========================================
+                          // IKONA KNIHY
+                          // ========================================
+
+                          const Icon(
+                            Icons.auto_stories,
+                            color:
+                                Color(0xFFE5C77F),
+                            size: 58,
+                          ),
+
+                          const SizedBox(
+                            height: 25,
+                          ),
+
+                          // ========================================
+                          // NAŠE
+                          // ========================================
+
+                          const Text(
+                            'N A Š E',
+                            textAlign:
+                                TextAlign.center,
+
+                            style: TextStyle(
+                              color:
+                                  Color(0xFFE5C77F),
+
+                              fontSize: 19,
+
+                              letterSpacing: 7,
+
+                              fontWeight:
+                                  FontWeight.w500,
+                            ),
+                          ),
+
+                          const SizedBox(
+                            height: 10,
+                          ),
+
+                          // ========================================
+                          // VZPOMÍNKY
+                          // ========================================
+
+                          const FittedBox(
+                            fit:
+                                BoxFit.scaleDown,
+
+                            child: Text(
+                              'VZPOMÍNKY',
+
+                              style:
+                                  TextStyle(
+                                color:
+                                    Color(
+                                  0xFFFFF1D2,
+                                ),
+
+                                fontSize: 43,
+
+                                fontWeight:
+                                    FontWeight.bold,
+
+                                letterSpacing: 2,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(
+                            height: 25,
+                          ),
+
+                          // ========================================
+                          // ZLATÁ LINKA
+                          // ========================================
+
+                          Container(
+                            width: 205,
+                            height: 1.5,
+
+                            decoration:
+                                const BoxDecoration(
+                              color:
+                                  Color(
+                                0xFFC9A45F,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(
+                            height: 27,
+                          ),
+
+                          // ========================================
+                          // JMÉNA
+                          // ========================================
+
+                          if (!namesLoaded)
+
+                            const SizedBox(
+                              width: 30,
+                              height: 30,
+
+                              child:
+                                  CircularProgressIndicator(
+                                color:
+                                    Color(
+                                  0xFFE5C77F,
+                                ),
+                                strokeWidth: 2,
+                              ),
+                            )
+
+                          else ...[
+
+                            // ------------------------------------
+                            // MOJE JMÉNO
+                            // ------------------------------------
+
+                            FittedBox(
+                              fit:
+                                  BoxFit.scaleDown,
+
+                              child: Text(
+                                myName,
+
+                                textAlign:
+                                    TextAlign.center,
+
+                                style:
+                                    const TextStyle(
+                                  color:
+                                      Color(
+                                    0xFFFFF1D2,
+                                  ),
+
+                                  fontSize: 31,
+
+                                  fontWeight:
+                                      FontWeight.w600,
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(
+                              height: 15,
+                            ),
+
+                            // ------------------------------------
+                            // SRDCE
+                            // ------------------------------------
+
+                            const Icon(
+                              Icons.favorite,
+
+                              color:
+                                  Color(
+                                0xFFC84B31,
+                              ),
+
+                              size: 30,
+                            ),
+
+                            const SizedBox(
+                              height: 15,
+                            ),
+
+                            // ------------------------------------
+                            // PARTNER
+                            // ------------------------------------
+
+                            FittedBox(
+                              fit:
+                                  BoxFit.scaleDown,
+
+                              child: Text(
+                                partnerName,
+
+                                textAlign:
+                                    TextAlign.center,
+
+                                style:
+                                    const TextStyle(
+                                  color:
+                                      Color(
+                                    0xFFFFF1D2,
+                                  ),
+
+                                  fontSize: 31,
+
+                                  fontWeight:
+                                      FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+
+                          const SizedBox(
+                            height: 27,
+                          ),
+
+                          // ========================================
+                          // PODTITULEK
+                          // ========================================
+
+                          FittedBox(
+                            fit:
+                                BoxFit.scaleDown,
+
+                            child: const Text(
+                              'Příběh, který píšeme spolu',
+
+                              textAlign:
+                                  TextAlign.center,
+
+                              style:
+                                  TextStyle(
+                                color:
+                                    Color(
+                                  0xFFE0C89F,
+                                ),
+
+                                fontSize: 15,
+
+                                fontStyle:
+                                    FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

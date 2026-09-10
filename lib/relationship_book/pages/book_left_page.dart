@@ -7,7 +7,7 @@ import '../widgets/memory_block.dart';
 class BookLeftPage extends StatelessWidget {
   final RelationshipChapter chapter;
   final int chapterNumber;
-  final int pageNumber; // <-- Přidáno samostatné číslo stránky
+  final int pageNumber;
   final String? motto;
   final RelationshipReflection? partnerReflection;
   final VoidCallback? onPreviousPage;
@@ -16,7 +16,7 @@ class BookLeftPage extends StatelessWidget {
     super.key,
     required this.chapter,
     required this.chapterNumber,
-    required this.pageNumber, // <-- Přidáno do konstruktoru
+    required this.pageNumber,
     required this.motto,
     required this.partnerReflection,
     this.onPreviousPage,
@@ -28,50 +28,114 @@ class BookLeftPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).orientation ==
+            Orientation.portrait;
+
+    // ==========================================================
+    // MOBIL
+    // ==========================================================
+
+    final horizontalPadding =
+        isPortrait ? 24.0 : 44.0;
+
+    final topPadding =
+        isPortrait ? 28.0 : 42.0;
+
+    final bottomPadding =
+        isPortrait ? 20.0 : 28.0;
+
+    final chapterFontSize =
+        isPortrait ? 12.0 : 13.0;
+
+    final titleFontSize =
+        isPortrait ? 27.0 : 38.0;
+
+    final dateFontSize =
+        isPortrait ? 13.0 : 15.0;
+
+    final bodyFontSize =
+        isPortrait ? 16.0 : 19.0;
+
+    final bodyLineHeight =
+        isPortrait ? 1.65 : 2.0;
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        44,
-        42,
-        44,
-        28,
+      padding: EdgeInsets.fromLTRB(
+        horizontalPadding,
+        topPadding,
+        horizontalPadding,
+        bottomPadding,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
         children: [
+          // ======================================================
+          // KAPITOLA
+          // ======================================================
+
           Text(
             "KAPITOLA $chapterNumber",
             style: TextStyle(
               color: Colors.brown.shade600,
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 4,
+              fontSize: chapterFontSize,
+              fontWeight:
+                  FontWeight.w600,
+              letterSpacing:
+                  isPortrait ? 3.2 : 4,
             ),
           ),
 
-          const SizedBox(height: 14),
+          SizedBox(
+            height:
+                isPortrait ? 10 : 14,
+          ),
+
+          // ======================================================
+          // NADPIS
+          // ======================================================
 
           Text(
             chapter.chapterTitle,
             style: TextStyle(
               color: Colors.brown.shade900,
-              fontSize: 38,
-              fontWeight: FontWeight.bold,
+              fontSize: titleFontSize,
+              fontWeight:
+                  FontWeight.bold,
               height: 1.15,
             ),
           ),
 
-          const SizedBox(height: 10),
+          SizedBox(
+            height:
+                isPortrait ? 7 : 10,
+          ),
+
+          // ======================================================
+          // DATUM
+          // ======================================================
 
           Text(
-            _formatDate(chapter.createdAt),
+            _formatDate(
+              chapter.createdAt,
+            ),
             style: TextStyle(
               color: Colors.brown.shade500,
-              fontStyle: FontStyle.italic,
-              fontSize: 15,
+              fontStyle:
+                  FontStyle.italic,
+              fontSize: dateFontSize,
             ),
           ),
 
-          const SizedBox(height: 18),
+          SizedBox(
+            height:
+                isPortrait ? 12 : 18,
+          ),
+
+          // ======================================================
+          // LINKA
+          // ======================================================
 
           Container(
             width: double.infinity,
@@ -79,51 +143,91 @@ class BookLeftPage extends StatelessWidget {
             color: Colors.brown.shade300,
           ),
 
-          if (motto != null && motto!.trim().isNotEmpty) ...[
-            const SizedBox(height: 26),
+          // ======================================================
+          // MOTTO
+          // ======================================================
+
+          if (motto != null &&
+              motto!.trim().isNotEmpty) ...[
+            SizedBox(
+              height:
+                  isPortrait ? 18 : 26,
+            ),
 
             Text(
               '"$motto"',
-              textAlign: TextAlign.center,
+              textAlign:
+                  TextAlign.center,
               style: TextStyle(
-                color: Colors.brown.shade800,
-                fontSize: 20,
-                fontStyle: FontStyle.italic,
-                height: 1.7,
+                color:
+                    Colors.brown.shade800,
+                fontSize:
+                    isPortrait ? 16 : 20,
+                fontStyle:
+                    FontStyle.italic,
+                height:
+                    isPortrait ? 1.5 : 1.7,
               ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(
+              height:
+                  isPortrait ? 16 : 24,
+            ),
 
             Divider(
-              color: Colors.brown.shade200,
+              color:
+                  Colors.brown.shade200,
               thickness: 1,
             ),
 
-            const SizedBox(height: 26),
+            SizedBox(
+              height:
+                  isPortrait ? 16 : 26,
+            ),
           ],
 
+          // ======================================================
+          // HLAVNÍ TEXT
+          // ======================================================
+
           Expanded(
-            child: SingleChildScrollView(
+            child:
+                SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
                 children: [
                   Text(
                     chapter.introduction,
-                    textAlign: TextAlign.justify,
+                    textAlign:
+                        TextAlign.justify,
                     style: TextStyle(
-                      color: Colors.brown.shade900,
-                      fontSize: 19,
-                      height: 2.0,
+                      color:
+                          Colors.brown.shade900,
+                      fontSize:
+                          bodyFontSize,
+                      height:
+                          bodyLineHeight,
                     ),
                   ),
 
-                  if (partnerReflection != null) ...[
-                    const SizedBox(height: 26),
+                  // ==================================================
+                  // PARTNEROVA REFLEXE
+                  // ==================================================
+
+                  if (partnerReflection !=
+                      null) ...[
+                    SizedBox(
+                      height:
+                          isPortrait ? 18 : 26,
+                    ),
 
                     MemoryBlock(
                       author: "Partner",
-                      text: partnerReflection!.text,
+                      text:
+                          partnerReflection!
+                              .text,
                     ),
                   ],
                 ],
@@ -131,40 +235,68 @@ class BookLeftPage extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(
+            height:
+                isPortrait ? 12 : 16,
+          ),
+
+          // ======================================================
+          // EROS VOICE
+          // ======================================================
 
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 18,
+            padding: EdgeInsets.symmetric(
+              horizontal:
+                  isPortrait ? 16 : 24,
+              vertical:
+                  isPortrait ? 13 : 18,
             ),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF4ECE2),
-              borderRadius: BorderRadius.circular(14),
+            decoration:
+                BoxDecoration(
+              color:
+                  const Color(0xFFF4ECE2),
+              borderRadius:
+                  BorderRadius.circular(
+                isPortrait ? 11 : 14,
+              ),
               border: Border.all(
-                color: Colors.brown.shade200,
+                color:
+                    Colors.brown.shade200,
               ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
               children: [
                 Text(
                   "EROS VOICE",
                   style: TextStyle(
-                    color: Colors.brown.shade700,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
+                    color:
+                        Colors.brown.shade700,
+                    fontSize:
+                        isPortrait ? 9 : 11,
+                    fontWeight:
+                        FontWeight.bold,
+                    letterSpacing:
+                        isPortrait ? 1.6 : 2,
                   ),
                 ),
-                const SizedBox(height: 8),
+
+                SizedBox(
+                  height:
+                      isPortrait ? 6 : 8,
+                ),
+
                 Text(
                   "Místo pro Eros Voice.",
                   style: TextStyle(
-                    color: Colors.brown.shade800,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 15,
+                    color:
+                        Colors.brown.shade800,
+                    fontStyle:
+                        FontStyle.italic,
+                    fontSize:
+                        isPortrait ? 13 : 15,
                     height: 1.5,
                   ),
                 ),
@@ -172,23 +304,35 @@ class BookLeftPage extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(
+            height:
+                isPortrait ? 10 : 20,
+          ),
 
-          // Číslo levé stránky s reakcí na kliknutí
+          // ======================================================
+          // ČÍSLO STRÁNKY
+          // ======================================================
+
           Center(
             child: GestureDetector(
               onTap: onPreviousPage,
               child: MouseRegion(
-                cursor: SystemMouseCursors.click,
+                cursor:
+                    SystemMouseCursors.click,
                 child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding:
+                      const EdgeInsets.all(4),
                   child: Text(
-                    "— $pageNumber —", // <-- Zde zobrazení přesného čísla stránky
+                    "— $pageNumber —",
                     style: TextStyle(
-                      color: Colors.brown.shade800,
-                      fontSize: 18,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w500,
+                      color:
+                          Colors.brown.shade800,
+                      fontSize:
+                          isPortrait ? 15 : 18,
+                      fontStyle:
+                          FontStyle.italic,
+                      fontWeight:
+                          FontWeight.w500,
                     ),
                   ),
                 ),

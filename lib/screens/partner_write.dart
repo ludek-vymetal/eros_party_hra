@@ -12,6 +12,7 @@ import '../services/community_scenario_service.dart';
 
 import '../services/partner_link_service.dart';
 import '../services/cloud_partner_scenario_service.dart';
+import '../services/cloud_partner_service.dart';
 
 class PartnerWriteScreen extends StatefulWidget {
   final ScenarioRecord? existingRecord;
@@ -55,19 +56,30 @@ class _PartnerWriteScreenState
   final Map<String, bool>
       vybraneEmoce = {};
 
+  bool _namesLoading = true;
+
   bool get isEdit =>
       widget.existingRecord != null &&
       !widget.repeatScenario;
 
   bool shareToCommunity = false;
-  bool anonymousShare = true;    
+  bool anonymousShare = true;
+
+  // ==========================================================
+  // INIT
+  // ==========================================================
 
   @override
   void initState() {
     super.initState();
 
+    // --------------------------------------------------------
+    // PŘEDVYPLNĚNÍ EXISTUJÍCÍHO SCÉNÁŘE
+    // --------------------------------------------------------
+
     if (widget.existingRecord != null) {
-      final s = widget.existingRecord!.scenar;
+      final s =
+          widget.existingRecord!.scenar;
 
       _autorCtrl.text = s.autor;
       _proCtrl.text = s.pro;
@@ -76,25 +88,163 @@ class _PartnerWriteScreenState
       _hraniceCtrl.text = s.hranice;
       _textCtrl.text = s.text;
 
-      for (final emoce in s.emoce) {
-        vybraneEmoce[emoce] = true;
+      for (final emotion in s.emoce) {
+        vybraneEmoce[emotion] = true;
       }
     }
-  } 
+
+    // --------------------------------------------------------
+    // U NOVÉHO / OPAKOVANÉHO SCÉNÁŘE
+    // AUTOMATICKY NAČTEME JMÉNA
+    // --------------------------------------------------------
+
+    if (!isEdit) {
+      _loadAutomaticNames();
+    } else {
+      _namesLoading = false;
+    }
+  }
+
+  // ==========================================================
+  // DISPOSE
+  // ==========================================================
+
+  @override
+  void dispose() {
+    _autorCtrl.dispose();
+    _proCtrl.dispose();
+    _nazevCtrl.dispose();
+    _hraniceCtrl.dispose();
+    _cilCtrl.dispose();
+    _textCtrl.dispose();
+
+    super.dispose();
+  }
+
+  // ==========================================================
+  // AUTOMATICKÉ NAČTENÍ JMÉN
+  // ==========================================================
+
+  Future<void> _loadAutomaticNames() async {
+    try {
+      // ------------------------------------------------------
+      // 1. MOJE JMÉNO
+      // ------------------------------------------------------
+
+      final myName =
+          await CloudPartnerService
+              .getMyDisplayName();
+
+      // ------------------------------------------------------
+      // 2. UID PARTNERA
+      // ------------------------------------------------------
+
+      final partnerUid =
+          await CloudPartnerService
+              .getPartnerUid();
+
+      String? partnerName;
+
+      // ------------------------------------------------------
+      // 3. JMÉNO PARTNERA
+      // ------------------------------------------------------
+
+      if (partnerUid != null &&
+          partnerUid.isNotEmpty) {
+        partnerName =
+            await CloudPartnerService
+                .getUserDisplayName(
+          partnerUid,
+        );
+      }
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        // ----------------------------------------------------
+        // AUTOR
+        // ----------------------------------------------------
+
+        if (myName != null &&
+            myName.trim().isNotEmpty) {
+          _autorCtrl.text =
+              myName.trim();
+        }
+
+        // ----------------------------------------------------
+        // PARTNER
+        // ----------------------------------------------------
+
+        if (partnerName != null &&
+            partnerName.trim().isNotEmpty) {
+          _proCtrl.text =
+              partnerName.trim();
+        }
+
+        _namesLoading = false;
+      });
+
+      debugPrint(
+        'AUTOR: ${_autorCtrl.text}',
+      );
+
+      debugPrint(
+        'PRO KOHO: ${_proCtrl.text}',
+      );
+    } catch (e) {
+      debugPrint(
+        'CHYBA PRI NACITANI JMEN: $e',
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _namesLoading = false;
+      });
+    }
+  }
+
+  // ==========================================================
+  // SAVE
+  // ==========================================================
 
   Future<void> _save() async {
-    debugPrint("SAVE START");
-    
+    debugPrint('SAVE START');
+
     final l10n =
         AppLocalizations.of(context);
 
-    if (_autorCtrl.text.isEmpty ||
-        _proCtrl.text.isEmpty ||
-        _nazevCtrl.text.isEmpty ||
-        _textCtrl.text.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(
+    // --------------------------------------------------------
+    // JMÉNA SE JEŠTĚ NAČÍTAJÍ
+    // --------------------------------------------------------
+
+    if (_namesLoading) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Ještě se načítají údaje uživatelů.',
+          ),
+        ),
+      );
+
+      return;
+    }
+
+    // --------------------------------------------------------
+    // KONTROLA POVINNÝCH POLÍ
+    // --------------------------------------------------------
+
+    if (_autorCtrl.text.trim().isEmpty ||
+        _proCtrl.text.trim().isEmpty ||
+        _nazevCtrl.text.trim().isEmpty ||
+        _textCtrl.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
         SnackBar(
           content: Text(
             l10n.fillRequiredFields,
@@ -105,14 +255,20 @@ class _PartnerWriteScreenState
       return;
     }
 
+    // --------------------------------------------------------
+    // ID
+    // --------------------------------------------------------
+
     final recordId =
         isEdit
-            ? widget
-                .existingRecord!
-                .id
+            ? widget.existingRecord!.id
             : DateTime.now()
                 .millisecondsSinceEpoch
                 .toString();
+
+    // --------------------------------------------------------
+    // SCÉNÁŘ
+    // --------------------------------------------------------
 
     final scenar = Scenar(
       id: recordId,
@@ -154,83 +310,121 @@ class _PartnerWriteScreenState
               : null,
     );
 
+    // ========================================================
+    // EDIT
+    // ========================================================
+
     if (isEdit) {
+      debugPrint('EDIT MODE');
 
-          debugPrint('EDIT MODE');
-
-          final updated =
-              widget
-                  .existingRecord!
-                  .copyWith(
-                    scenar: scenar,
-                  );
+      final updated =
+          widget.existingRecord!.copyWith(
+        scenar: scenar,
+      );
 
       await ScenarioRecordStorage
           .update(updated);
 
+      if (!mounted) {
+        return;
+      }
+
       setState(() {
         generatedCode =
             CryptoService.encodeScenar(
-              scenar,
-            );
+          scenar,
+        );
       });
-    
-    } else {
-      debugPrint('NEW RECORD MODE');
 
-      if (!widget.repeatScenario) {
-        final record = ScenarioRecord(
-          id: recordId,
-          parentScenarioId: recordId,
-          scenar: scenar,
-          reactions: [],
-        );
-
-        await ScenarioRecordStorage.add(record);
-      }
-
-     
-
-      if (shareToCommunity) {
-        await CommunityScenarioService
-            .uploadScenario(
-          scenar: scenar,
-          anonymous: anonymousShare,
-        );
-      }
-
-      final partnerUid =
-          await PartnerLinkService.getPartnerUid();
-
-      debugPrint('PARTNER UID: $partnerUid');
-
-      if (partnerUid != null) {
-        debugPrint('SENDING TO FIREBASE');
-        debugPrint('VOLAM SEND SCENARIO');
-
-        await CloudPartnerScenarioService.sendScenario(
-          receiverUid: partnerUid,
-          parentScenarioId: widget.repeatScenario
-              ? widget.existingRecord!.parentScenarioId
-              : recordId,
-          nazev: scenar.nazev,
-          text: scenar.text,
-        );
-
-        debugPrint('SEND HOTOVO');
-        debugPrint('SENT');
-      }
-      
-      // Zde opraveno uzavření metody
-      setState(() {
-        generatedCode =
-            CryptoService.encodeScenar(
-              scenar,
-            );
-      
-      });
+      return;
     }
+
+    // ========================================================
+    // NOVÝ SCÉNÁŘ
+    // ========================================================
+
+    debugPrint('NEW RECORD MODE');
+
+    if (!widget.repeatScenario) {
+      final record = ScenarioRecord(
+        id: recordId,
+        parentScenarioId: recordId,
+        scenar: scenar,
+        reactions: [],
+      );
+
+      await ScenarioRecordStorage.add(
+        record,
+      );
+    }
+
+    // ========================================================
+    // KOMUNITA
+    // ========================================================
+
+    if (shareToCommunity) {
+      await CommunityScenarioService
+          .uploadScenario(
+        scenar: scenar,
+        anonymous: anonymousShare,
+      );
+    }
+
+    // ========================================================
+    // PARTNER
+    // ========================================================
+
+    final partnerUid =
+        await PartnerLinkService
+            .getPartnerUid();
+
+    debugPrint(
+      'PARTNER UID: $partnerUid',
+    );
+
+    if (partnerUid != null) {
+      debugPrint(
+        'SENDING TO FIREBASE',
+      );
+
+      await CloudPartnerScenarioService
+          .sendScenario(
+        receiverUid: partnerUid,
+
+        parentScenarioId:
+            widget.repeatScenario
+                ? widget
+                    .existingRecord!
+                    .parentScenarioId
+                : recordId,
+
+        nazev: scenar.nazev,
+
+        text: scenar.text,
+      );
+
+      debugPrint('SEND HOTOVO');
+    }
+
+    // ========================================================
+    // GENEROVÁNÍ KÓDU
+    // ========================================================
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      generatedCode =
+          CryptoService.encodeScenar(
+        scenar,
+      );
+    });
   }
+
+  // ==========================================================
+  // BUILD
+  // ==========================================================
 
   @override
   Widget build(
@@ -250,7 +444,10 @@ class _PartnerWriteScreenState
       l10n.emotionCuriosity,
     ];
 
-    // inicializace emocí
+    // ========================================================
+    // INICIALIZACE EMOCÍ
+    // ========================================================
+
     for (final e in emoce) {
       vybraneEmoce.putIfAbsent(
         e,
@@ -267,192 +464,302 @@ class _PartnerWriteScreenState
         ),
       ),
 
-      body:
-          SingleChildScrollView(
-            padding:
-                const EdgeInsets.all(
-                  16,
+      body: SingleChildScrollView(
+        padding:
+            const EdgeInsets.all(16),
+
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+
+          children: [
+
+            // ==================================================
+            // AUTOR – AUTOMATICKY
+            // ==================================================
+
+            if (_namesLoading)
+              const Padding(
+                padding:
+                    EdgeInsets.only(
+                  bottom: 16,
                 ),
+                child: LinearProgressIndicator(),
+              ),
 
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment
-                      .start,
+            _automaticNameField(
+              label: l10n.author,
+              controller: _autorCtrl,
+              icon: Icons.person,
+            ),
 
-              children: [
-                _field(
-                  l10n.author,
-                  _autorCtrl,
-                ),
+            // ==================================================
+            // PRO KOHO – AUTOMATICKY
+            // ==================================================
 
-                _field(
-                  l10n.forWho,
-                  _proCtrl,
-                ),
+            _automaticNameField(
+              label: l10n.forWho,
+              controller: _proCtrl,
+              icon: Icons.favorite,
+            ),
 
-                _field(
-                  l10n
-                      .scenarioTitle,
-                  _nazevCtrl,
-                ),
+            // ==================================================
+            // NÁZEV
+            // ==================================================
 
-                _field(
-                  l10n.boundaries,
-                  _hraniceCtrl,
-                ),
+            _field(
+              l10n.scenarioTitle,
+              _nazevCtrl,
+            ),
 
-                _field(
-                  l10n
-                      .scenarioGoal,
-                  _cilCtrl,
-                ),
+            // ==================================================
+            // HRANICE
+            // ==================================================
 
-                const SizedBox(
-                  height: 16,
-                ),
+            _field(
+              l10n.boundaries,
+              _hraniceCtrl,
+            ),
 
-                Text(
-                  l10n
-                      .scenarioEmotions,
-                  style:
-                      const TextStyle(
-                        fontWeight:
-                            FontWeight
-                                .bold,
-                      ),
-                ),
+            // ==================================================
+            // CÍL
+            // ==================================================
 
-                Wrap(
-                  spacing: 8,
+            _field(
+              l10n.scenarioGoal,
+              _cilCtrl,
+            ),
 
-                  children:
-                      emoce.map((e) {
-                        return FilterChip(
-                          label: Text(
-                            e,
-                          ),
+            const SizedBox(
+              height: 16,
+            ),
 
-                          selected:
-                              vybraneEmoce[e]!,
+            // ==================================================
+            // EMOCE
+            // ==================================================
 
-                          onSelected:
-                              (v) {
-                            setState(() {
-                              vybraneEmoce[e] =
-                                  v;
-                            });
-                          },
-                        );
-                      }).toList(),
-                ),
+            Text(
+              l10n.scenarioEmotions,
+              style:
+                  const TextStyle(
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
 
-                const SizedBox(
-                  height: 16,
-                ),
+            const SizedBox(
+              height: 8,
+            ),
 
-                TextField(
-                  controller:
-                      _textCtrl,
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
 
-                  maxLines: 6,
+              children:
+                  emoce.map((e) {
+                return FilterChip(
+                  label: Text(e),
 
-                  decoration:
-                      InputDecoration(
-                        labelText:
-                            l10n
-                                .scenarioText,
-                      ),
-                ),
+                  selected:
+                      vybraneEmoce[e]!,
 
-                const SizedBox(
-                  height: 20,
-                ),
-
-                SwitchListTile(
-                  title: Text(
-                    l10n.shareToCommunity,
-                  ),
-                  value: shareToCommunity,
-                  onChanged: (v) {
+                  onSelected: (v) {
                     setState(() {
-                      shareToCommunity = v;
+                      vybraneEmoce[e] =
+                          v;
                     });
                   },
-                ),
-
-                if (shareToCommunity)
-                  SwitchListTile(
-                    title: Text(
-                      l10n.shareAnonymously,
-                    ),
-                    value: anonymousShare,
-                    onChanged: (v) {
-                      setState(() {
-                        anonymousShare = v;
-                      });
-                    },
-                  ),
-
-                ElevatedButton(
-                  onPressed: _save,
-
-                  child: Text(
-                    isEdit
-                        ? l10n
-                            .saveChanges
-                        : l10n
-                            .generateCode,
-                  ),
-                ),
-
-                if (generatedCode != null) ...[
-                  const SizedBox(
-                    height: 12,
-                  ),
-
-                  SelectableText(
-                    generatedCode!,
-                  ),
-
-                  const SizedBox(
-                    height: 6,
-                  ),
-
-                  ElevatedButton(
-                    onPressed: () =>
-                        Clipboard.setData(
-                          ClipboardData(
-                            text: generatedCode!,
-                          ),
-                        ),
-                    child: Text(
-                      l10n.copyCode,
-                    ),
-                  ),
-                ],
-              ],
+                );
+              }).toList(),
             ),
-          ),
+
+            const SizedBox(
+              height: 24,
+            ),
+
+            // ==================================================
+            // TEXT SCÉNÁŘE
+            // ==================================================
+
+            TextField(
+              controller:
+                  _textCtrl,
+
+              maxLines: 6,
+
+              decoration:
+                  InputDecoration(
+                labelText:
+                    l10n.scenarioText,
+              ),
+            ),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            // ==================================================
+            // KOMUNITA
+            // ==================================================
+
+            SwitchListTile(
+              contentPadding:
+                  EdgeInsets.zero,
+
+              title: Text(
+                l10n.shareToCommunity,
+              ),
+
+              value:
+                  shareToCommunity,
+
+              onChanged: (v) {
+                setState(() {
+                  shareToCommunity =
+                      v;
+                });
+              },
+            ),
+
+            if (shareToCommunity)
+              SwitchListTile(
+                contentPadding:
+                    EdgeInsets.zero,
+
+                title: Text(
+                  l10n.shareAnonymously,
+                ),
+
+                value:
+                    anonymousShare,
+
+                onChanged: (v) {
+                  setState(() {
+                    anonymousShare =
+                        v;
+                  });
+                },
+              ),
+
+            const SizedBox(
+              height: 12,
+            ),
+
+            // ==================================================
+            // ULOŽIT
+            // ==================================================
+
+            SizedBox(
+              width: double.infinity,
+
+              child: ElevatedButton(
+                onPressed:
+                    _namesLoading
+                        ? null
+                        : _save,
+
+                child: Text(
+                  isEdit
+                      ? l10n.saveChanges
+                      : l10n.generateCode,
+                ),
+              ),
+            ),
+
+            // ==================================================
+            // VYGNEROVANÝ KÓD
+            // ==================================================
+
+            if (generatedCode != null) ...[
+              const SizedBox(
+                height: 20,
+              ),
+
+              SelectableText(
+                generatedCode!,
+              ),
+
+              const SizedBox(
+                height: 10,
+              ),
+
+              ElevatedButton(
+                onPressed: () =>
+                    Clipboard.setData(
+                  ClipboardData(
+                    text:
+                        generatedCode!,
+                  ),
+                ),
+
+                child: Text(
+                  l10n.copyCode,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 
+  // ==========================================================
+  // AUTOMATICKÉ JMÉNO
+  // ==========================================================
+
+  Widget _automaticNameField({
+    required String label,
+    required TextEditingController controller,
+    required IconData icon,
+  }) {
+    return Padding(
+      padding:
+          const EdgeInsets.only(
+        bottom: 8,
+      ),
+
+      child: TextField(
+        controller: controller,
+
+        readOnly: true,
+
+        decoration:
+            InputDecoration(
+          labelText: label,
+
+          prefixIcon: Icon(icon),
+
+          suffixIcon:
+              const Icon(
+            Icons.lock_outline,
+            size: 18,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==========================================================
+  // BĚŽNÉ POLE
+  // ==========================================================
+
   Widget _field(
     String label,
-    TextEditingController c,
+    TextEditingController controller,
   ) {
     return Padding(
       padding:
           const EdgeInsets.only(
-            bottom: 8,
-          ),
+        bottom: 8,
+      ),
 
       child: TextField(
-        controller: c,
+        controller: controller,
 
         decoration:
             InputDecoration(
-              labelText: label,
-            ),
+          labelText: label,
+        ),
       ),
     );
   }

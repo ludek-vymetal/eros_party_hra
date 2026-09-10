@@ -74,6 +74,12 @@ class _RelationshipBookScreenState
     final allChapters =
         await widget.repository.getAllMemories();
 
+    allChapters.sort(
+      (a, b) => b.createdAt.compareTo(
+        a.createdAt,
+      ),
+    );
+
     final photosByChapter =
         <String, List<RelationshipPhoto>>{};
 
@@ -387,7 +393,15 @@ class _RelationshipBookScreenState
           }
 
           final chapters =
-              snapshot.data ?? [];
+              List<RelationshipChapter>.from(
+                snapshot.data ?? [],
+              );
+
+          chapters.sort(
+            (a, b) => b.createdAt.compareTo(
+              a.createdAt,
+            ),
+          );
 
           if (chapters.isEmpty) {
             return const Center(
